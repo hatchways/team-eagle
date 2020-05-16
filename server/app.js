@@ -10,7 +10,7 @@ const pingRouter = require("./routes/ping");
 const { json, urlencoded } = express;
 
 var app = express();
-var mongoose = required("mongoose"); //For database connection
+var mongoose = require("mongoose"); //For database connection
 
 // Connecting to database. fail if not able to connect
 mongoose.connect("mongodb://localhost:27017", {useNewUrlParser:true});
