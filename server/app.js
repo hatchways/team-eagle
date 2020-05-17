@@ -14,7 +14,7 @@ var mongoose = require("mongoose"); //For database connection
 
 // Connecting to database. fail if not able to connect
 mongoose.connect("mongodb://localhost:27017", {useNewUrlParser:true});
-var db = mongoose.connection;
+const db = mongoose.connection;
 db.on("error", console.error.bind(console, 'connection error: '));
 db.once("open", function(){
   // We're connected
