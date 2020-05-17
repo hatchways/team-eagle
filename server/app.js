@@ -9,13 +9,24 @@ const pingRouter = require("./routes/ping");
 
 const { json, urlencoded } = express;
 
-var app = express();
+const app = express();
+const mongoose = require("mongoose"); //For database connection
+
+// Connecting to database. fail if not able to connect
+mongoose.connect("mongodb://localhost:27017", {useNewUrlParser:true});
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, 'connection error: '));
+db.once("open", function(){
+  // We're connected
+  console.log("connected to database");
+})
 
 app.use(logger("dev"));
 app.use(json());
 app.use(urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(join(__dirname, "public")));
+
 
 app.use("/", indexRouter);
 app.use("/ping", pingRouter);
