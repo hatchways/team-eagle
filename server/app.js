@@ -7,7 +7,8 @@ const passport = require("passport");
 
 const indexRouter = require("./routes/index");
 const pingRouter = require("./routes/ping");
-const usersRouter = require("./routes/api/users")
+const registerRouter = require("./routes/auth/register");
+const loginRouter = require("./routes/auth/login");
 
 const { json, urlencoded } = express;
 
@@ -36,7 +37,8 @@ require("./config/passport")(passport);
 // Routes
 app.use("/", indexRouter);
 app.use("/ping", pingRouter);
-app.use("/", usersRouter);
+app.use("/auth/register", registerRouter);
+app.use("/auth/login", loginRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
