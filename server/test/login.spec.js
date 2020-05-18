@@ -7,57 +7,54 @@ chai.use(chaiHttp);
 
 const expect = chai.expect;
 
-describe("POST /register", () => {
+describe("POST /login", () => {
   describe("When parameters are invalid", () => {
     let user = {
-      name: "John Doe",
       email: "fakeEmail@gamil.com",
-      password: "123"
-    }
+      password: "",
+    };
 
-    it("it returns 401 status code", (done) => {
+    it("it returns 404 status code", (done) => {
       chai
         .request(app)
-        .post("/register")
+        .post("/login")
         .send(user)
         .end((err, res) => {
-          res.should.have.status(401);
+          res.should.have.status(404);
           res.body.should.have
             .property("response")
-            .eql("Password has to be longer than 6 characters")
-            done();
+            .eql("Incorrect credentials. Please check username and password.");
+          done();
         });
     });
   });
 
   describe("When parameters are valid", () => {
     let user = {
-      name: "John Doe",
       email: "fakeEmail@gamil.com",
-      password: "123",
+      password: "12345678",
     };
 
     it("it returns 201 status code", (done) => {
       chai
         .request(app)
-        .post("/register")
+        .post("/login")
         .send(user)
         .end((err, res) => {
           res.should.have.status(201);
-            done();
-        })
+          done();
+        });
     });
 
     it("it returns a JWT token", (done) => {
       chai
         .request(app)
-        .post("/register")
+        .post("/login")
         .send(user)
         .end((err, res) => {
-          expect(res.body.response.token)
-          .to.not.be.empty;
+          expect(res.body.response.token).to.not.be.empty;
           done();
         });
-    })
+    });
   });
 });
