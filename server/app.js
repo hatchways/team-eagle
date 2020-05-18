@@ -7,8 +7,8 @@ const passport = require("passport");
 
 const indexRouter = require("./routes/index");
 const pingRouter = require("./routes/ping");
-const registerRouter = require("./routes/auth/register");
-const loginRouter = require("./routes/auth/login");
+const registerRouter = require("./routes/auth/register.route");
+const loginRouter = require("./routes/auth/login.route");
 
 const { json, urlencoded } = express;
 

@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 
-const validateRegisterInput = require("../../validation/auth/register");
+const validateRegisterInput = require("../../validation/auth/register.validation");
 const User = require("../../models/User");
 
 // @route POST /auth/register
