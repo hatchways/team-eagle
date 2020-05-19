@@ -15,17 +15,14 @@ describe("POST /register", () => {
       password: "123"
     }
 
-    it("it returns 401 status code", (done) => {
+    it("it returns 400 status code", (done) => {
       chai
         .request(app)
         .post("/register")
         .send(user)
         .end((err, res) => {
-          res.should.have.status(401);
-          res.body.should.have
-            .property("response")
-            .eql("Password has to be longer than 6 characters")
-            done();
+          res.should.have.status(400);
+          done();
         });
     });
   });
@@ -37,14 +34,14 @@ describe("POST /register", () => {
       password: "123",
     };
 
-    it("it returns 201 status code", (done) => {
+    it("it returns 200 status code", (done) => {
       chai
         .request(app)
         .post("/register")
         .send(user)
         .end((err, res) => {
-          res.should.have.status(201);
-            done();
+          res.should.have.status(200);
+          done();
         })
     });
 
@@ -54,8 +51,7 @@ describe("POST /register", () => {
         .post("/register")
         .send(user)
         .end((err, res) => {
-          expect(res.body.response.token)
-          .to.not.be.empty;
+          expect(res.body.token).to.not.be.empty;
           done();
         });
     })

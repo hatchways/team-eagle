@@ -17,7 +17,7 @@ router.post("/", (req, res) => {
 
   // Check validation
   if (!isValid) {
-    return res.status(404).json(errors);
+    return res.status(400).json(errors);
   }
 
   const email = req.body.email;
@@ -27,14 +27,12 @@ router.post("/", (req, res) => {
   User.findOne({ email }).then(user => {
     // Check if user exists
     if (!user) {
-      return res.status(404).json({ emailnotfound: "Email not found" });
+      return res.status(400).json({ message: "Incorrect credentials" });
     }
 
     // Check password
     bcrypt.compare(password, user.password).then(isMatch => {
       if (isMatch) {
-        // User matched
-        // Create JWT Payload
         const payload = {
           id: user.id,
           name: user.name
@@ -55,8 +53,8 @@ router.post("/", (req, res) => {
         );
       } else {
         return res
-          .status(404)
-          .json({ passwordincorrect: "Password incorrect" });
+          .status(400)
+          .json({ message: "Incorrect credentials" });
       }
     });
   });

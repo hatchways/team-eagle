@@ -14,16 +14,13 @@ describe("POST /login", () => {
       password: "",
     };
 
-    it("it returns 404 status code", (done) => {
+    it("it returns 400 status code", (done) => {
       chai
         .request(app)
         .post("/login")
         .send(user)
         .end((err, res) => {
-          res.should.have.status(404);
-          res.body.should.have
-            .property("response")
-            .eql("Incorrect credentials. Please check username and password.");
+          res.should.have.status(400);
           done();
         });
     });
@@ -35,13 +32,13 @@ describe("POST /login", () => {
       password: "12345678",
     };
 
-    it("it returns 201 status code", (done) => {
+    it("it returns 200 status code", (done) => {
       chai
         .request(app)
         .post("/login")
         .send(user)
         .end((err, res) => {
-          res.should.have.status(201);
+          res.should.have.status(200);
           done();
         });
     });
@@ -52,7 +49,7 @@ describe("POST /login", () => {
         .post("/login")
         .send(user)
         .end((err, res) => {
-          expect(res.body.response.token).to.not.be.empty;
+          expect(res.body.token).to.not.be.empty;
           done();
         });
     });

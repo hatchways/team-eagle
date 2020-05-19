@@ -14,7 +14,7 @@ router.post("/", (req, res) => {
 
   // Check validation
   if (!isValid) {
-    return res.status(401).json(errors);
+    return res.status(400).json(errors);
   }
 
   User.findOne({ email: req.body.email }).then(user => {
@@ -33,7 +33,10 @@ router.post("/", (req, res) => {
           newUser.password = hash;
           newUser
             .save()
-            .then(user => res.json(user))
+            .then(user => {
+              delete user.password; // remove hashed password from response
+              return res.json(user);
+            })
             .catch(err => console.log(err));
         });
       });
