@@ -2,7 +2,7 @@ import React from "react";
 
 import { Link as RouterLink } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
-import { Box, Card, Container, Snackbar, Button } from "@material-ui/core";
+import { Box, Card, Container, Button } from "@material-ui/core";
 import ForumRoundedIcon from "@material-ui/icons/ForumRounded";
 
 import image from "../../images/woman-laptop.png";
