@@ -44,7 +44,6 @@ export const theme = createMuiTheme({
     MuiContainer: {
       root: {
         position: "relative",
-        marginTop: 50,
         paddingLeft: 0,
         paddingRight: 0,
         width: "calc(100% - 24px)",

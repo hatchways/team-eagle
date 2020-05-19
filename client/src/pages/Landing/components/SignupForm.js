@@ -22,10 +22,12 @@ export default function SignupForm(props) {
     name: "",
     email: "",
     password: "",
+    confirmPassword: "",
 
     nameError: false,
     emailError: false,
     passwordError: false,
+    confirmPasswordError: false,
 
     snackbarOpen: false,
   });
@@ -46,11 +48,12 @@ export default function SignupForm(props) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    const { name, email, password } = state;
+    const { name, email, password, confirmPassword } = state;
 
     let nameError = false;
     let emailError = false;
     let passwordError = false;
+    let confirmPasswordError = false;
     let snackbarOpen = false;
     let loading = false;
 
@@ -73,7 +76,13 @@ export default function SignupForm(props) {
       passwordError = `Password must contain at least ${passwordMinLength} characters`;
     }
 
-    if (!nameError && !emailError && !passwordError) {
+    if (!confirmPassword) {
+      confirmPasswordError = "This is a required field";
+    } else if (confirmPassword !== password) {
+      confirmPasswordError = "Passwords do not match";
+    }
+
+    if (!nameError && !emailError && !passwordError && !confirmPasswordError) {
       // Sends request to server
       loading = true;
     } else {
@@ -85,6 +94,7 @@ export default function SignupForm(props) {
       nameError,
       emailError,
       passwordError,
+      confirmPasswordError,
       snackbarOpen,
       loading,
     });
@@ -144,6 +154,29 @@ export default function SignupForm(props) {
           helperText={state.passwordError}
           required
         />
+        <TextField
+          className={classes.input}
+          label="Confirm Password"
+          variant="outlined"
+          value={state.confirmPassword}
+          onChange={handleChange}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                {state.confirmPassword.length >= passwordMinLength ? (
+                  <CheckIcon className={classes.checkIcon} />
+                ) : (
+                  <span></span>
+                )}
+              </InputAdornment>
+            ),
+          }}
+          type="password"
+          name="confirmPassword"
+          error={!!state.confirmPasswordError}
+          helperText={state.confirmPasswordError}
+          required
+        />
         <Box className={classes.submitBox}>
           <Button onClick={handleSubmit} variant="contained" color="primary">
             Create
@@ -158,7 +191,10 @@ export default function SignupForm(props) {
         autoHideDuration={6000}
         onClose={closeSnackbar}
       >
-        {state.nameError || state.emailError || state.passwordError ? (
+        {state.nameError ||
+        state.emailError ||
+        state.passwordError ||
+        state.confirmPasswordError ? (
           <Alert onClose={closeSnackbar} severity="error">
             Some fields are invalid
           </Alert>

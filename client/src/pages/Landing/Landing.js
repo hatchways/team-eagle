@@ -11,12 +11,16 @@ import SignupForm from "./components/SignupForm";
 import LoginForm from "./components/LoginForm";
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    position: "relative",
+  },
   nav: {
     marginLeft: "auto",
     marginRight: "auto",
     zIndex: 1,
   },
   link: {
+    marginTop: theme.spacing(6),
     position: "absolute",
     top: 0,
     right: 0,
@@ -24,15 +28,19 @@ const useStyles = makeStyles((theme) => ({
     borderColor: theme.palette.common.white,
   },
   forumIcon: {
+    marginTop: theme.spacing(6),
     fontSize: 80,
     position: "absolute",
     top: 0,
     left: 0,
   },
   wrapper: {
+    marginTop: 0,
+  },
+  leftSide: {
     width: "50%",
-    height: "100vh",
-    minHeight: "650px",
+    height: `calc(100vh - ${theme.spacing(6)}px)`,
+    minHeight: "850px",
     display: "flex",
     backgroundColor: "white",
   },
@@ -51,7 +59,8 @@ const useStyles = makeStyles((theme) => ({
     top: 0,
     right: 0,
     width: "50%",
-    height: "100vh",
+    minHeight: "100vh",
+    height: "100%",
     zIndex: "-1",
     backgroundImage: `url(${image})`,
     backgroundSize: "cover",
@@ -81,8 +90,9 @@ const useStyles = makeStyles((theme) => ({
     imageContainer: {
       right: "inherit",
       width: "100%",
+      backgroundPositionX: "calc(100% + 320px)",
     },
-    wrapper: {
+    leftSide: {
       width: "calc(100% - 24px)",
       margin: "auto",
       backgroundColor: "transparent",
@@ -97,7 +107,7 @@ export default function AuthLayout(props) {
   const classes = useStyles();
 
   return (
-    <>
+    <Box className={classes.root}>
       <Container className={classes.nav} component="nav">
         <ForumRoundedIcon className={classes.forumIcon} />
         <Button
@@ -109,8 +119,8 @@ export default function AuthLayout(props) {
           {props.form === "signup" ? "Log In" : "Sign Up"}
         </Button>
       </Container>
-      <Container>
-        <Box className={classes.wrapper}>
+      <Container className={classes.wrapper}>
+        <Box className={classes.leftSide}>
           <Card className={classes.card}>
             {props.form === "signup" ? (
               <SignupForm classes={classes} />
@@ -121,6 +131,6 @@ export default function AuthLayout(props) {
         </Box>
       </Container>
       <Box className={classes.imageContainer}></Box>
-    </>
+    </Box>
   );
 }
