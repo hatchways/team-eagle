@@ -15,6 +15,7 @@ let passwordMinLength = 6;
 
 export default function LoginForm(props) {
   const classes = props.classes;
+
   const [state, setState] = useState({
     email: "",
     password: "",
@@ -137,11 +138,7 @@ export default function LoginForm(props) {
           <Alert onClose={closeSnackbar} severity="error">
             Some fields are invalid
           </Alert>
-        ) : (
-          <Alert onClose={closeSnackbar} severity="success">
-            All fields are valid!
-          </Alert>
-        )}
+        ) : null}
       </Snackbar>
     </Box>
   );

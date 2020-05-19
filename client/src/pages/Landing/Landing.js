@@ -63,6 +63,7 @@ const useStyles = makeStyles((theme) => ({
     textTransform: "uppercase",
   },
   submitBox: {
+    marginTop: "32px",
     display: "flex",
     justifyContent: "space-between",
   },
