@@ -1,6 +1,7 @@
 import { createMuiTheme } from "@material-ui/core";
 
 export const theme = createMuiTheme({
+  // Use the overrides to set defaults
   overrides: {
     MuiButton: {
       root: {
@@ -17,9 +18,15 @@ export const theme = createMuiTheme({
     },
     MuiInputLabel: {
       outlined: {
+        fontWeight: 700,
         "&[data-shrink='true']": {
           transform: "translate(0, -6px) scale(1)",
         },
+      },
+    },
+    MuiInputBase: {
+      input: {
+        fontSize: 20,
       },
     },
     MuiOutlinedInput: {
@@ -27,6 +34,10 @@ export const theme = createMuiTheme({
         marginTop: "16px",
         "& legend": {
           display: "none",
+        },
+        '& input[type="password"]': {
+          font: "large Verdana,sans-serif",
+          letterSpacing: "1px",
         },
       },
     },
@@ -45,22 +56,22 @@ export const theme = createMuiTheme({
     },
   },
   typography: {
-    fontFamily: '"Roboto"',
+    fontFamily: '"Source Sans Pro", Arial, sans-serif',
     fontSize: 12,
     h1: {
       fontSize: "2rem",
+      fontWeight: 700,
     },
     a: {
-      fontFamily: '"Roboto"',
       display: "none",
     },
   },
   palette: {
     primary: {
-      main: "#000000",
+      main: "#000000", // Black
     },
     secondary: {
-      main: "#ffffff",
+      main: "#FF5D5D", // Pink
     },
   },
 });

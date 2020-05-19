@@ -1,14 +1,17 @@
 import React, { useState } from "react";
-
 import {
   Box,
   Snackbar,
   Typography,
   TextField,
+  InputAdornment,
   Button,
+  CircularProgress,
 } from "@material-ui/core";
-
 import { Alert } from "@material-ui/lab";
+import CheckIcon from "@material-ui/icons/Check";
+
+let passwordMinLength = 6;
 
 export default function LoginForm(props) {
   const classes = props.classes;
@@ -43,6 +46,7 @@ export default function LoginForm(props) {
     let emailError = false;
     let passwordError = false;
     let snackbarOpen = false;
+    let loading = false;
 
     // Validation
     if (!email) {
@@ -53,13 +57,13 @@ export default function LoginForm(props) {
 
     if (!password) {
       passwordError = "This is a required field";
-    } else if (password.length < 6) {
-      passwordError = "Password must contain at least 6 characters";
+    } else if (password.length < passwordMinLength) {
+      passwordError = `Password must contain at least ${passwordMinLength} characters`;
     }
 
     if (!emailError && !passwordError) {
       // Sends request to server
-      alert("All Fields are valid");
+      loading = true;
     } else {
       snackbarOpen = true;
     }
@@ -69,6 +73,7 @@ export default function LoginForm(props) {
       emailError,
       passwordError,
       snackbarOpen,
+      loading,
     });
   }
 
@@ -79,6 +84,7 @@ export default function LoginForm(props) {
       </Typography>
       <form>
         <TextField
+          autoFocus
           className={classes.input}
           label="Email Address"
           variant="outlined"
@@ -96,17 +102,31 @@ export default function LoginForm(props) {
           variant="outlined"
           value={state.password}
           onChange={handleChange}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                {state.password.length >= passwordMinLength ? (
+                  <CheckIcon className={classes.checkIcon} />
+                ) : (
+                  <span></span>
+                )}
+              </InputAdornment>
+            ),
+          }}
           type="password"
           name="password"
           error={!!state.passwordError}
           helperText={state.passwordError}
           required
         />
-        <div>
+        <Box className={classes.submitBox}>
           <Button onClick={handleSubmit} variant="contained" color="primary">
             Log In
           </Button>
-        </div>
+          {state.loading ? (
+            <CircularProgress className={classes.progressIcon} />
+          ) : null}
+        </Box>
       </form>
       <Snackbar
         open={state.snackbarOpen}

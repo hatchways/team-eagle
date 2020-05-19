@@ -3,6 +3,7 @@ import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import { Box, Card, Container, Snackbar, Button } from "@material-ui/core";
+import ForumRoundedIcon from "@material-ui/icons/ForumRounded";
 
 import image from "../../images/woman-laptop.png";
 
@@ -11,12 +12,22 @@ import LoginForm from "./components/LoginForm";
 
 const useStyles = makeStyles((theme) => ({
   nav: {
-    position: "absolute",
+    marginLeft: "auto",
+    marginRight: "auto",
+    zIndex: 1,
   },
   link: {
     position: "absolute",
     top: 0,
     right: 0,
+    color: theme.palette.common.white,
+    borderColor: theme.palette.common.white,
+  },
+  forumIcon: {
+    fontSize: 80,
+    position: "absolute",
+    top: 0,
+    left: 0,
   },
   wrapper: {
     width: "50%",
@@ -31,6 +42,9 @@ const useStyles = makeStyles((theme) => ({
     padding: "25px",
     backgroundColor: "white",
     boxShadow: "none",
+  },
+  heading: {
+    marginBottom: "4rem",
   },
   imageContainer: {
     position: "absolute",
@@ -48,10 +62,21 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: "14px",
     textTransform: "uppercase",
   },
-  heading: {
-    marginBottom: "4rem",
+  submitBox: {
+    display: "flex",
+    justifyContent: "space-between",
+  },
+  checkIcon: {
+    color: theme.palette.success.main,
+  },
+  progressIcon: {
+    color: theme.palette.success.main,
+    marginBottom: "-14px",
   },
   [theme.breakpoints.down("sm")]: {
+    forumIcon: {
+      display: "none",
+    },
     imageContainer: {
       right: "inherit",
       width: "100%",
@@ -73,25 +98,27 @@ export default function AuthLayout(props) {
   return (
     <>
       <Container className={classes.nav} component="nav">
+        <ForumRoundedIcon className={classes.forumIcon} />
         <Button
           component={RouterLink}
           variant="outlined"
-          color="secondary"
           className={classes.link}
           to={props.form === "signup" ? "/login" : "/signup"}
         >
           {props.form === "signup" ? "Log In" : "Sign Up"}
         </Button>
       </Container>
-      <Box className={classes.wrapper}>
-        <Card className={classes.card}>
-          {props.form === "signup" ? (
-            <SignupForm classes={classes} />
-          ) : (
-            <LoginForm classes={classes} />
-          )}
-        </Card>
-      </Box>
+      <Container>
+        <Box className={classes.wrapper}>
+          <Card className={classes.card}>
+            {props.form === "signup" ? (
+              <SignupForm classes={classes} />
+            ) : (
+              <LoginForm classes={classes} />
+            )}
+          </Card>
+        </Box>
+      </Container>
       <Box className={classes.imageContainer}></Box>
     </>
   );
