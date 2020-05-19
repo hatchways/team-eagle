@@ -2,6 +2,15 @@
 
 ## Instructions
 
+### React
+
+A component can only be imported into another if:
+
+- It is inside the components folder of the parent, or
+- It is inside the src/components folder
+
+All multi-purpose React components should be placed inside src/components.
+
 ### Material-UI
 
 Material-UI should be styled from within theme.js using overrides and specific styling should be made using the makeStyles hook. This project is not using any StyledComponents.
