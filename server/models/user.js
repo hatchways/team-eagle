@@ -21,4 +21,20 @@ const UserSchema = new Schema({
   }
 });
 
+UserSchema.pre("save", function (next) {
+  // create new hashed password when ordered to create or update password
+  if (!this.isModified("password")) {
+    return next();
+  }
+
+  this.password = bcrypt.genSalt(10, (err, salt) => {
+    bcrypt.hash(newUser.password, salt, (err, hash) => {
+      if (err) throw err;
+      return hash
+    })
+  });
+  
+  next();
+});
+
 module.exports = User = mongoose.model("users", UserSchema);

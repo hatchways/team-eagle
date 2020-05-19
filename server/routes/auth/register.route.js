@@ -26,20 +26,13 @@ router.post("/", (req, res) => {
         email: req.body.email,
         password: req.body.password
       });
-      // Hash password before saving in database
-      bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(newUser.password, salt, (err, hash) => {
-          if (err) throw err;
-          newUser.password = hash;
-          newUser
-            .save()
-            .then(user => {
-              delete user.password; // remove hashed password from response
-              return res.json(user);
-            })
-            .catch(err => console.log(err));
-        });
-      });
+      
+      newUser.save()
+        .then(user => {
+          delete user.password; // remove hashed password from response
+          return res.json(user);
+        })
+        .catch(err => console.log(err));
     }
   });
 });
