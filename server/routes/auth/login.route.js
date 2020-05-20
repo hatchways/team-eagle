@@ -35,9 +35,14 @@ router.post("/", (req, res) => {
       };
 
       const token = user.signJWT(payload);
-      return res.json({
-        success: true
-      })
+      res
+      .cookie("jwt", token, { httpOnly: true, secure: true })
+      .json({
+        success: true,
+        data: {
+          user
+        }
+      });
     } else {
       return res.status(400).json({ message: "Incorrect credentials" });
     }
