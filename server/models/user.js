@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const keys = require("../config/keys");
 
 const Schema = mongoose.Schema;// Create Schem
 
@@ -41,5 +43,21 @@ UserSchema.pre("save", async function (next) {
 UserSchema.methods.checkPassword = function(password) {
   return bcrypt.compare(password, this.password);
 }
+
+UserSchema.methods.signJWT = function (payload) {
+  jwt.sign(
+    payload,
+    keys.secretOrKey,
+    {
+      expiresIn: 31556926, // 1 year in seconds
+    },
+    (err, token) => {
+      res.json({
+        success: true,
+        token: "Bearer " + token,
+      });
+    }
+  );
+};
 
 module.exports = User = mongoose.model("users", UserSchema);

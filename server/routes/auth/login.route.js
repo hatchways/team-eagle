@@ -1,7 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const jwt = require("jsonwebtoken");
-const keys = require("../../config/keys");
 
 const validateLoginInput = require("../../validation/auth/login.validation");
 
@@ -30,29 +28,15 @@ router.post("/", (req, res) => {
     }
 
     // Check password
-    user.checkPassword(password).then((isMatch) => {
-      if (isMatch) {
-        const payload = {
-          id: user.id,
-        };
-        // Sign token
-        jwt.sign(
-          payload,
-          keys.secretOrKey,
-          {
-            expiresIn: 31556926, // 1 year in seconds
-          },
-          (err, token) => {
-            res.json({
-              success: true,
-              token: "Bearer " + token,
-            });
-          }
-        );
-      } else {
-        return res.status(400).json({ message: "Incorrect credentials" });
-      }
-    });
+    const isMatch = user.checkPassword(password);
+    if (isMatch) {
+      const payload = {
+        id: user.id,
+      };
+      user.signJWT(payload);
+    } else {
+      return res.status(400).json({ message: "Incorrect credentials" });
+    }
   });
 });
 
