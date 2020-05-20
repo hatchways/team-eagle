@@ -33,7 +33,11 @@ router.post("/", (req, res) => {
       const payload = {
         id: user.id,
       };
-      user.signJWT(payload);
+
+      const token = user.signJWT(payload);
+      return res.json({
+        success: true
+      })
     } else {
       return res.status(400).json({ message: "Incorrect credentials" });
     }

@@ -45,17 +45,11 @@ UserSchema.methods.checkPassword = function(password) {
 }
 
 UserSchema.methods.signJWT = function (payload) {
-  jwt.sign(
+  return jwt.sign(
     payload,
     keys.secretOrKey,
     {
       expiresIn: 31556926, // 1 year in seconds
-    },
-    (err, token) => {
-      res.json({
-        success: true,
-        token: "Bearer " + token,
-      });
     }
   );
 };
