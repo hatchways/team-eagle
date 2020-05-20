@@ -20,26 +20,21 @@ router.post("/", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
 
-  // Find user by email
   User.findOne({ email }).then((user) => {
-    // Check if user exists
     if (!user) {
       return res.status(400).json({ message: "Incorrect credentials" });
     }
 
-    // Check password
     const isMatch = user.checkPassword(password);
     if (isMatch) {
-      const payload = {
-        id: user.id,
-      };
-
+      const payload = { id: user.id };
       const token = user.signJWT(payload);
-      res
-      .cookie("jwt", token, { httpOnly: true, secure: true })
-      .json({ user });
+
+      user.password = null;
+
+      res.cookie("jwt", token, { httpOnly: true, secure: true }).json(user);
     } else {
-      return res.status(400).json({ message: "Incorrect credentials" });
+      res.status(400).json({ message: "Incorrect credentials" });
     }
   });
 });

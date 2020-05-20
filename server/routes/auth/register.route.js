@@ -28,8 +28,8 @@ router.post("/", (req, res) => {
       
       newUser.save()
         .then(user => {
-          delete user.password; // remove hashed password from response
-          return res.json(user);
+          user.password = null;
+          res.json(user);
         })
         .catch(err => console.log(err));
     }
