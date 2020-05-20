@@ -6,7 +6,7 @@ const validateLoginInput = require("../../validation/auth/login.validation");
 const User = require("../../models/User");
 
 // @route POST /auth/login
-// @desc Login user and return JWT token
+// @desc Login user and return JWT token in cookie, and user in json response
 // @access Public
 router.post("/", (req, res) => {
   // Form validation
@@ -37,12 +37,7 @@ router.post("/", (req, res) => {
       const token = user.signJWT(payload);
       res
       .cookie("jwt", token, { httpOnly: true, secure: true })
-      .json({
-        success: true,
-        data: {
-          user
-        }
-      });
+      .json({ user });
     } else {
       return res.status(400).json({ message: "Incorrect credentials" });
     }
