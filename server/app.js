@@ -9,6 +9,7 @@ const indexRouter = require("./routes/index");
 const pingRouter = require("./routes/ping");
 const registerRouter = require("./routes/auth/register.route");
 const loginRouter = require("./routes/auth/login.route");
+const addPollRouter = require("./routes/polls/add.route");
 
 const { json, urlencoded } = express;
 
@@ -16,7 +17,7 @@ const app = express();
 const mongoose = require("mongoose"); //For database connection
 
 // Connecting to database. fail if not able to connect
-mongoose.connect("mongodb://localhost:27017", {useNewUrlParser:true});
+mongoose.connect("mongodb://localhost:27017/test", {useNewUrlParser:true});
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, 'connection error: '));
 db.once("open", function(){
@@ -39,6 +40,7 @@ app.use("/", indexRouter);
 app.use("/ping", pingRouter);
 app.use("/auth/register", registerRouter);
 app.use("/auth/login", loginRouter);
+app.use("/polls/add", addPollRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
