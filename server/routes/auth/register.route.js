@@ -16,15 +16,15 @@ router.post("/", (req, res) => {
     return res.status(400).json(errors);
   }
 
-  User.findOne({ email: req.body.email }).then(user => {
+  const name = req.body.name;
+  const email = req.body.email;
+  const password = req.body.password; 
+
+  User.findOne({ email }).then(user => {
     if (user) {
       return res.status(400).json({ email: "Email already exists" });
     } else {
-      const newUser = new User({
-        name: req.body.name,
-        email: req.body.email,
-        password: req.body.password
-      });
+      const newUser = new User({ name, email, password });
       
       newUser.save()
         .then(user => {
