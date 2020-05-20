@@ -5,9 +5,9 @@ const validateLoginInput = require("../../validation/auth/login.validation");
 
 const User = require("../../models/User");
 
-// @route POST /auth/login
-// @desc Login user and return JWT token in cookie, and user in json response
-// @access Public
+// @route:  POST /auth/login
+// @desc:   Login user and return response that has cookie, and json user
+// @access: Public
 router.post("/", (req, res) => {
   // Form validation
   const { errors, isValid } = validateLoginInput(req.body);

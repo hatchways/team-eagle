@@ -4,9 +4,9 @@ const router = express.Router();
 const validateRegisterInput = require("../../validation/auth/register.validation");
 const User = require("../../models/User");
 
-// @route POST /auth/register
-// @desc Register user
-// @access Public
+// @route:  POST /auth/register
+// @desc:   Register user and return response that has cookie, and json user
+// @access: Public
 router.post("/", (req, res) => {
   // Form validation
   const { errors, isValid } = validateRegisterInput(req.body);
