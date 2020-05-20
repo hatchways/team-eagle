@@ -41,7 +41,7 @@ UserSchema.pre("save", async function (next) {
 });
 
 UserSchema.methods.checkPassword = function(password) {
-  return bcrypt.compare(password, this.password);
+  return bcrypt.compareSync(password, this.password);
 }
 
 UserSchema.methods.signJWT = function (payload) {
