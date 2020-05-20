@@ -28,8 +28,12 @@ router.post("/", (req, res) => {
       
       newUser.save()
         .then(user => {
+          const payload = { id: user.id };
+          const token = user.signJWT(payload);
+
           user.password = null;
-          res.json(user);
+          
+          res.cookie("jwt", token, { httpOnly: true, secure: true }).json(user);
         })
         .catch(err => console.log(err));
     }
