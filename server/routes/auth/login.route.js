@@ -34,7 +34,6 @@ router.post("/", (req, res) => {
       if (isMatch) {
         const payload = {
           id: user.id,
-          name: user.name,
         };
         // Sign token
         jwt.sign(
