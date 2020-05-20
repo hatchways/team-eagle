@@ -24,8 +24,8 @@ const PollSchema = new Schema({
 	],
 });
 
-PollSchema.methods.addImage = function(imageLocation){
-    this.images.push({url:imageLocation})
-}
+PollSchema.methods.addImage = function (imageLocation) {
+	this.images.push({ url: imageLocation });
+};
 
 module.exports = Poll = mongoose.model("polls", PollSchema);
