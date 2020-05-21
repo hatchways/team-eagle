@@ -11,9 +11,7 @@ const pingRouter = require("./routes/ping");
 const registerRouter = require("./routes/auth/register.route");
 const loginRouter = require("./routes/auth/login.route");
 // Poll routes
-const addPollRouter = require("./routes/polls/add.route");
-const deletePollRouter = require("./routes/polls/delete.route");
-const updatePollRouter = require("./routes/polls/update.route");
+const pollsRouter = require("./routes/polls/polls.route");
 
 const { json, urlencoded } = express;
 
@@ -21,12 +19,15 @@ const app = express();
 const mongoose = require("mongoose"); //For database connection
 
 // Connecting to database. fail if not able to connect
-mongoose.connect("mongodb://localhost:27017/test", { useUnifiedTopology: true, useNewUrlParser: true });
+mongoose.connect("mongodb://localhost:27017/test", {
+  useUnifiedTopology: true,
+  useNewUrlParser: true,
+});
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error: "));
 db.once("open", function () {
-	// We're connected
-	console.log("connected to database");
+  // We're connected
+  console.log("connected to database");
 });
 
 app.use(logger("dev"));
@@ -46,24 +47,22 @@ app.use("/ping", pingRouter);
 app.use("/auth/register", registerRouter);
 app.use("/auth/login", loginRouter);
 // Polls backend routes
-app.use("/polls/add", addPollRouter);
-app.use("/polls/delete", deletePollRouter);
-app.use("/polls/update", updatePollRouter);
+app.use("/polls", pollsRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-	next(createError(404));
+  next(createError(404));
 });
 
 // error handler
 app.use(function (err, req, res, next) {
-	// set locals, only providing error in development
-	res.locals.message = err.message;
-	res.locals.error = req.app.get("env") === "development" ? err : {};
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get("env") === "development" ? err : {};
 
-	// render the error page
-	res.status(err.status || 500);
-	res.json({ error: err });
+  // render the error page
+  res.status(err.status || 500);
+  res.json({ error: err });
 });
 
 module.exports = app;
