@@ -41,8 +41,10 @@ require("./config/passport")(passport);
 // Routes
 app.use("/", indexRouter);
 app.use("/ping", pingRouter);
+// Login Routes
 app.use("/auth/register", registerRouter);
 app.use("/auth/login", loginRouter);
+// Polls backend routes
 app.use("/polls/add", addPollRouter);
 app.use("/polls/delete", deletePollRouter);
 
