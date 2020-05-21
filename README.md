@@ -13,10 +13,9 @@ ___
 
 ### API
 #### Endpoints
-- `/auth/register`
- - Parameters: _name, email, password_
-- `/auth/login`
- - Parameters: _email, password_
+- `POST /auth/register`
+- `POST /auth/login`
+- `DELETE /auth/logout`
 
 #### Protecting Endpoints
 To make a certain API endpint only accessible by logged-in users, do the following:
