@@ -4,7 +4,7 @@ const Poll = require("../../models/polls");
 const upload = require("./utils");
 
 // Route to update the title of the poll
-router.post("/", (req, res) => {
+router.post("/", (req, res) => {	
 	const title = req.body.title;
 	const pollId = req.body.pollId;
 
@@ -17,7 +17,7 @@ router.post("/", (req, res) => {
 
 // Router to update the image
 router.post("/image", upload.any(), (req, res) => {
-	// This method expects the name of the field to be the id of the image
+	// This method expects the name of the field to be the id of the image	
 	const image = req.files[0];
 	const pollId = req.body.pollId;
 
