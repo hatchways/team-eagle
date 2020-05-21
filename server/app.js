@@ -21,7 +21,7 @@ const app = express();
 const mongoose = require("mongoose"); //For database connection
 
 // Connecting to database. fail if not able to connect
-mongoose.connect("mongodb://localhost:27017/test", { useNewUrlParser: true });
+mongoose.connect("mongodb://localhost:27017/test", { useUnifiedTopology: true, useNewUrlParser: true });
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error: "));
 db.once("open", function () {
