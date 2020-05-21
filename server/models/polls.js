@@ -7,7 +7,7 @@ const PollSchema = new Schema({
     required: true,
   },
   userId: {
-    type: Number,
+    type: String,
     required: true,
   },
   date: {
