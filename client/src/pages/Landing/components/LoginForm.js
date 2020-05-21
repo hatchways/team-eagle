@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Box,
   Snackbar,
@@ -7,9 +7,9 @@ import {
   InputAdornment,
   Button,
   CircularProgress,
-} from "@material-ui/core";
-import { Alert } from "@material-ui/lab";
-import CheckIcon from "@material-ui/icons/Check";
+} from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
+import CheckIcon from '@material-ui/icons/Check';
 
 let passwordMinLength = 6;
 
@@ -17,8 +17,8 @@ export default function LoginForm(props) {
   const classes = props.classes;
 
   const [state, setState] = useState({
-    email: "",
-    password: "",
+    email: '',
+    password: '',
 
     emailError: false,
     passwordError: false,
@@ -51,13 +51,13 @@ export default function LoginForm(props) {
 
     // Validation
     if (!email) {
-      emailError = "This is a required field";
-    } else if (email.search("@") === -1) {
-      emailError = "Please provide a valid email address";
+      emailError = 'This is a required field';
+    } else if (email.search('@') === -1) {
+      emailError = 'Please provide a valid email address';
     }
 
     if (!password) {
-      passwordError = "This is a required field";
+      passwordError = 'This is a required field';
     } else if (password.length < passwordMinLength) {
       passwordError = `Password must contain at least ${passwordMinLength} characters`;
     }

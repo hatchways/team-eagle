@@ -1,14 +1,14 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
 
-const validateLoginInput = require("../../validation/auth/login.validation");
+const validateLoginInput = require('../../validation/auth/login.validation');
 
-const User = require("../../models/User");
+const User = require('../../models/User');
 
 // @route POST /auth/login
 // @desc Login user and return JWT token
 // @access Public
-router.post("/", (req, res) => {
+router.post('/', (req, res) => {
   // Form validation
   const { errors, isValid } = validateLoginInput(req.body);
 
@@ -24,7 +24,7 @@ router.post("/", (req, res) => {
   User.findOne({ email }).then((user) => {
     // Check if user exists
     if (!user) {
-      return res.status(400).json({ message: "Incorrect credentials" });
+      return res.status(400).json({ message: 'Incorrect credentials' });
     }
 
     // Check password
@@ -36,10 +36,10 @@ router.post("/", (req, res) => {
 
       const token = user.signJWT(payload);
       return res.json({
-        success: true
-      })
+        success: true,
+      });
     } else {
-      return res.status(400).json({ message: "Incorrect credentials" });
+      return res.status(400).json({ message: 'Incorrect credentials' });
     }
   });
 });
