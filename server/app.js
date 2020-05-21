@@ -7,9 +7,12 @@ const passport = require("passport");
 
 const indexRouter = require("./routes/index");
 const pingRouter = require("./routes/ping");
+// Auth routes
 const registerRouter = require("./routes/auth/register.route");
 const loginRouter = require("./routes/auth/login.route");
+// Poll routes
 const addPollRouter = require("./routes/polls/add.route");
+const deletePollRouter = require("./routes/polls/delete.route");
 
 const { json, urlencoded } = express;
 
@@ -41,6 +44,7 @@ app.use("/ping", pingRouter);
 app.use("/auth/register", registerRouter);
 app.use("/auth/login", loginRouter);
 app.use("/polls/add", addPollRouter);
+app.use("/polls/delete", deletePollRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
