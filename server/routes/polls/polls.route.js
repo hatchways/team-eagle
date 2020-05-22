@@ -56,19 +56,17 @@ router.delete("/:pollId", (req, res) => {
 // @params image [name attributes should equal to  id of the existing image], pollId
 // @access public [to be made private]
 // @caution form trying to use this, will always have to be a enctype="multipart/form-data"
-router.put("/", upload.any(), (req, res) => {
-  const pollId = req.body.pollId;
-  const messages = [];
+router.put("/:pollId", upload.any(), (req, res) => {
+  const pollId = req.params["pollId"];
+  const messages = {};
 
   Poll.findById(pollId, (err, poll) => {
     if (err) return console.log(err);
     // Update the title if the title exists
     if (req.body.title) {
-      console.log("title exists");
       if (req.body.title != poll.title) {
         poll.updateTitle(req.body.title);
-        console.log("title updated");
-        messages.push("title updated");
+        messages.title = "Title updated";
       }
     }
     // Update the images subdoc if files exist in request
@@ -76,7 +74,7 @@ router.put("/", upload.any(), (req, res) => {
       req.files.map((image) => {
         poll.updateImage(image.location, image.fieldname);
       });
-      messages.push("images updated");
+      messages.images = "Image updated";
     }
   });
 
