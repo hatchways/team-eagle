@@ -1,7 +1,7 @@
-const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const keys = require("../config/keys");
+const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const keys = require('../config/keys');
 
 const Schema = mongoose.Schema; // Create Schem
 
@@ -25,9 +25,9 @@ const UserSchema = new Schema({
   },
 });
 
-UserSchema.pre("save", async function (next) {
+UserSchema.pre('save', async function (next) {
   // hash password when ordered to create or update password
-  if (!this.isModified("password")) {
+  if (!this.isModified('password')) {
     return next();
   }
 
@@ -52,4 +52,4 @@ UserSchema.methods.signJWT = function (payload) {
   );
 };
 
-module.exports = User = mongoose.model("users", UserSchema);
+module.exports = User = mongoose.model('users', UserSchema);

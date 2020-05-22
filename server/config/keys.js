@@ -1,4 +1,4 @@
 module.exports = {
-  mongoURI: "",
-  secretOrKey: "secret"
+  mongoURI: '',
+  secretOrKey: 'secret',
 };

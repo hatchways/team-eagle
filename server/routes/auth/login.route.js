@@ -1,14 +1,14 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
 
-const validateLoginInput = require("../../validation/auth/login.validation");
+const validateLoginInput = require('../../validation/auth/login.validation');
 
-const User = require("../../models/User");
+const User = require('../../models/User');
 
 // @route:  POST /auth/login
 // @desc:   Login user and return response that has cookie, and json user
 // @access: Public
-router.post("/", (req, res) => {
+router.post('/', (req, res) => {
   // Form validation
   const { errors, isValid } = validateLoginInput(req.body);
 
@@ -22,7 +22,7 @@ router.post("/", (req, res) => {
 
   User.findOne({ email }).then((user) => {
     if (!user) {
-      return res.status(400).json({ message: "Incorrect credentials" });
+      return res.status(400).json({ message: 'Incorrect credentials' });
     }
 
     const isMatch = user.checkPassword(password);
@@ -32,9 +32,9 @@ router.post("/", (req, res) => {
 
       user.password = null;
 
-      res.cookie("jwt", token, { httpOnly: true, secure: true }).json(user);
+      res.cookie('jwt', token, { httpOnly: true, secure: true }).json(user);
     } else {
-      res.status(400).json({ message: "Incorrect credentials" });
+      res.status(400).json({ message: 'Incorrect credentials' });
     }
   });
 });

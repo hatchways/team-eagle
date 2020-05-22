@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
 import {
   Box,
@@ -8,9 +8,9 @@ import {
   InputAdornment,
   Button,
   CircularProgress,
-} from "@material-ui/core";
-import { Alert } from "@material-ui/lab";
-import CheckIcon from "@material-ui/icons/Check";
+} from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
+import CheckIcon from '@material-ui/icons/Check';
 
 let nameMinLength = 3;
 let passwordMinLength = 6;
@@ -19,10 +19,10 @@ export default function SignupForm(props) {
   const classes = props.classes;
 
   const [state, setState] = useState({
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
 
     nameError: false,
     emailError: false,
@@ -59,27 +59,27 @@ export default function SignupForm(props) {
 
     // Validation
     if (!name) {
-      nameError = "This is a required field";
+      nameError = 'This is a required field';
     } else if (name.length < nameMinLength) {
       nameError = `Name must contain at least ${nameMinLength} characters`;
     }
 
     if (!email) {
-      emailError = "This is a required field";
-    } else if (email.search("@") === -1) {
-      emailError = "Please provide a valid email address";
+      emailError = 'This is a required field';
+    } else if (email.search('@') === -1) {
+      emailError = 'Please provide a valid email address';
     }
 
     if (!password) {
-      passwordError = "This is a required field";
+      passwordError = 'This is a required field';
     } else if (password.length < passwordMinLength) {
       passwordError = `Password must contain at least ${passwordMinLength} characters`;
     }
 
     if (!confirmPassword) {
-      confirmPasswordError = "This is a required field";
+      confirmPasswordError = 'This is a required field';
     } else if (confirmPassword !== password) {
-      confirmPasswordError = "Passwords do not match";
+      confirmPasswordError = 'Passwords do not match';
     }
 
     if (!nameError && !emailError && !passwordError && !confirmPasswordError) {
