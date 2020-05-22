@@ -43,7 +43,7 @@ router.post("/", upload.any(), (req, res) => {
 // @params pollId
 // @access private
 router.delete("/:pollId", (req, res) => {
-  const pollId = req.params["pollId"];  
+  const pollId = req.params["pollId"];
   Poll.findById(pollId, function (err, poll) {
     if (err) return res.status(400).json({ error: "poll not found" });
     else poll.remove();
