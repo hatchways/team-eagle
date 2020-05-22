@@ -41,6 +41,10 @@ describe('POST /register', () => {
         .send(user)
         .end((err, res) => {
           this.response = res;
+          this.cookie = this.response.headers['set-cookie'].find((el) =>
+            el.includes('jwt=')
+          );
+          this.jwt = this.cookie ? this.cookie.split(';')[0] : '';
           done();
         });
     });
@@ -50,9 +54,7 @@ describe('POST /register', () => {
     });
 
     it('it returns a JWT token', () => {
-      expect(
-        this.response.headers['set-cookie'].some((el) => el.includes('jwt='))
-      ).to.be.true;
+      expect(this.jwt.length > 4).to.be.true;
     });
   });
 });
