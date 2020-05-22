@@ -7,9 +7,12 @@ const passport = require("passport");
 
 const indexRouter = require("./routes/index");
 const pingRouter = require("./routes/ping");
+// Auth routes
 const registerRouter = require("./routes/auth/register.route");
 const loginRouter = require("./routes/auth/login.route");
 const logoutRouter = require("./routes/auth/logout.route");
+// Poll routes
+const pollsRouter = require("./routes/polls/polls.route");
 
 const { json, urlencoded } = express;
 
@@ -17,13 +20,16 @@ const app = express();
 const mongoose = require("mongoose"); //For database connection
 
 // Connecting to database. fail if not able to connect
-mongoose.connect("mongodb://localhost:27017", {useNewUrlParser:true});
+mongoose.connect("mongodb://localhost:27017/test", {
+  useUnifiedTopology: true,
+  useNewUrlParser: true,
+});
 const db = mongoose.connection;
-db.on("error", console.error.bind(console, 'connection error: '));
-db.once("open", function(){
+db.on("error", console.error.bind(console, "connection error: "));
+db.once("open", function () {
   // We're connected
   console.log("connected to database");
-})
+});
 
 app.use(logger("dev"));
 app.use(json());
@@ -38,17 +44,20 @@ require("./config/passport")(passport);
 // Routes
 app.use("/", indexRouter);
 app.use("/ping", pingRouter);
+// Login Routes
 app.use("/auth/register", registerRouter);
 app.use("/auth/login", loginRouter);
 app.use("/auth/logout", logoutRouter);
+// Poll Routes
+app.use("/polls", pollsRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
