@@ -63,8 +63,28 @@ export default function LoginForm(props) {
     }
 
     if (!emailError && !passwordError) {
-      // Sends request to server
       loading = true;
+      // Sends request to server
+      fetch("/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        referrerPolicy: "no-referrer",
+        body: JSON.stringify({
+          email: state.email,
+          password: state.password,
+        }),
+      })
+        .then(function (res) {
+          res.json().then(function (user) {
+            console.log(user);
+          });
+        })
+        .catch(function (err) {
+          // Add message to user here!
+          throw err;
+        });
     } else {
       snackbarOpen = true;
     }

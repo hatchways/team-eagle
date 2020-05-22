@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 import {
   Box,
@@ -18,7 +18,7 @@ let passwordMinLength = 6;
 export default function SignupForm(props) {
   const classes = props.classes;
 
-  const [state, setState] = useState({
+  const [state, setState] = React.useState({
     name: "",
     email: "",
     password: "",
@@ -83,8 +83,29 @@ export default function SignupForm(props) {
     }
 
     if (!nameError && !emailError && !passwordError && !confirmPasswordError) {
-      // Sends request to server
       loading = true;
+      // Sends request to server
+      fetch("/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        referrerPolicy: "no-referrer",
+        body: JSON.stringify({
+          name: state.name,
+          email: state.email,
+          password: state.password,
+        }),
+      })
+        .then(function (res) {
+          res.json().then(function (user) {
+            console.log(user);
+          });
+        })
+        .catch(function (err) {
+          // Add message to user here!
+          throw err;
+        });
     } else {
       snackbarOpen = true;
     }

@@ -13,7 +13,7 @@ import "./App.css";
 // Temporary
 const isLoggedIn = false;
 
-function User({ children }) {
+function ContextProvider({ children }) {
   const [state, setState] = React.useState({
     // Placeholders
     name: "Caroline",
@@ -22,7 +22,15 @@ function User({ children }) {
       "https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?cs=srgb&dl=closeup-photo-of-woman-with-brown-coat-and-gray-top-733872.jpg&fm=jpg",
   });
 
-  return <UserContext.Provider value={state}>{children}</UserContext.Provider>;
+  function setUser(user) {
+    setState(user);
+  }
+
+  return (
+    <UserContext.Provider value={{ ...state, setUser }}>
+      {children}
+    </UserContext.Provider>
+  );
 }
 
 function App() {
@@ -32,9 +40,9 @@ function App() {
         {isLoggedIn ? (
           <>
             <Route path="/">
-              <User>
+              <ContextProvider>
                 <NavBar />
-              </User>
+              </ContextProvider>
             </Route>
           </>
         ) : (
