@@ -42,13 +42,12 @@ router.post("/", upload.any(), (req, res) => {
 // @desc to be delete a poll with a given pollId
 // @params pollId
 // @access private
-router.delete("/", (req, res) => {
-  const pollId = req.body.id;
-  Poll.findByIdAndDelete(pollId, (error) => {
-    if (error) return res.status(400).send(error);
-    else {
-      return res.status(200).json({ status: "ok" });
-    }
+router.delete("/:pollId", (req, res) => {
+  const pollId = req.params["pollId"];
+  Poll.findById(pollId, function (err, poll) {
+    if (err) return res.status(400).json({ error: err });
+    poll.remove();
+    return res.status(200).json({ status: "ok" });
   });
 });
 
