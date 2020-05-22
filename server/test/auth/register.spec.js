@@ -7,7 +7,7 @@ chai.use(chaiHttp);
 
 const expect = chai.expect;
 
-describe('POST /register', () => {
+describe('POST /auth/register', () => {
   context('When parameters are invalid', () => {
     let user = {
       name: 'John Doe',
