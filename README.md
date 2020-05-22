@@ -22,9 +22,14 @@ The upload functions will take the credentials from your local .env file. Please
 
 ### API
 #### Endpoints
+Login Routes
 - `POST /auth/register`
 - `POST /auth/login`
 - `DELETE /auth/logout`
+Polls Routes
+- `POST /polls`
+- `PUT /polls/<pollId>`
+- `DELETE /polls/<pollId> `
 
 #### Protecting Endpoints
 To make a certain API endpint only accessible by logged-in users, do the following:
