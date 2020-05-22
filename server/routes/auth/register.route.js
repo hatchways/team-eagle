@@ -4,9 +4,9 @@ const router = express.Router();
 const validateRegisterInput = require("../../validation/auth/register.validation");
 const User = require("../../models/User");
 
-// @route POST /auth/register
-// @desc Register user
-// @access Public
+// @route:  POST /auth/register
+// @desc:   Register user and return response that has cookie, and json user
+// @access: Public
 router.post("/", (req, res) => {
   // Form validation
   const { errors, isValid } = validateRegisterInput(req.body);
@@ -16,20 +16,24 @@ router.post("/", (req, res) => {
     return res.status(400).json(errors);
   }
 
-  User.findOne({ email: req.body.email }).then(user => {
+  const name = req.body.name;
+  const email = req.body.email;
+  const password = req.body.password; 
+
+  User.findOne({ email }).then(user => {
     if (user) {
       return res.status(400).json({ email: "Email already exists" });
     } else {
-      const newUser = new User({
-        name: req.body.name,
-        email: req.body.email,
-        password: req.body.password
-      });
+      const newUser = new User({ name, email, password });
       
       newUser.save()
         .then(user => {
-          delete user.password; // remove hashed password from response
-          return res.json(user);
+          const payload = { id: user.id };
+          const token = user.signJWT(payload);
+
+          user.password = null;
+          
+          res.cookie("jwt", token, { httpOnly: true, secure: true }).json(user);
         })
         .catch(err => console.log(err));
     }

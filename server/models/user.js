@@ -3,26 +3,26 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const keys = require("../config/keys");
 
-const Schema = mongoose.Schema;// Create Schem
+const Schema = mongoose.Schema; // Create Schem
 
 // Schema for user Model
 const UserSchema = new Schema({
   name: {
     type: String,
-    required: true
+    required: true,
   },
   email: {
     type: String,
-    required: true
+    required: true,
   },
   password: {
     type: String,
-    required: true
+    required: true,
   },
   date: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
 });
 
 UserSchema.pre("save", async function (next) {
@@ -30,7 +30,7 @@ UserSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
     return next();
   }
-  
+
   try {
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
@@ -40,17 +40,15 @@ UserSchema.pre("save", async function (next) {
   }
 });
 
-UserSchema.methods.checkPassword = function(password) {
+UserSchema.methods.checkPassword = function (password) {
   return bcrypt.compareSync(password, this.password);
-}
+};
 
 UserSchema.methods.signJWT = function (payload) {
   return jwt.sign(
     payload,
     keys.secretOrKey,
-    {
-      expiresIn: 31556926, // 1 year in seconds
-    }
+    { expiresIn: 31556926 } // 1 year in seconds
   );
 };
 
