@@ -10,8 +10,7 @@ const pingRouter = require("./routes/ping");
 // Auth routes
 const registerRouter = require("./routes/auth/register.route");
 const loginRouter = require("./routes/auth/login.route");
-// Poll routes
-const pollsRouter = require("./routes/polls/polls.route");
+const logoutRouter = require("./routes/auth/logout.route");
 
 const { json, urlencoded } = express;
 
@@ -46,8 +45,7 @@ app.use("/ping", pingRouter);
 // Login Routes
 app.use("/auth/register", registerRouter);
 app.use("/auth/login", loginRouter);
-// Polls backend routes
-app.use("/polls", pollsRouter);
+app.use("/auth/logout", logoutRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

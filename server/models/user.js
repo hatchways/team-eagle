@@ -38,8 +38,12 @@ UserSchema.pre("save", async function (next) {
 	}
 });
 
-UserSchema.methods.checkPassword = function (password) {
-	return bcrypt.compare(password, this.password);
+UserSchema.methods.signJWT = function (payload) {
+  return jwt.sign(
+    payload,
+    keys.secretOrKey,
+    { expiresIn: 31556926 } // 1 year in seconds
+  );
 };
 
 module.exports = User = mongoose.model("users", UserSchema);
