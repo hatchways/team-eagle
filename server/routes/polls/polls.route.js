@@ -43,10 +43,10 @@ router.post("/", upload.any(), (req, res) => {
 // @params pollId
 // @access private
 router.delete("/:pollId", (req, res) => {
-  const pollId = req.params["pollId"];
+  const pollId = req.params["pollId"];  
   Poll.findById(pollId, function (err, poll) {
-    if (err) return res.status(400).json({ error: err });
-    poll.remove();
+    if (err) return res.status(400).json({ error: "poll not found" });
+    else poll.remove();
     return res.status(200).json({ status: "ok" });
   });
 });
@@ -70,7 +70,7 @@ router.put("/:pollId", upload.any(), (req, res) => {
       }
     }
     // Update the images subdoc if files exist in request
-    if (req.files) {
+    if (req.files.length > 0) {
       req.files.map((image) => {
         poll.updateImage(image.location, image.fieldname);
       });
