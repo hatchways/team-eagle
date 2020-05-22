@@ -4,7 +4,7 @@ const { MongoMemoryServer } = require('mongodb-memory-server');
 const mongod = new MongoMemoryServer();
 
 // @fileDesc : this file is used to create a mock database for testing
-  // the db is cleared and removed after testing
+// the db is cleared and removed after testing
 
 /**
  * Connect to the in-memory database.
@@ -36,13 +36,12 @@ module.exports.closeDatabase = async () => {
  */
 module.exports.clearDatabase = async () => {
   const collections = mongoose.connection.collections;
-  
+
   for (const key in collections) {
     const collection = collections[key];
     await collection.deleteMany();
   }
-  console.log('############ CLEARED DB ########## ');
 };
 
-// reference:
-// https://dev.to/paulasantamaria/testing-node-js-mongoose-with-an-in-memory-database-32np
+// reference(s):
+// functions : https://dev.to/paulasantamaria/testing-node-js-mongoose-with-an-in-memory-database-32np

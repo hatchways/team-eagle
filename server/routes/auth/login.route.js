@@ -21,7 +21,6 @@ router.post('/', (req, res) => {
   const password = req.body.password;
 
   User.findOne({ email }).then((user) => {
-    console.log('User ===============>', user);
     if (!user) {
       return res.status(400).json({ message: 'Incorrect credentials' });
     }

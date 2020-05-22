@@ -7,12 +7,17 @@ chai.use(chaiHttp);
 
 const expect = chai.expect;
 
-describe('POST /login', () => {
-  beforeEach((done) => {
+describe('POST /auth/login', () => {
+  /**
+   * Create a user before running any of the context hooks
+   */
+  before((done) => {
     let user = {
+      name: 'fake user',
       email: 'fakeEmail@gamil.com',
       password: '12345678',
     };
+
     chai
       .request(app)
       .post('/auth/register')
@@ -20,10 +25,9 @@ describe('POST /login', () => {
       .end((err, res) => {
         done();
       });
-    console.log('############ CREATED User ########## ');
   });
 
-  describe('When parameters are invalid', () => {
+  context('When parameters are invalid', () => {
     it('it returns 400 status code', (done) => {
       let user = {
         email: 'fakeEmail@gamil.com',
@@ -41,7 +45,7 @@ describe('POST /login', () => {
     });
   });
 
-  describe('When parameters are valid', () => {
+  context('When parameters are valid', () => {
     let user = {
       email: 'fakeEmail@gamil.com',
       password: '12345678',
@@ -64,7 +68,8 @@ describe('POST /login', () => {
         .post('/auth/login')
         .send(user)
         .end((err, res) => {
-          expect(res.cookie('jwt').to.be.a('string'));
+          expect(res.headers['set-cookie'].some((el) => el.includes('jwt='))).to
+            .be.true;
           done();
         });
     });
