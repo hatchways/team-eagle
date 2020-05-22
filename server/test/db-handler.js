@@ -23,15 +23,6 @@ module.exports.connect = async () => {
 };
 
 /**
- * Drop database, close the connection and stop mongod.
- */
-module.exports.closeDatabase = async () => {
-  await mongoose.connection.dropDatabase();
-  await mongoose.connection.close();
-  await mongod.stop();
-};
-
-/**
  * Remove all the data for all db collections.
  */
 module.exports.clearDatabase = async () => {
@@ -41,6 +32,15 @@ module.exports.clearDatabase = async () => {
     const collection = collections[key];
     await collection.deleteMany();
   }
+};
+
+/**
+ * Drop database, close the connection and stop mongod.
+ */
+module.exports.closeDatabase = async () => {
+  await mongoose.connection.dropDatabase();
+  await mongoose.connection.close();
+  await mongod.stop();
 };
 
 /**

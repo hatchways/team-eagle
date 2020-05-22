@@ -6,7 +6,7 @@ const dbHandler = require('./db-handler');
 before(async () => await dbHandler.connect());
 
 /**
- * Clear all test data after every test.
+ * Clear all test data before every test suite.
  */
 beforeEachSuite(async () => await dbHandler.clearDatabase());
 
