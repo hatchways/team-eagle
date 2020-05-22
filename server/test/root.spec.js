@@ -27,6 +27,8 @@ function beforeEachSuite(fn) {
   });
 }
 
-// reference(s) :
-// helper : https://github.com/mochajs/mocha/issues/911#issuecomment-396861668
-// hooks : https://dev.to/paulasantamaria/testing-node-js-mongoose-with-an-in-memory-database-32np
+/**
+ * reference(s) :
+ *  helper : https://github.com/mochajs/mocha/issues/911#issuecomment-396861668
+ *  hooks : https://dev.to/paulasantamaria/testing-node-js-mongoose-with-an-in-memory-database-32np
+ */

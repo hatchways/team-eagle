@@ -43,5 +43,7 @@ module.exports.clearDatabase = async () => {
   }
 };
 
-// reference(s):
-// functions : https://dev.to/paulasantamaria/testing-node-js-mongoose-with-an-in-memory-database-32np
+/**
+ * reference(s) :
+ *  functions : https://dev.to/paulasantamaria/testing-node-js-mongoose-with-an-in-memory-database-32np
+ */
