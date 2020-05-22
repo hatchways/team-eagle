@@ -58,7 +58,7 @@ router.delete("/:pollId", (req, res) => {
 // @caution form trying to use this, will always have to be a enctype="multipart/form-data"
 router.put("/:pollId", upload.any(), (req, res) => {
   const pollId = req.params["pollId"];
-  const messages = {};
+  const messages = [];
 
   Poll.findById(pollId, (err, poll) => {
     if (err) return console.log(err);
@@ -66,19 +66,21 @@ router.put("/:pollId", upload.any(), (req, res) => {
     if (req.body.title) {
       if (req.body.title != poll.title) {
         poll.updateTitle(req.body.title);
-        messages.title = "Title updated";
+        messages.push("title updated");
       }
     }
     // Update the images subdoc if files exist in request
-    if (req.files.length) {
+    if (req.files) {
       req.files.map((image) => {
         poll.updateImage(image.location, image.fieldname);
       });
-      messages.images = "Image updated";
+      messages.push("images updated");
     }
+    if (messages.length > 0) return res.status(200).json({ status: messages });
+    if (messages.length == 0)
+      return res.status(200).json({ status: "nothing to update" });
+    console.log(messages);
   });
-
-  return res.status(200).json({ status: messages });
 });
 
 module.exports = router;
