@@ -8,16 +8,31 @@ chai.use(chaiHttp);
 const expect = chai.expect;
 
 describe("POST /login", () => {
-  describe("When parameters are invalid", () => {
+  beforeEach((done) => {
     let user = {
-      email: "fakeEmail@gamil.com",
-      password: "",
+      email: 'fakeEmail@gamil.com',
+      password: '12345678'
     };
+    chai
+      .request(app)
+      .post("/auth/register")
+      .send(user)
+      .end((err, res) => {
+        done();
+      })
+    console.log('############ CREATED User ########## ');
+  })
 
+  describe("When parameters are invalid", () => {
     it("it returns 400 status code", (done) => {
+      let user = {
+        email: 'fakeEmail@gamil.com',
+        password: '',
+      };
+
       chai
         .request(app)
-        .post("/login")
+        .post("/auth/login")
         .send(user)
         .end((err, res) => {
           res.should.have.status(400);
@@ -29,13 +44,13 @@ describe("POST /login", () => {
   describe("When parameters are valid", () => {
     let user = {
       email: "fakeEmail@gamil.com",
-      password: "12345678",
+      password: "12345678"
     };
 
     it("it returns 200 status code", (done) => {
       chai
         .request(app)
-        .post("/login")
+        .post("/auth/login")
         .send(user)
         .end((err, res) => {
           res.should.have.status(200);
@@ -46,10 +61,10 @@ describe("POST /login", () => {
     it("it returns a JWT token", (done) => {
       chai
         .request(app)
-        .post("/login")
+        .post("/auth/login")
         .send(user)
         .end((err, res) => {
-          expect(res.body.token).to.not.be.empty;
+          expect(res.cookie('jwt').to.be.a('string'));
           done();
         });
     });
