@@ -11,6 +11,8 @@ import {
 } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import CheckIcon from '@material-ui/icons/Check';
+// import AddPollButton from '../../../components/polls/AddPollButton';
+import PollModal from '../../../components/polls/PollModal';
 
 let nameMinLength = 3;
 let passwordMinLength = 6;
@@ -181,6 +183,7 @@ export default function SignupForm(props) {
           <Button onClick={handleSubmit} variant="contained" color="primary">
             Create
           </Button>
+          <PollModal view="add" />
           {state.loading ? (
             <CircularProgress className={classes.progressIcon} />
           ) : null}
