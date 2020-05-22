@@ -1,0 +1,10 @@
+{
+  "plugins": ["react"],
+  "extends": ["plugin:react/recommended"],
+  "rules": {
+    "no-undef": [1]
+  },
+  "parserOptions": {
+    "sourceType": "module"
+  }
+}
