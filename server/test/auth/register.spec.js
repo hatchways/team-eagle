@@ -28,11 +28,9 @@ describe('POST /register', () => {
   });
 
   context('When parameters are valid', () => {
-    let user;
-
-    it('it returns 200 status code', (done) => {
-      user = {
-        name: 'John Doe',
+    before((done) => {
+      let user = {
+        name: 'fake user',
         email: 'fakeEmail@gamil.com',
         password: '12345678',
       };
@@ -42,27 +40,19 @@ describe('POST /register', () => {
         .post('/auth/register')
         .send(user)
         .end((err, res) => {
-          res.should.have.status(200);
+          this.response = res;
           done();
         });
     });
 
-    it('it returns a JWT token', (done) => {
-      user = {
-        name: 'John Doe',
-        email: 'fakeEmail2@gamil.com',
-        password: '12345678',
-      };
+    it('it returns 200 status code', () => {
+      this.response.should.have.status(200);
+    });
 
-      chai
-        .request(app)
-        .post('/auth/register')
-        .send(user)
-        .end((err, res) => {
-          expect(res.headers['set-cookie'].some((el) => el.includes('jwt='))).to
-            .be.true;
-          done();
-        });
+    it('it returns a JWT token', () => {
+      expect(
+        this.response.headers['set-cookie'].some((el) => el.includes('jwt='))
+      ).to.be.true;
     });
   });
 });

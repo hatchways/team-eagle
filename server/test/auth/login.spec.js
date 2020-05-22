@@ -46,32 +46,30 @@ describe('POST /auth/login', () => {
   });
 
   context('When parameters are valid', () => {
-    let user = {
-      email: 'fakeEmail@gamil.com',
-      password: '12345678',
-    };
+    before((done) => {
+      let user = {
+        email: 'fakeEmail@gamil.com',
+        password: '12345678',
+      };
 
-    it('it returns 200 status code', (done) => {
       chai
         .request(app)
         .post('/auth/login')
         .send(user)
         .end((err, res) => {
-          res.should.have.status(200);
+          this.response = res;
           done();
         });
     });
 
-    it('it returns a JWT token', (done) => {
-      chai
-        .request(app)
-        .post('/auth/login')
-        .send(user)
-        .end((err, res) => {
-          expect(res.headers['set-cookie'].some((el) => el.includes('jwt='))).to
-            .be.true;
-          done();
-        });
+    it('it returns 200 status code', () => {
+      this.response.should.have.status(200);
+    });
+
+    it('it returns a JWT token', () => {
+      expect(
+        this.response.headers['set-cookie'].some((el) => el.includes('jwt='))
+      ).to.be.true;
     });
   });
 });
