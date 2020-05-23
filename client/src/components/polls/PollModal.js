@@ -26,8 +26,6 @@ export default function PollModal(props){
     const [image1, setImage1] = React.useState(null);
     const [image2, setImage2] = React.useState(null);
 
-    console.log(image1, image2, title);
-
     const handleOpen = () =>{        
         setOpen(true);
     }
@@ -63,7 +61,7 @@ export default function PollModal(props){
                 method:"post",
                 url: "http://localhost:3001/polls",
                 data: query
-            }).then((respons)=>{
+            }).then((response)=>{
                 alert("New poll has been created");                
             })
             .catch((error)=>{
