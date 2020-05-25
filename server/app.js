@@ -5,8 +5,6 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const passport = require('passport');
 
-const indexRouter = require('./routes/index');
-const pingRouter = require('./routes/ping');
 // Auth routes
 const registerRouter = require('./routes/auth/register.route');
 const loginRouter = require('./routes/auth/login.route');
@@ -42,8 +40,7 @@ app.use(passport.initialize());
 require('./config/passport')(passport);
 
 // Routes
-app.use('/', indexRouter);
-app.use('/ping', pingRouter);
+
 // Login Routes
 app.use('/auth/register', registerRouter);
 app.use('/auth/login', loginRouter);
@@ -51,18 +48,18 @@ app.use('/auth/logout', logoutRouter);
 // Poll Routes
 app.use('/polls', pollsRouter);
 
-// catch 404 and forward to error handler
+// Catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
 });
 
-// error handler
+// Error handler
 app.use(function (err, req, res, next) {
-  // set locals, only providing error in development
+  // Set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
+  // Render the error page
   res.status(err.status || 500);
   res.json({ error: err });
 });
