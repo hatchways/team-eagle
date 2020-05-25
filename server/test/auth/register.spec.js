@@ -31,7 +31,7 @@ describe('POST /auth/register', () => {
     before((done) => {
       let user = {
         name: 'fake user',
-        email: 'fakeEmail@gamil.com',
+        email: 'fakeEmailForRegister@gamil.com',
         password: '12345678',
       };
 

@@ -53,7 +53,10 @@ app.use('/auth/logout', logoutRouter);
 // Poll Routes
 app.use('/polls', pollsRouter);
 // Friends Routes
-app.use('/users/:userId/friends/suggestions', suggestionsRouter);
+// app.use('/users/:userId/friends'); // index // public
+// app.use('/users/:userId/friends/suggestions', suggestionsRouter); //private
+// app.use('/users/:userId/friends/:friendId/follow'); // follow // private
+// app.use('/users/:userId/friends/:friendId/unfollow'); // unfollow // private
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

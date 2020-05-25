@@ -21,6 +21,13 @@ module.exports.connect = async () => {
 };
 
 /**
+ * Connect to the in-memory database.
+ */
+module.exports.seed = async () => {
+  seedUsers();
+};
+
+/**
  * Remove all the data for all db collections.
  */
 module.exports.clearDatabase = async () => {
@@ -43,5 +50,27 @@ module.exports.closeDatabase = async () => {
 
 /**
  * reference(s) :
- *  functions : https://dev.to/paulasantamaria/testing-node-js-mongoose-with-an-in-memory-database-32np
+ *  https://dev.to/paulasantamaria/testing-node-js-mongoose-with-an-in-memory-database-32np
  */
+
+// Helpers :
+seedUsers = async () => {
+  const User = mongoose.model('users');
+
+  let name;
+  let email;
+  let password = '12345678';
+  let newUser;
+
+  for (let i = 0; i < 10; i++) {
+    name = `seed user ${i}`;
+    email = `seedEmail${i}@gmail.com`;
+
+    newUser = new User({ name, email, password });
+    try {
+      await newUser.save();
+    } catch (err) {
+      throw err;
+    }
+  }
+};
