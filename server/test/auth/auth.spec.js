@@ -62,26 +62,10 @@ describe('POST /auth/register', () => {
 /******************************************************************************/
 
 describe('POST /auth/login', () => {
-  before((done) => {
-    let user = {
-      name: 'fake user',
-      email: 'fakeEmail@gamil.com',
-      password: '12345678',
-    };
-
-    chai
-      .request(app)
-      .post('/auth/register')
-      .send(user)
-      .end(() => {
-        done();
-      });
-  });
-
   context('When parameters are invalid', () => {
     it('it returns 400 status code', (done) => {
       let user = {
-        email: 'fakeEmail@gamil.com',
+        email: 'seedEmail1@gamil.com',
         password: '',
       };
 
@@ -99,7 +83,7 @@ describe('POST /auth/login', () => {
   context('When parameters are valid', () => {
     before((done) => {
       let user = {
-        email: 'fakeEmail@gamil.com',
+        email: 'seedEmail1@gmail.com',
         password: '12345678',
       };
 
@@ -130,26 +114,10 @@ describe('POST /auth/login', () => {
 /******************************************************************************/
 
 describe('DELETE /auth/logout', () => {
-  before((done) => {
-    let user = {
-      name: 'fake user',
-      email: 'fakeEmail@gamil.com',
-      password: '12345678',
-    };
-
-    chai
-      .request(app)
-      .post('/auth/register')
-      .send(user)
-      .end(() => {
-        done();
-      });
-  });
-
   context('When user is logged in', () => {
     beforeEach((done) => {
       let user = {
-        email: 'fakeEmail@gamil.com',
+        email: 'seedEmail1@gmail.com',
         password: '12345678',
       };
 
