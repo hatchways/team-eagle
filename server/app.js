@@ -8,13 +8,9 @@ const passport = require('passport');
 const indexRouter = require('./routes/index');
 const pingRouter = require('./routes/ping');
 // Auth routes
-const registerRouter = require('./routes/auth/register.route');
-const loginRouter = require('./routes/auth/login.route');
-const logoutRouter = require('./routes/auth/logout.route');
+const authRouter = require('./routes/auth/auth.route');
 // Poll routes
 const pollsRouter = require('./routes/polls/polls.route');
-// Friends routes
-const suggestionsRouter = require('./routes/users/friends/suggestions.route');
 
 const { json, urlencoded } = express;
 
@@ -46,17 +42,10 @@ require('./config/passport')(passport);
 // Routes
 app.use('/', indexRouter);
 app.use('/ping', pingRouter);
-// Login Routes
-app.use('/auth/register', registerRouter);
-app.use('/auth/login', loginRouter);
-app.use('/auth/logout', logoutRouter);
+// Auth Routes
+app.use('/auth', authRouter);
 // Poll Routes
 app.use('/polls', pollsRouter);
-// Friends Routes
-// app.use('/users/:userId/friends'); // index // public
-// app.use('/users/:userId/friends/suggestions', suggestionsRouter); //private
-// app.use('/users/:userId/friends/:friendId/follow'); // follow // private
-// app.use('/users/:userId/friends/:friendId/unfollow'); // unfollow // private
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

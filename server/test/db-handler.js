@@ -21,7 +21,7 @@ module.exports.connect = async () => {
 };
 
 /**
- * Connect to the in-memory database.
+ * Seed database.
  */
 module.exports.seed = async () => {
   seedUsers();
