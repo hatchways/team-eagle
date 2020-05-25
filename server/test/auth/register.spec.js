@@ -7,18 +7,18 @@ chai.use(chaiHttp);
 
 const expect = chai.expect;
 
-describe('POST /register', () => {
-  describe('When parameters are invalid', () => {
+describe('POST /auth/register', () => {
+  context('When parameters are invalid', () => {
     let user = {
       name: 'John Doe',
       email: 'fakeEmail@gamil.com',
-      password: '123',
+      password: '123', // password must be at least 6 chars
     };
 
     it('it returns 400 status code', (done) => {
       chai
         .request(app)
-        .post('/register')
+        .post('/auth/register')
         .send(user)
         .end((err, res) => {
           res.should.have.status(400);
@@ -27,33 +27,34 @@ describe('POST /register', () => {
     });
   });
 
-  describe('When parameters are valid', () => {
-    let user = {
-      name: 'John Doe',
-      email: 'fakeEmail@gamil.com',
-      password: '123',
-    };
+  context('When parameters are valid', () => {
+    before((done) => {
+      let user = {
+        name: 'fake user',
+        email: 'fakeEmail@gamil.com',
+        password: '12345678',
+      };
 
-    it('it returns 200 status code', (done) => {
       chai
         .request(app)
-        .post('/register')
+        .post('/auth/register')
         .send(user)
         .end((err, res) => {
-          res.should.have.status(200);
+          this.response = res;
+          this.cookie = this.response.headers['set-cookie'].find((el) =>
+            el.includes('jwt=')
+          );
+          this.jwt = this.cookie ? this.cookie.split(';')[0] : '';
           done();
         });
     });
 
-    it('it returns a JWT token', (done) => {
-      chai
-        .request(app)
-        .post('/register')
-        .send(user)
-        .end((err, res) => {
-          expect(res.body.token).to.not.be.empty;
-          done();
-        });
+    it('it returns 200 status code', () => {
+      this.response.should.have.status(200);
+    });
+
+    it('it returns a JWT token', () => {
+      expect(this.jwt.length > 4).to.be.true;
     });
   });
 });

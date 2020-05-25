@@ -31,7 +31,7 @@ db.once('open', function () {
   console.log('connected to database');
 });
 
-app.use(logger('dev'));
+app.use(logger('dev', { skip: () => process.env.NODE_ENV === 'test' }));
 app.use(json());
 app.use(urlencoded({ extended: false }));
 app.use(cookieParser());
