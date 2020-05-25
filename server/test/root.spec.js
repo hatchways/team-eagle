@@ -6,12 +6,12 @@ const dbHandler = require('./db-handler');
 before(async () => await dbHandler.connect());
 
 /**
- * Clear all test data before every test suite.
+ * Clear all test data before each test suite.
  */
 beforeEachSuite(async () => await dbHandler.clearDatabase());
 
 /**
- * Remove and close the db and server.
+ * Remove and close the db after running all tests
  */
 after(async () => await dbHandler.closeDatabase());
 
