@@ -96,7 +96,7 @@ export default function LoginForm(props) {
         if (res.status === 200) {
           // On success
           res.json().then(function (data) {
-            user.setUser(data);
+            user.login(data);
           });
         } else if (res.status === 400) {
           // Invalid credentials

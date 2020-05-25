@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 // This is what each component should import
 export const UserContext = React.createContext();
@@ -13,15 +13,15 @@ export const ContextProvider = ({ children }) => {
     //   "https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?cs=srgb&dl=closeup-photo-of-woman-with-brown-coat-and-gray-top-733872.jpg&fm=jpg",
   });
 
-  function setUser(user) {
-    console.log("setting user...");
+  function login(user) {
+    console.log('setting user...');
     console.log(user);
     setState(user);
   }
 
   function logout() {
-    fetch("/auth/logout", {
-      method: "DELETE",
+    fetch('/auth/logout', {
+      method: 'DELETE',
     })
       .then(function (res) {
         setState({});
