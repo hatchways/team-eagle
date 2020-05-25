@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Box,
   Snackbar,
@@ -7,10 +7,10 @@ import {
   InputAdornment,
   Button,
   CircularProgress,
-} from "@material-ui/core";
-import { Alert } from "@material-ui/lab";
-import CheckIcon from "@material-ui/icons/Check";
-import { UserContext } from "../../../components/UserContext";
+} from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
+import CheckIcon from '@material-ui/icons/Check';
+import { UserContext } from '../../../components/UserContext';
 
 let passwordMinLength = 6;
 
@@ -19,13 +19,13 @@ export default function LoginForm(props) {
   const user = React.useContext(UserContext);
 
   const [state, setState] = React.useState({
-    email: "",
-    password: "",
+    email: '',
+    password: '',
 
     emailError: false,
     passwordError: false,
 
-    snackbarMessage: "",
+    snackbarMessage: '',
     loading: false,
   });
 
@@ -47,22 +47,22 @@ export default function LoginForm(props) {
     e.preventDefault();
     const { email, password } = state;
 
-    const requiredMessage = "This is a required field";
-    const invalidEmailMessage = "Please provide a valid email address";
+    const requiredMessage = 'This is a required field';
+    const invalidEmailMessage = 'Please provide a valid email address';
     const passwordMinMessage = `Password must contain at least ${passwordMinLength} characters`;
-    const invalidCredentialsMessage = "Invalid credentials";
-    const serverErrorMessage = "Server Error";
-    const fieldsInvalidMessage = "Some fields are invalid";
+    const invalidCredentialsMessage = 'Invalid credentials';
+    const serverErrorMessage = 'Server Error';
+    const fieldsInvalidMessage = 'Some fields are invalid';
 
     let emailError = false;
     let passwordError = false;
-    let snackbarMessage = "";
+    let snackbarMessage = '';
     let loading = false;
 
     // Validation
     if (!email) {
       emailError = requiredMessage;
-    } else if (email.search("@") === -1) {
+    } else if (email.search('@') === -1) {
       emailError = invalidEmailMessage;
     }
 
@@ -78,16 +78,16 @@ export default function LoginForm(props) {
         ...state,
         emailError,
         passwordError,
-        snackbarMessage: "",
+        snackbarMessage: '',
         loading: true,
       });
       // Sends request to server
-      fetch("/auth/login", {
-        method: "POST",
+      fetch('/auth/login', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-        referrerPolicy: "no-referrer",
+        referrerPolicy: 'no-referrer',
         body: JSON.stringify({
           email: state.email,
           password: state.password,

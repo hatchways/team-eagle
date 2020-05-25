@@ -1,9 +1,9 @@
-const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const keys = require("../config/keys");
+const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const keys = require('../config/keys');
 
-const Schema = mongoose.Schema; // Create Schem
+const Schema = mongoose.Schema; // Create Schema
 
 // Schema for user Model
 const UserSchema = new Schema({
@@ -25,9 +25,9 @@ const UserSchema = new Schema({
   },
 });
 
-UserSchema.pre("save", async function (next) {
-  // hash password when ordered to create or update password
-  if (!this.isModified("password")) {
+UserSchema.pre('save', async function (next) {
+  // Hash password when ordered to create or update password
+  if (!this.isModified('password')) {
     return next();
   }
 
@@ -45,11 +45,11 @@ UserSchema.methods.checkPassword = function (password) {
 };
 
 UserSchema.methods.signJWT = function (payload) {
-  return jwt.sign(
-    payload,
-    keys.secretOrKey,
-    { expiresIn: 31556926 } // 1 year in seconds
-  );
+  const expiresIn = 31556926; // 1 year in seconds
+  return {
+    token: jwt.sign(payload, keys.secretOrKey, { expiresIn }),
+    tokenExpiry: expiresIn,
+  };
 };
 
-module.exports = User = mongoose.model("users", UserSchema);
+module.exports = User = mongoose.model('users', UserSchema);

@@ -1,14 +1,14 @@
-import React from "react";
-import { MuiThemeProvider } from "@material-ui/core";
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import React from 'react';
+import { MuiThemeProvider } from '@material-ui/core';
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 
-import { theme } from "./themes/theme";
-import { UserContext } from "./components/UserContext";
+import { theme } from './themes/theme';
+import { UserContext } from './components/UserContext';
 
-import NavBar from "./components/NavBar";
-import LandingPage from "./pages/Landing/Landing";
+import NavBar from './components/NavBar';
+import LandingPage from './pages/Landing/Landing';
 
-import "./App.css";
+import './App.css';
 
 function App() {
   const user = React.useContext(UserContext);

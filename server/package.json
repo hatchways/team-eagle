@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "nodemon ./bin/www",
     "debug": "nodemon  --inspect ./bin/www",
-    "test": "NODE_ENV=test ./node_modules/.bin/mocha --exit --timeout 30000"
+    "test": "NODE_ENV=test ./node_modules/.bin/mocha --exit --recursive --timeout 30000"
   },
   "dependencies": {
     "aws-sdk": "^2.682.0",
@@ -29,7 +29,7 @@
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
     "mocha": "^6.2.0",
-    "nodemon": "^2.0.4",
-    "sinon": "^9.0.2"
+    "mongodb-memory-server": "^6.6.1",
+    "nodemon": "^2.0.4"
   }
 }

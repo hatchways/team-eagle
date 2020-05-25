@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const PollSchema = new Schema({
@@ -30,7 +30,7 @@ PollSchema.methods.addImage = function (imageLocation) {
 
 PollSchema.methods.updateImage = function (imageLocation, id) {
   const imageObj = this.images.find((image) => String(image._id) === id);
-  imageObj["url"] = imageLocation;
+  imageObj['url'] = imageLocation;
   // Saving the parent, because the child cannot be saved
   this.save();
 };
@@ -40,4 +40,4 @@ PollSchema.methods.updateTitle = function (title) {
   this.save();
 };
 
-module.exports = Poll = mongoose.model("polls", PollSchema);
+module.exports = Poll = mongoose.model('polls', PollSchema);
