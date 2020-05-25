@@ -7,17 +7,33 @@ chai.use(chaiHttp);
 
 const expect = chai.expect;
 
-describe('POST /login', () => {
-  describe('When parameters are invalid', () => {
+describe('POST /auth/login', () => {
+  before((done) => {
     let user = {
+      name: 'fake user',
       email: 'fakeEmail@gamil.com',
-      password: '',
+      password: '12345678',
     };
 
+    chai
+      .request(app)
+      .post('/auth/register')
+      .send(user)
+      .end(() => {
+        done();
+      });
+  });
+
+  context('When parameters are invalid', () => {
     it('it returns 400 status code', (done) => {
+      let user = {
+        email: 'fakeEmail@gamil.com',
+        password: '',
+      };
+
       chai
         .request(app)
-        .post('/login')
+        .post('/auth/login')
         .send(user)
         .end((err, res) => {
           res.should.have.status(400);
@@ -26,32 +42,33 @@ describe('POST /login', () => {
     });
   });
 
-  describe('When parameters are valid', () => {
-    let user = {
-      email: 'fakeEmail@gamil.com',
-      password: '12345678',
-    };
+  context('When parameters are valid', () => {
+    before((done) => {
+      let user = {
+        email: 'fakeEmail@gamil.com',
+        password: '12345678',
+      };
 
-    it('it returns 200 status code', (done) => {
       chai
         .request(app)
-        .post('/login')
+        .post('/auth/login')
         .send(user)
         .end((err, res) => {
-          res.should.have.status(200);
+          this.response = res;
+          this.cookie = this.response.headers['set-cookie'].find((el) =>
+            el.includes('jwt=')
+          );
+          this.jwt = this.cookie ? this.cookie.split(';')[0] : '';
           done();
         });
     });
 
-    it('it returns a JWT token', (done) => {
-      chai
-        .request(app)
-        .post('/login')
-        .send(user)
-        .end((err, res) => {
-          expect(res.body.token).to.not.be.empty;
-          done();
-        });
+    it('it returns 200 status code', () => {
+      this.response.should.have.status(200);
+    });
+
+    it('it returns a JWT token', () => {
+      expect(this.jwt.length > 4).to.be.true;
     });
   });
 });
