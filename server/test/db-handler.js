@@ -24,7 +24,8 @@ module.exports.connect = async () => {
  * Seed database.
  */
 module.exports.seed = async () => {
-  seedUsers();
+  await seedUsers();
+  await seedFriendsForFirstThreeUsers();
 };
 
 /**
@@ -72,5 +73,20 @@ seedUsers = async () => {
     } catch (err) {
       throw err;
     }
+  }
+};
+
+seedFriendsForFirstThreeUsers = async () => {
+  const User = mongoose.model('users');
+  // get first three records
+  const firstThree = await User.find().sort({ _id: 1 }).limit(3);
+  // get last three user ids
+  let lastThreeIds = await User.find().sort({ _id: -1 }).distinct('_id');
+  lastThreeIds = lastThreeIds.slice(7);
+
+  // make first three all be friends with last three
+  for (let i = 0; i < firstThree.length; i++) {
+    firstThree[i].friendIds = lastThreeIds;
+    await firstThree[i].save();
   }
 };

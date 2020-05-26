@@ -3,7 +3,7 @@ const router = express.Router({ mergeParams: true });
 
 const User = require('../../../models/user');
 
-// @route:  GET /user/:userId/friends
+// @route:  GET /users/:userId/friends
 // @desc:   Find and return array of friends of specified userId
 // @access: Public
 router.get('/', async (req, res) => {
