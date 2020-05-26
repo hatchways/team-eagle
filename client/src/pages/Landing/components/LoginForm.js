@@ -81,41 +81,33 @@ export default function LoginForm(props) {
         snackbarMessage: '',
         loading: true,
       });
-      // Sends request to server
-      fetch('/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        referrerPolicy: 'no-referrer',
-        body: JSON.stringify({
+      user.login(
+        {
           email: state.email,
           password: state.password,
-        }),
-      }).then(function (res) {
-        if (res.status === 200) {
-          // On success
-          res.json().then(function (data) {
-            user.login(data);
-          });
-        } else if (res.status === 400) {
-          // Invalid credentials
-          setState({
-            ...state,
-            emailError: invalidCredentialsMessage,
-            passwordError: invalidCredentialsMessage,
-            snackbarMessage: invalidCredentialsMessage,
-            loading: false,
-          });
-        } else {
-          // Other errors
-          setState({
-            ...state,
-            snackbarMessage: serverErrorMessage,
-            loading: false,
-          });
+        },
+        (err) => {
+          if (err) {
+            if (err === 400) {
+              // Invalid credentials
+              setState({
+                ...state,
+                emailError: invalidCredentialsMessage,
+                passwordError: invalidCredentialsMessage,
+                snackbarMessage: invalidCredentialsMessage,
+                loading: false,
+              });
+            } else {
+              // Other errors
+              setState({
+                ...state,
+                snackbarMessage: serverErrorMessage,
+                loading: false,
+              });
+            }
+          }
         }
-      });
+      );
     } else {
       // Updates the state showing errors
       setState({

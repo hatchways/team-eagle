@@ -5,35 +5,63 @@ export const UserContext = React.createContext();
 
 // This should be imported only by index.js
 export const ContextProvider = ({ children }) => {
-  const [state, setState] = React.useState({
-    // Placeholders
-    // name: "Caroline",
-    // email: "email@gmail.com",
-    // image:
-    //   "https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?cs=srgb&dl=closeup-photo-of-woman-with-brown-coat-and-gray-top-733872.jpg&fm=jpg",
-  });
+  const [state, setState] = React.useState({});
 
-  function login(user) {
-    console.log('setting user...');
-    console.log(user);
-    setState(user);
+  function signup(payload, callback) {
+    fetch('/auth/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      referrerPolicy: 'no-referrer',
+      body: JSON.stringify(payload),
+    }).then((res) => {
+      res.json().then((data) => {
+        if (res.status === 200) {
+          setState({
+            ...state,
+            ...data,
+          });
+        } else {
+          callback({ ...data, status: res.status });
+        }
+      });
+    });
   }
 
-  function logout() {
+  function login(payload, callback) {
+    fetch('/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      referrerPolicy: 'no-referrer',
+      body: JSON.stringify(payload),
+    }).then((res) => {
+      if (res.status === 200) {
+        res.json().then((user) => {
+          setState({ ...state, ...user });
+        });
+      } else {
+        callback(res.status);
+      }
+    });
+  }
+
+  function logout(callback) {
     fetch('/auth/logout', {
       method: 'DELETE',
-    })
-      .then(function (res) {
+    }).then((res) => {
+      if (res.status === 200) {
         setState({});
-      })
-      .catch(function (err) {
-        // Add message to user here!
-        throw err;
-      });
+      } else {
+        callback(res.status);
+      }
+    });
   }
 
   return (
-    <UserContext.Provider value={{ ...state, setUser, logout }}>
+    <UserContext.Provider value={{ ...state, signup, login, logout }}>
       {children}
     </UserContext.Provider>
   );
