@@ -1,5 +1,10 @@
 # Poll App. Hatchways Project
 
+## How to Add the Poll Button anywhere
+
+1. import PollModal from "<components>/polls/PollModal";
+2. Put <PollModal view="edit or add"> anywhere you want to display the button
+
 ## Instructions
 
 ### React
