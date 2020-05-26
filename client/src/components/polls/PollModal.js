@@ -25,15 +25,12 @@ export default function PollModal(props) {
         setTitle(e.target.value);
         break;
       case 'image1':
-        console.log(e.target.files[0]);
         setImage1(e.target.files[0]);
         break;
       case 'image2':
-        console.log(e.target.files[0]);
         setImage2(e.target.files[0]);
         break;
       default:
-        console.log('nada');
         break;
     }
   };
@@ -52,7 +49,7 @@ export default function PollModal(props) {
       },
     };
     await axios
-      .post('http://localhost:3001/polls', formData, config)
+      .post('/polls', formData, config)
       .then((response) => {
         alert('Poll has been created');
         handleClose();
@@ -98,7 +95,7 @@ export default function PollModal(props) {
             type="file"
           />
           <Button
-            style={{ marginTop: 30 }}
+            mt={3}
             variant="contained"
             color="secondary"
             onClick={() => handleSubmit()}
