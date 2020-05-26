@@ -44,9 +44,7 @@ require('./config/passport')(passport);
 // Routes
 
 // Auth Routes
-app.use('/auth/register', registerRouter);
-app.use('/auth/login', loginRouter);
-app.use('/auth/logout', logoutRouter);
+app.use('/auth', authRouter);
 // Poll Routes
 app.use('/polls', pollsRouter);
 // Friends Routes
