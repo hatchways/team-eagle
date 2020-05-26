@@ -49,9 +49,9 @@ router.post(
   async (req, res) => {
     const currUser = await User.findOne({ _id: req.params.userId });
     const followeeId = req.params.friendId;
-    const isFolloweeIdValid = await mongoose.isValidObjectId(followeeId);
+    const followeeIdIsValid = await mongoose.isValidObjectId(followeeId);
 
-    if (!isFolloweeIdValid) {
+    if (!followeeIdIsValid) {
       return res
         .status(404)
         .json({ message: 'Invalid provided friendId param' });
@@ -72,6 +72,43 @@ router.post(
 
     res.json({
       message: 'Success! User followed',
+      updatedRequestAuthor: currUser,
+    });
+  }
+);
+
+// @route:  DELETE /users/:userId/friends/:friendId/follow
+// @desc:   Make current user unfollow user at friendId
+// @access: Private
+router.delete(
+  '/:friendId/follow',
+  passport.authenticate('jwt', { session: false }),
+  async (req, res) => {
+    const currUser = await User.findOne({ _id: req.params.userId });
+    const unfolloweeId = req.params.friendId;
+    const unfolloweeIdIsValid = await mongoose.isValidObjectId(unfolloweeId);
+
+    if (!unfolloweeIdIsValid) {
+      return res
+        .status(404)
+        .json({ message: 'Invalid provided friendId param' });
+    }
+
+    const followeeExists = await User.exists({ _id: unfolloweeId });
+
+    if (!followeeExists) {
+      return res
+        .status(404)
+        .json({ message: 'No user at provided friendId param' });
+    } else if (!currUser.friendIds.includes(unfolloweeId)) {
+      return res.status(401).json({ message: 'User already unfollowed' });
+    }
+
+    currUser.friendIds = currUser.friendIds.filter((el) => el !== unfolloweeId);
+    await currUser.save();
+
+    res.json({
+      message: 'Success! User unfollowed',
       updatedRequestAuthor: currUser,
     });
   }
