@@ -8,14 +8,16 @@ const User = require('../../../models/user');
 // @desc:   Find and return array of friends of specified userId
 // @access: Public
 router.get('/', async (req, res) => {
-  const user = await User.findById(req.params.userId);
-  const friends = [];
+  let user = await User.findById(req.params.userId)
+    .populate('friendIds')
+    .exec();
+  let friends = user.friendIds;
+  // filter out only wanted fields
+  friends = friends.map((friend) => {
+    return (({ _id, email, name }) => ({ _id, email, name }))(friend);
+  });
 
-  for (const friendId of user.friendIds) {
-    friends.push(await User.findById(friendId));
-  }
-
-  res.json({ friends });
+  res.json({ friends: user.friendIds });
 });
 
 // @route:  GET /users/:userId/friends/suggestions?name=<query>
