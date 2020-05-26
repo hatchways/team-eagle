@@ -1,6 +1,9 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
+const mongoose = require('mongoose');
+
 const app = require('../../../app');
+const User = mongoose.model('users');
 
 chai.should();
 chai.use(chaiHttp);
@@ -150,31 +153,70 @@ describe('GET /users/:userId/friends/suggestions', () => {
 
 // /******************************************************************************/
 
-// describe('PUT /users/:userId/friends/follow', () => {
-//   context('When request author is logged in', () => {
-//     before(() => {
-//       // do api call here;
-//     });
+describe('POST /users/:userId/friends/:friendId/follow', () => {
+  before(async () => {
+    this.followee = await User.findOne({ name: 'seed user 2' });
 
-//     it('it returns 200 status code', () => {
-//       this.response.should.have.status(200);
-//     });
+    let user = {
+      email: 'seedEmail1@gmail.com',
+      password: '12345678',
+    };
 
-//     it('it adds followee id to friendIds', () => {
-//       // check that current user friendIds include the one just followed
-//     });
-//   });
+    const loginRes = await chai.request(app).post('/auth/login').send(user);
 
-//   context('When request author is not logged in', () => {
-//     before(() => {
-//       // do api call here;
-//     });
+    this.loggedInUser = loginRes.body;
+    this.cookie = loginRes.headers['set-cookie'].find((el) =>
+      el.includes('jwt=')
+    );
+  });
 
-//     it('it returns 401 status code', () => {
-//       this.response.should.have.status(401);
-//     });
-//   });
-// });
+  context('When request author is logged in', () => {
+    before((done) => {
+      chai
+        .request(app)
+        .post(
+          `/users/${this.loggedInUser._id}/friends/${this.followee._id}/follow`
+        )
+        .set('Cookie', this.cookie)
+        .end((err, res) => {
+          this.response = res;
+          done();
+        });
+    });
+
+    it('it returns 200 status code', () => {
+      this.response.should.have.status(200);
+    });
+
+    it('it adds followee id to friendIds', () => {
+      expect(this.loggedInUser.friendIds).to.include(this.followee._id);
+    });
+  });
+
+  context('When request author is not logged in', () => {
+    before((done) => {
+      chai
+        .request(app)
+        .delete('/auth/logout')
+        .set('Cookie', this.cookie)
+        .end(() => {});
+
+      chai
+        .request(app)
+        .post(
+          `/users/${this.loggedInUser._id}/friends/${this.followee._id}/follow`
+        )
+        .end((err, res) => {
+          this.response = res;
+          done();
+        });
+    });
+
+    it('it returns 401 status code', () => {
+      this.response.should.have.status(401);
+    });
+  });
+});
 
 // /******************************************************************************/
 
