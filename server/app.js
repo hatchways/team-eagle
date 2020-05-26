@@ -11,6 +11,8 @@ const pingRouter = require('./routes/ping');
 const authRouter = require('./routes/auth/auth.route');
 // Poll routes
 const pollsRouter = require('./routes/polls/polls.route');
+// Friends Routes
+const friendsRouter = require('./routes/users/friends');
 
 const { json, urlencoded } = express;
 
@@ -46,6 +48,8 @@ app.use('/ping', pingRouter);
 app.use('/auth', authRouter);
 // Poll Routes
 app.use('/polls', pollsRouter);
+// Friends Routes
+app.use('/user/:userId/friends', friendsRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

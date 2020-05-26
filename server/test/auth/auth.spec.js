@@ -105,6 +105,10 @@ describe('POST /auth/login', () => {
       this.response.should.have.status(200);
     });
 
+    it('it returns an instance of the user', () => {
+      expect(this.response.body.email).to.not.be.undefined;
+    });
+
     it('it returns a JWT token', () => {
       expect(this.jwt.length > 4).to.be.true;
     });
