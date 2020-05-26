@@ -1,7 +1,7 @@
-import React from "react";
-import { UserContext } from "./UserContext";
-import { Link as RouterLink } from "react-router-dom";
-import { makeStyles } from "@material-ui/core/styles";
+import React from 'react';
+import { UserContext } from './UserContext';
+import { Link as RouterLink } from 'react-router-dom';
+import { makeStyles } from '@material-ui/core/styles';
 import {
   AppBar,
   Grid,
@@ -11,9 +11,11 @@ import {
   Button,
   IconButton,
   Hidden,
-} from "@material-ui/core";
-import MenuIcon from "@material-ui/icons/Menu";
-import NavDrawer from "./NavDrawer";
+} from '@material-ui/core';
+
+import MenuIcon from '@material-ui/icons/Menu';
+import Thumbnail from './Thumbnail';
+import NavDrawer from './NavDrawer';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,19 +24,17 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.common.black,
   },
   thumbnail: {
-    width: 50,
-    height: 50,
-    borderRadius: "50%",
-    objectFit: "cover",
+    borderRadius: '50%',
+    objectFit: 'cover',
     marginRight: theme.spacing(1),
   },
   grid: {
     flexGrow: 1,
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
     padding: `0 ${theme.spacing(1)}px`,
-    "& > div": {
-      display: "flex",
-      alignItems: "center",
+    '& > div': {
+      display: 'flex',
+      alignItems: 'center',
     },
   },
   logo: {
@@ -133,7 +133,7 @@ export default function NavBar(props) {
               className={classes.link}
               onClick={openProfileMenu}
             >
-              <img className={classes.thumbnail} src={user.image} alt="User" />
+              <Thumbnail className={classes.thumbnail} user={user} />
               My Profile
             </Button>
             <Menu
@@ -141,12 +141,12 @@ export default function NavBar(props) {
               keepMounted
               getContentAnchorEl={null}
               anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "center",
+                vertical: 'bottom',
+                horizontal: 'center',
               }}
               transformOrigin={{
-                vertical: "top",
-                horizontal: "center",
+                vertical: 'top',
+                horizontal: 'center',
               }}
               anchorEl={state.anchorEl}
               open={!!state.anchorEl}

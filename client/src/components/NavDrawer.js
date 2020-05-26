@@ -1,6 +1,6 @@
-import React, { useState, useContext } from "react";
-import { Link as RouterLink } from "react-router-dom";
-import { makeStyles } from "@material-ui/core/styles";
+import React, { useState, useContext } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
+import { makeStyles } from '@material-ui/core/styles';
 import {
   Drawer,
   List,
@@ -8,45 +8,50 @@ import {
   ListItemIcon,
   ListItemText,
   Divider,
-} from "@material-ui/core";
-import PersonIcon from "@material-ui/icons/Person";
-import EmojiPeopleIcon from "@material-ui/icons/EmojiPeople";
-import RecentActorsIcon from "@material-ui/icons/RecentActors";
-import ContactSupportIcon from "@material-ui/icons/ContactSupport";
-import AddIcon from "@material-ui/icons/Add";
+} from '@material-ui/core';
+import PersonIcon from '@material-ui/icons/Person';
+import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople';
+import RecentActorsIcon from '@material-ui/icons/RecentActors';
+import ContactSupportIcon from '@material-ui/icons/ContactSupport';
+import AddIcon from '@material-ui/icons/Add';
 
 const list = [
   {
-    label: "Friends",
+    label: 'Friends',
     Icon: EmojiPeopleIcon,
-    url: "/friends",
+    url: '/friends',
   },
   {
     label: "Friends' Polls",
     Icon: RecentActorsIcon,
-    url: "/friends-polls",
+    url: '/friends-polls',
   },
   {
-    label: "Opinions",
+    label: 'Opinions',
     Icon: ContactSupportIcon,
-    url: "/opinions",
+    url: '/opinions',
   },
   {
-    label: "Create Poll",
+    label: 'Create Poll',
     Icon: AddIcon,
-    url: "/create-poll",
+    url: '/create-poll',
   },
   {
-    label: "My Profile",
+    label: 'My Profile',
     Icon: PersonIcon,
-    url: "/dashboard",
+    url: '/dashboard',
   },
 ];
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    "& span": {
-      fontSize: "1.3rem",
+    '& span': {
+      fontSize: '1.3rem',
+    },
+    '& a': {
+      '&:visited': {
+        color: theme.palette.text.primary,
+      },
     },
   },
 }));
