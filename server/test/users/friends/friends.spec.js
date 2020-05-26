@@ -53,16 +53,10 @@ describe('GET /users/:userId/friends', () => {
 
   context('When request author is not logged in', () => {
     before((done) => {
-      chai
-        .request(app)
-        .delete('/auth/logout')
-        .set('Cookie', this.cookie)
-        .end(() => {});
-
+      // user is assumed to not be logged in if a cookie isn't sent in request
       chai
         .request(app)
         .get(`/users/${this.loggedInUser._id}/friends`)
-        .set('Cookie', this.cookie)
         .end((err, res) => {
           this.response = res;
           done();
@@ -130,12 +124,6 @@ describe('GET /users/:userId/friends/suggestions', () => {
 
   context('When request author is not logged in', () => {
     before((done) => {
-      chai
-        .request(app)
-        .delete('/auth/logout')
-        .set('Cookie', this.cookie)
-        .end(() => {});
-
       chai
         .request(app)
         .get(`/users/${this.loggedInUser._id}/friends/suggestions`)
@@ -221,12 +209,6 @@ describe('POST /users/:userId/friends/:friendId/follow', () => {
     before((done) => {
       chai
         .request(app)
-        .delete('/auth/logout')
-        .set('Cookie', this.cookie)
-        .end(() => {});
-
-      chai
-        .request(app)
         .post(
           `/users/${this.loggedInUser._id}/friends/${this.followee._id}/follow`
         )
@@ -244,33 +226,85 @@ describe('POST /users/:userId/friends/:friendId/follow', () => {
 
 // /******************************************************************************/
 
-// describe('DELETE /users/:userId/friends/follow', () => {
-//   context('When request author is logged in', () => {
-//     before(() => {
-//       // do api call here;
-//     });
+describe('DELETE /users/:userId/friends/:friendId/follow', () => {
+  before(async () => {
+    this.unFollowee = await User.findOne({ name: 'seed user 9' });
 
-//     it('it returns 200 status code', () => {
-//       this.response.should.have.status(200);
-//     });
+    let user = {
+      email: 'seedEmail1@gmail.com',
+      password: '12345678',
+    };
 
-//     it("it removes followee id from friendIds (if it's there)", () => {
-//       // check that current user friendIds doesn't include the one just unfollowed
-//     });
+    const loginRes = await chai.request(app).post('/auth/login').send(user);
 
-//     it("it doesn't allow you to unfollow someone you already unfollowed", () => {
-//       // make API request to unfollow person just unfollowed
-//       // expect response to be 401
-//     });
-//   });
+    this.loggedInUser = loginRes.body;
+    this.cookie = loginRes.headers['set-cookie'].find((el) =>
+      el.includes('jwt=')
+    );
+  });
 
-//   context('When request author is not logged in', () => {
-//     before(() => {
-//       // do api call here;
-//     });
+  context('When request author is logged in', () => {
+    before((done) => {
+      chai
+        .request(app)
+        .delete(
+          `/users/${this.loggedInUser._id}/friends/${this.unFollowee._id}/follow`
+        )
+        .set('Cookie', this.cookie)
+        .end((err, res) => {
+          this.response = res;
+          this.loggedInUser = this.response.body.updatedRequestAuthor;
+          done();
+        });
+    });
 
-//     it('it returns 401 status code', () => {
-//       this.response.should.have.status(401);
-//     });
-//   });
-// });
+    it('it returns 200 status code', () => {
+      this.response.should.have.status(200);
+    });
+
+    it('it removes unfollowee id from friendIds', () => {
+      expect(this.loggedInUser.friendIds).to.not.include(
+        this.unFollowee._id.toString()
+      );
+    });
+
+    it("it doesn't allow you to unfollow user you already not follow", async () => {
+      const response = await chai
+        .request(app)
+        .delete(
+          `/users/${this.loggedInUser._id}/friends/${this.unFollowee._id}/follow`
+        )
+        .set('Cookie', this.cookie);
+
+      response.should.have.status(401);
+      expect(response.body.message).to.equal('User already unfollowed');
+    });
+
+    it('it throws 404 error if you enter inccorect followee id', async () => {
+      const response = await chai
+        .request(app)
+        .delete(`/users/${this.loggedInUser._id}/friends/thisIsAFakeId/follow`)
+        .set('Cookie', this.cookie);
+
+      response.should.have.status(404);
+    });
+  });
+
+  context('When request author is not logged in', () => {
+    before((done) => {
+      chai
+        .request(app)
+        .post(
+          `/users/${this.loggedInUser._id}/friends/${this.unFollowee._id}/follow`
+        )
+        .end((err, res) => {
+          this.response = res;
+          done();
+        });
+    });
+
+    it('it returns 401 status code', () => {
+      this.response.should.have.status(401);
+    });
+  });
+});
