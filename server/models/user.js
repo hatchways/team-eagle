@@ -19,7 +19,7 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
-  friend_ids: [
+  friendIds: [
     {
       type: String,
       required: true,
