@@ -180,6 +180,7 @@ describe('POST /users/:userId/friends/:friendId/follow', () => {
         .set('Cookie', this.cookie)
         .end((err, res) => {
           this.response = res;
+          this.loggedInUser = this.response.body.updatedRequestAuthor;
           done();
         });
     });
@@ -189,7 +190,30 @@ describe('POST /users/:userId/friends/:friendId/follow', () => {
     });
 
     it('it adds followee id to friendIds', () => {
-      expect(this.loggedInUser.friendIds).to.include(this.followee._id);
+      expect(this.loggedInUser.friendIds).to.include(
+        this.followee._id.toString()
+      );
+    });
+
+    it("it doesn't allow you to follow user you already follow", async () => {
+      const response = await chai
+        .request(app)
+        .post(
+          `/users/${this.loggedInUser._id}/friends/${this.followee._id}/follow`
+        )
+        .set('Cookie', this.cookie);
+
+      response.should.have.status(401);
+      expect(response.body.message).to.equal('User already followed');
+    });
+
+    it('it throws 404 error if you enter inccorect followee id', async () => {
+      const response = await chai
+        .request(app)
+        .post(`/users/${this.loggedInUser._id}/friends/thisIsAFakeId/follow`)
+        .set('Cookie', this.cookie);
+
+      response.should.have.status(404);
     });
   });
 

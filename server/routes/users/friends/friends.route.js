@@ -1,5 +1,6 @@
 const express = require('express');
 const passport = require('passport');
+const mongoose = require('mongoose');
 const router = express.Router({ mergeParams: true });
 const User = require('../../../models/user');
 
@@ -7,9 +8,6 @@ const User = require('../../../models/user');
 // @desc:   Find and return array of friends of specified userId
 // @access: Public
 router.get('/', async (req, res) => {
-  if (!req.params.userId)
-    throw 'please make sure to include userId param in the API URL';
-
   const user = await User.findById(req.params.userId);
   const friends = [];
 
@@ -39,6 +37,43 @@ router.get(
     }
 
     return res.status(200).json({ suggestions });
+  }
+);
+
+// @route:  POST /users/:userId/friends/:friendId/follow
+// @desc:   Make current user follow user at friendId
+// @access: Private
+router.post(
+  '/:friendId/follow',
+  passport.authenticate('jwt', { session: false }),
+  async (req, res) => {
+    const currUser = await User.findOne({ _id: req.params.userId });
+    const followeeId = req.params.friendId;
+    const isFolloweeIdValid = await mongoose.isValidObjectId(followeeId);
+
+    if (!isFolloweeIdValid) {
+      return res
+        .status(404)
+        .json({ message: 'Invalid provided friendId param' });
+    }
+
+    const followeeExists = await User.exists({ _id: followeeId });
+
+    if (!followeeExists) {
+      return res
+        .status(404)
+        .json({ message: 'No user at provided friendId param' });
+    } else if (currUser.friendIds.includes(followeeId)) {
+      return res.status(401).json({ message: 'User already followed' });
+    }
+
+    currUser.friendIds.push(followeeId);
+    await currUser.save();
+
+    res.json({
+      message: 'Success! User followed',
+      updatedRequestAuthor: currUser,
+    });
   }
 );
 
