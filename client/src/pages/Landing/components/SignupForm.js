@@ -11,6 +11,7 @@ import {
 } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import CheckIcon from '@material-ui/icons/Check';
+import PollModal from '../../../components/polls/PollModal';
 
 let nameMinLength = 3;
 let passwordMinLength = 6;
