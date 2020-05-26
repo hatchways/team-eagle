@@ -104,7 +104,9 @@ router.delete(
       return res.status(401).json({ message: 'User already unfollowed' });
     }
 
-    currUser.friendIds = currUser.friendIds.filter((el) => el !== unfolloweeId);
+    currUser.friendIds = currUser.friendIds.filter(
+      (el) => el._id.toString() !== unfolloweeId
+    );
     await currUser.save();
 
     res.json({
