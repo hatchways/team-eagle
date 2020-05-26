@@ -4,6 +4,7 @@ const { join } = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const passport = require('passport');
+const cors = require('cors');
 
 const indexRouter = require('./routes/index');
 const pingRouter = require('./routes/ping');
@@ -32,6 +33,7 @@ db.once('open', function () {
 });
 
 app.use(logger('dev', { skip: () => process.env.NODE_ENV === 'test' }));
+app.use(cors());
 app.use(json());
 app.use(urlencoded({ extended: false }));
 app.use(cookieParser());

@@ -8,6 +8,7 @@ const upload = require('./utils');
 // @access private
 // @params title, userId, imagess x 2
 router.post('/', upload.any(), (req, res) => {
+  console.log(req.body);
   const errors = [];
   if (!req.body.title) errors.push({ title: 'Invalid title' });
   if (!req.body.userId) errors.push({ userId: 'Invalid user id' });
@@ -15,7 +16,6 @@ router.post('/', upload.any(), (req, res) => {
     errors.push({ images: 'minimum two images required' });
 
   if (errors.length > 0) return res.status(400).json({ error: errors });
-
   const poll = new Poll({
     title: req.body.title,
     userId: req.body.userId,

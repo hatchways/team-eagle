@@ -97,7 +97,14 @@ export default function PollModal(props) {
             label="Upload Image 1"
             type="file"
           />
-          <Button onClick={() => handleSubmit()}>Submit Form</Button>
+          <Button
+            style={{ marginTop: 30 }}
+            variant="contained"
+            color="secondary"
+            onClick={() => handleSubmit()}
+          >
+            Submit Form
+          </Button>
         </form>
       </div>
     </div>
@@ -120,7 +127,12 @@ export default function PollModal(props) {
 
   return (
     <div>
-      <Button color="primary" onClick={handleOpen}>
+      <Button
+        variant="contained"
+        color="secondary"
+        onClick={handleOpen}
+        style={useStyles.button}
+      >
         Add Poll
       </Button>
       <Modal
@@ -136,6 +148,10 @@ export default function PollModal(props) {
 }
 
 const useStyles = makeStyles((theme) => ({
+  button: {
+    backgroundColor: 'black',
+    color: 'white',
+  },
   paper: {
     position: 'absolute',
     width: 400,
