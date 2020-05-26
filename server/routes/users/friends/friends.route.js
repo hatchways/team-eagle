@@ -1,6 +1,6 @@
 const express = require('express');
+const passport = require('passport');
 const router = express.Router({ mergeParams: true });
-
 const User = require('../../../models/user');
 
 // @route:  GET /users/:userId/friends
@@ -19,5 +19,27 @@ router.get('/', async (req, res) => {
 
   res.json({ friends });
 });
+
+// @route:  GET /users/:userId/friends/suggestions?name=<query>
+// @desc:   Gets a list of suggested friends (random). Can take a name query parameter
+// @access: Private
+router.get(
+  '/suggestions',
+  passport.authenticate('jwt', { session: false }),
+  async (req, res) => {
+    const nameQuery = req.query.name;
+    let suggestions;
+
+    if (nameQuery) {
+      suggestions = await User.find({
+        name: new RegExp(nameQuery, 'i'),
+      });
+    } else {
+      suggestions = await User.find({});
+    }
+
+    return res.status(200).json({ suggestions });
+  }
+);
 
 module.exports = router;

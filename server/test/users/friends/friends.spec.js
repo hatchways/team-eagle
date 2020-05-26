@@ -102,7 +102,7 @@ describe('GET /users/:userId/friends/suggestions', () => {
     before((done) => {
       chai
         .request(app)
-        .get(`/users/${this.loggedInUser._id}/friends/suggestions/name=user 2`)
+        .get(`/users/${this.loggedInUser._id}/friends/suggestions?name=user 2`)
         .set('Cookie', this.cookie)
         .end((err, res) => {
           this.response = res;
@@ -115,13 +115,13 @@ describe('GET /users/:userId/friends/suggestions', () => {
     });
 
     it('it returns a list of friends in an array', () => {
-      expect(this.response.body.friends).to.be.an('array');
+      expect(this.response.body.suggestions).to.be.an('array');
     });
 
     it('it filters friend suggestions based on name param', () => {
-      expect(this.response.body.friends).to.deep.include({
-        name: 'seed user 2',
-      });
+      expect(this.response.body.suggestions.map((e) => e.name)).to.include(
+        'seed user 2'
+      );
     });
   });
 
@@ -136,7 +136,6 @@ describe('GET /users/:userId/friends/suggestions', () => {
       chai
         .request(app)
         .get(`/users/${this.loggedInUser._id}/friends/suggestions`)
-        .set('Cookie', this.cookie)
         .end((err, res) => {
           this.response = res;
           done();
