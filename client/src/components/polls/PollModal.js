@@ -49,7 +49,7 @@ export default function PollModal(props) {
       },
     };
     await axios
-      .post('/polls', formData, config)
+      .post('http://localhost:3001/polls', formData, config)
       .then((response) => {
         alert('Poll has been created');
         handleClose();
@@ -100,7 +100,7 @@ export default function PollModal(props) {
             color="secondary"
             onClick={() => handleSubmit()}
           >
-            Submit Form
+            Create/Update Poll
           </Button>
         </form>
       </div>

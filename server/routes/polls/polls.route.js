@@ -8,7 +8,6 @@ const upload = require('./utils');
 // @access private
 // @params title, userId, imagess x 2
 router.post('/', upload.any(), (req, res) => {
-  console.log(req.body);
   const errors = [];
   if (!req.body.title) errors.push({ title: 'Invalid title' });
   if (!req.body.userId) errors.push({ userId: 'Invalid user id' });
@@ -29,7 +28,6 @@ router.post('/', upload.any(), (req, res) => {
   // Saving file location to the poll object
   try {
     req.files.map((item) => {
-      console.log(item);
       poll.addImage(item.location);
     });
   } catch (error) {
@@ -79,7 +77,6 @@ router.put('/:pollId', upload.any(), (req, res) => {
     if (messages.length > 0) return res.status(200).json({ status: messages });
     if (messages.length == 0)
       return res.status(200).json({ status: 'nothing to update' });
-    console.log(messages);
   });
 });
 
