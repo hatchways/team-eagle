@@ -49,7 +49,7 @@ router.post(
   '/:friendId/follow',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
-    const currUser = await User.findOne({ _id: req.params.userId });
+    const currUser = req.user;
     const followeeId = req.params.friendId;
     const followeeIdIsValid = await mongoose.isValidObjectId(followeeId);
 
@@ -86,7 +86,7 @@ router.delete(
   '/:friendId/follow',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
-    const currUser = await User.findOne({ _id: req.params.userId });
+    const currUser = req.user;
     const unfolloweeId = req.params.friendId;
     const unfolloweeIdIsValid = await mongoose.isValidObjectId(unfolloweeId);
 
