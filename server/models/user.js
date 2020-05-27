@@ -52,11 +52,11 @@ UserSchema.methods.checkPassword = function (password) {
 };
 
 UserSchema.methods.signJWT = function (payload) {
-  const expiresIn = 31556926; // 1 year in seconds
-  return {
-    token: jwt.sign(payload, keys.secretOrKey, { expiresIn }),
-    tokenExpiry: expiresIn,
-  };
+  return jwt.sign(
+    payload,
+    keys.secretOrKey,
+    { expiresIn: 31556926 } // 1 year in seconds
+  );
 };
 
 module.exports = User = mongoose.model('users', UserSchema);
