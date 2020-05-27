@@ -15,14 +15,13 @@ router.post(
   (req, res) => {
     const errors = [];
     if (!req.body.title) errors.push({ title: 'Invalid title' });
-    if (!req.body.userId) errors.push({ userId: 'Invalid user id' });
     if (req.files.length != 2)
       errors.push({ images: 'minimum two images required' });
 
     if (errors.length > 0) return res.status(400).json({ error: errors });
     const poll = new Poll({
       title: req.body.title,
-      userId: req.body.userId,
+      userId: req.user.id,
     });
     // Trying to save the poll
     try {
