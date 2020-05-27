@@ -7,7 +7,7 @@ const User = require('../../../models/user');
 // @route:  GET /users/:userId/friends
 // @desc:   Find and return array of friends of specified userId
 // @access: Public
-router.get('/', async (req, res) => {
+router.get('/followers', async (req, res) => {
   let user = await User.findById(req.params.userId)
     .populate('friendIds')
     .exec();

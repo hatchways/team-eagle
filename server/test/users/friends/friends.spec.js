@@ -10,7 +10,7 @@ chai.use(chaiHttp);
 
 const expect = chai.expect;
 
-describe('GET /users/:userId/friends', () => {
+describe('GET /users/:userId/friends/followers', () => {
   before((done) => {
     let user = {
       email: 'seedEmail1@gmail.com',
@@ -34,7 +34,7 @@ describe('GET /users/:userId/friends', () => {
     before((done) => {
       chai
         .request(app)
-        .get(`/users/${this.loggedInUser._id}/friends`)
+        .get(`/users/${this.loggedInUser._id}/friends/followers`)
         .set('Cookie', this.cookie)
         .end((err, res) => {
           this.response = res;
@@ -56,7 +56,7 @@ describe('GET /users/:userId/friends', () => {
       // user is assumed to not be logged in if a cookie isn't sent in request
       chai
         .request(app)
-        .get(`/users/${this.loggedInUser._id}/friends`)
+        .get(`/users/${this.loggedInUser._id}/friends/followers`)
         .end((err, res) => {
           this.response = res;
           done();
