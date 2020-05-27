@@ -75,6 +75,71 @@ describe('GET /users/:userId/friends/followers', () => {
 
 /******************************************************************************/
 
+describe('GET /users/:userId/friends/followings', () => {
+  before((done) => {
+    let user = {
+      email: 'seedEmail1@gmail.com',
+      password: '12345678',
+    };
+
+    chai
+      .request(app)
+      .post('/auth/login')
+      .send(user)
+      .end((err, res) => {
+        this.loggedInUser = res.body;
+        this.cookie = res.headers['set-cookie'].find((el) =>
+          el.includes('jwt=')
+        );
+        done();
+      });
+  });
+
+  context('When request author is logged in', () => {
+    before((done) => {
+      chai
+        .request(app)
+        .get(`/users/${this.loggedInUser._id}/friends/followings`)
+        .set('Cookie', this.cookie)
+        .end((err, res) => {
+          this.response = res;
+          done();
+        });
+    });
+
+    it('it returns 200 status code', () => {
+      this.response.should.have.status(200);
+    });
+
+    it('it returns a list of friends in an array', () => {
+      expect(this.response.body.friends).to.be.an('array');
+    });
+  });
+
+  context('When request author is not logged in', () => {
+    before((done) => {
+      // user is assumed to not be logged in if a cookie isn't sent in request
+      chai
+        .request(app)
+        .get(`/users/${this.loggedInUser._id}/friends/followings`)
+        .end((err, res) => {
+          this.response = res;
+          done();
+        });
+    });
+
+    it('it returns 200 status code', () => {
+      this.response.should.have.status(200);
+    });
+
+    it('it returns a list of friends of requested id in an array', () => {
+      expect(this.response.body.friends).to.be.an('array');
+    });
+  });
+});
+
+/******************************************************************************/
+
 describe('GET /users/:userId/friends/suggestions', () => {
   before((done) => {
     let user = {
