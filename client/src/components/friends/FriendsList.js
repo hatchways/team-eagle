@@ -4,7 +4,7 @@ import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import FriendListItem from './FriendListItem';
 import TextField from '@material-ui/core/TextField';
-import { debounce } from '../../../util/util';
+import { debounce } from '../../util/util';
 
 const useStyles = makeStyles((theme) => ({
   root: {

@@ -8,7 +8,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Chip from '@material-ui/core/Chip';
 import Avatar from '@material-ui/core/Avatar';
-import testImg from '../../../images/img1.png';
+import testImg from '../../images/img1.png';
 
 const useStyles = makeStyles((theme) => ({
   chipGreen: {
