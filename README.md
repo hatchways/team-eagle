@@ -29,15 +29,25 @@ The upload functions will take the credentials from your local .env file. Please
 
 #### Endpoints
 
-Login Routes
+Auth
 
 - `POST /auth/register`
 - `POST /auth/login`
 - `DELETE /auth/logout`
-  Polls Routes
+
+Polls
+
 - `POST /polls`
 - `PUT /polls/<pollId>`
 - `DELETE /polls/<pollId>`
+
+Friends
+
+- `GET /users/:userId/friends/followers`
+- `GET /users/:userId/friends/followings`
+- `GET /users/:userId/friends/suggestions?name=<query>`
+- `POST /users/:userId/friends/:friendId/follow`
+- `DELETE /users/:userId/friends/:friendId/follow`
 
 #### Protecting Endpoints
 
