@@ -7,7 +7,7 @@ import { UserContext } from './components/UserContext';
 
 import NavBar from './components/NavBar';
 import LandingPage from './pages/Landing/Landing';
-import FriendsIndex from './components/friends/FriendsList';
+import FriendsLayout from './pages/Friends/Friends';
 
 import './App.css';
 
@@ -39,7 +39,7 @@ function App() {
               path="/login"
               render={() => <LandingPage form="login" />}
             />
-            <Route exact path="/friends" render={() => <FriendsIndex />} />
+            <Route exact path="/friends" render={() => <FriendsLayout />} />
             <Route path="*">
               <Redirect to="/signup" />
             </Route>
