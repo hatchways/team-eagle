@@ -10,7 +10,6 @@ import FriendsLists from './FriendsLists';
 const useStyles = makeStyles((theme) => ({
   root: {
     paddingTop: theme.spacing(10),
-    marginRight: 0,
     minHeight: '100vh',
     display: 'flex',
   },
