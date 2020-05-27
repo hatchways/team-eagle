@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Box,
   Snackbar,
@@ -10,26 +10,29 @@ import {
 } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import CheckIcon from '@material-ui/icons/Check';
+import { UserContext } from '../../../components/UserContext';
 
 let passwordMinLength = 6;
 
 export default function LoginForm(props) {
   const classes = props.classes;
+  const user = React.useContext(UserContext);
 
-  const [state, setState] = useState({
+  const [state, setState] = React.useState({
     email: '',
     password: '',
 
     emailError: false,
     passwordError: false,
 
-    snackbarOpen: false,
+    snackbarMessage: '',
+    loading: false,
   });
 
   function closeSnackbar() {
     setState({
       ...state,
-      snackbarOpen: false,
+      snackbarMessage: false,
     });
   }
 
@@ -44,38 +47,77 @@ export default function LoginForm(props) {
     e.preventDefault();
     const { email, password } = state;
 
+    const requiredMessage = 'This is a required field';
+    const invalidEmailMessage = 'Please provide a valid email address';
+    const passwordMinMessage = `Password must contain at least ${passwordMinLength} characters`;
+    const invalidCredentialsMessage = 'Invalid credentials';
+    const serverErrorMessage = 'Server Error';
+    const fieldsInvalidMessage = 'Some fields are invalid';
+
     let emailError = false;
     let passwordError = false;
-    let snackbarOpen = false;
+    let snackbarMessage = '';
     let loading = false;
 
     // Validation
     if (!email) {
-      emailError = 'This is a required field';
+      emailError = requiredMessage;
     } else if (email.search('@') === -1) {
-      emailError = 'Please provide a valid email address';
+      emailError = invalidEmailMessage;
     }
 
     if (!password) {
-      passwordError = 'This is a required field';
+      passwordError = requiredMessage;
     } else if (password.length < passwordMinLength) {
-      passwordError = `Password must contain at least ${passwordMinLength} characters`;
+      passwordError = passwordMinMessage;
     }
 
     if (!emailError && !passwordError) {
-      // Sends request to server
-      loading = true;
+      // Updates the state before the request
+      setState({
+        ...state,
+        emailError,
+        passwordError,
+        snackbarMessage: '',
+        loading: true,
+      });
+      user.login(
+        {
+          email: state.email,
+          password: state.password,
+        },
+        (err) => {
+          if (err) {
+            if (err === 400) {
+              // Invalid credentials
+              setState({
+                ...state,
+                emailError: invalidCredentialsMessage,
+                passwordError: invalidCredentialsMessage,
+                snackbarMessage: invalidCredentialsMessage,
+                loading: false,
+              });
+            } else {
+              // Other errors
+              setState({
+                ...state,
+                snackbarMessage: serverErrorMessage,
+                loading: false,
+              });
+            }
+          }
+        }
+      );
     } else {
-      snackbarOpen = true;
+      // Updates the state showing errors
+      setState({
+        ...state,
+        emailError,
+        passwordError,
+        snackbarMessage: fieldsInvalidMessage,
+        loading,
+      });
     }
-    // Updates the state
-    setState({
-      ...state,
-      emailError,
-      passwordError,
-      snackbarOpen,
-      loading,
-    });
   }
 
   return (
@@ -130,15 +172,13 @@ export default function LoginForm(props) {
         </Box>
       </form>
       <Snackbar
-        open={state.snackbarOpen}
+        open={!!state.snackbarMessage}
         autoHideDuration={6000}
         onClose={closeSnackbar}
       >
-        {state.emailError || state.passwordError ? (
-          <Alert onClose={closeSnackbar} severity="error">
-            Some fields are invalid
-          </Alert>
-        ) : null}
+        <Alert onClose={closeSnackbar} severity="error">
+          {state.snackbarMessage}
+        </Alert>
       </Snackbar>
     </Box>
   );
