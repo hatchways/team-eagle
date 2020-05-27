@@ -3,7 +3,7 @@ import { MuiThemeProvider } from '@material-ui/core';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 
 import { theme } from './themes/theme';
-import { UserContext } from './components/UserContext';
+import { UserContext } from './components/contexts/UserContext';
 
 import NavBar from './components/NavBar';
 import LandingPage from './pages/Landing/Landing';
