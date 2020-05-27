@@ -5,6 +5,7 @@ import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import { theme } from './themes/theme';
 
 import LandingPage from './pages/Landing/Landing';
+import FriendsIndex from './pages/Friends/components/FriendsIndex';
 
 import './App.css';
 
@@ -23,6 +24,7 @@ function App() {
             path="/login"
             render={() => <LandingPage form="login" />}
           />
+          <Route exact path="/friends" render={() => <FriendsIndex />} />
           <Route path="*">
             <Redirect to="/signup" />
           </Route>
