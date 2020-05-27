@@ -2,11 +2,12 @@ import React from 'react';
 import { MuiThemeProvider } from '@material-ui/core';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 
-import { theme } from './themes/theme';
-import { UserContext } from './components/UserContext';
+import { theme } from 'themes/theme';
+import { UserContext } from 'components/UserContext';
 
-import NavBar from './components/NavBar';
-import LandingPage from './pages/Landing/Landing';
+import NavBar from 'components/NavBar';
+import LandingPage from 'pages/Landing/Landing';
+import Dashboard from 'pages/Dashboard/Dashboard';
 
 import './App.css';
 
@@ -24,6 +25,7 @@ function App() {
           <>
             <Route path="/">
               <NavBar />
+              <Dashboard />
             </Route>
           </>
         ) : (
