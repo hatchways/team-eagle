@@ -7,6 +7,7 @@ import { UserContext } from './components/UserContext';
 
 import NavBar from './components/NavBar';
 import LandingPage from './pages/Landing/Landing';
+import FriendsIndex from './pages/Friends/components/FriendsIndex';
 
 import './App.css';
 
