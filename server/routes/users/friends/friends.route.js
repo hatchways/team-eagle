@@ -4,20 +4,35 @@ const mongoose = require('mongoose');
 const router = express.Router({ mergeParams: true });
 const User = require('../../../models/user');
 
-// @route:  GET /users/:userId/friends
-// @desc:   Find and return array of friends of specified userId
+// @route:  GET /users/:userId/friends/followers
+// @desc:   Find and return array of followers of userId
 // @access: Public
 router.get('/followers', async (req, res) => {
   let user = await User.findById(req.params.userId)
     .populate('friendIds')
     .exec();
   let friends = user.friendIds;
+
   // filter out only wanted fields
   friends = friends.map((friend) => {
     return (({ _id, email, name }) => ({ _id, email, name }))(friend);
   });
 
-  res.json({ friends: user.friendIds });
+  res.json({ friends });
+});
+
+// @route:  GET /users/:userId/friends/followings
+// @desc:   Find and return array of followings of userId
+// @access: Public
+router.get('/followings', async (req, res) => {
+  let friends = await User.find({ friendIds: req.params.userId });
+
+  // filter out only wanted fields
+  friends = friends.map((friend) => {
+    return (({ _id, email, name }) => ({ _id, email, name }))(friend);
+  });
+
+  res.json({ friends });
 });
 
 // @route:  GET /users/:userId/friends/suggestions?name=<query>

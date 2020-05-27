@@ -78,7 +78,7 @@ describe('GET /users/:userId/friends/followers', () => {
 describe('GET /users/:userId/friends/followings', () => {
   before((done) => {
     let user = {
-      email: 'seedEmail1@gmail.com',
+      email: 'seedEmail8@gmail.com',
       password: '12345678',
     };
 
