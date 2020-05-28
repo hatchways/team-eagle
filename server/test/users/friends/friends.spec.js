@@ -231,7 +231,7 @@ describe('POST /users/:userId/friends/:friendId/follow', () => {
         .set('Cookie', this.cookie)
         .end((err, res) => {
           this.response = res;
-          this.followedUser = this.response.body.followedUser;
+          this.requestedUser = this.response.body.requestedUser;
           done();
         });
     });
@@ -241,7 +241,7 @@ describe('POST /users/:userId/friends/:friendId/follow', () => {
     });
 
     it('it adds followee id of request author to friendIds of followed user', () => {
-      expect(this.followedUser.friendIds).to.include(
+      expect(this.requestedUser.friendIds).to.include(
         this.loggedInUser._id.toString()
       );
     });
@@ -304,6 +304,13 @@ describe('DELETE /users/:userId/friends/:friendId/follow', () => {
     this.cookie = loginRes.headers['set-cookie'].find((el) =>
       el.includes('jwt=')
     );
+
+    await chai
+      .request(app)
+      .post(
+        `/users/${this.loggedInUser._id}/friends/${this.unFollowee._id}/follow`
+      )
+      .set('Cookie', this.cookie);
   });
 
   context('When request author is logged in', () => {
@@ -316,7 +323,7 @@ describe('DELETE /users/:userId/friends/:friendId/follow', () => {
         .set('Cookie', this.cookie)
         .end((err, res) => {
           this.response = res;
-          this.loggedInUser = this.response.body.updatedRequestAuthor;
+          this.requestedUser = this.response.body.requestedUser;
           done();
         });
     });
@@ -326,8 +333,8 @@ describe('DELETE /users/:userId/friends/:friendId/follow', () => {
     });
 
     it('it removes unfollowee id from friendIds', () => {
-      expect(this.loggedInUser.friendIds).to.not.include(
-        this.unFollowee._id.toString()
+      expect(this.requestedUser.friendIds).to.not.include(
+        this.loggedInUser._id.toString()
       );
     });
 

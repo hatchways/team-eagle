@@ -91,7 +91,7 @@ router.post(
 
     res.json({
       message: 'Success! User followed',
-      followedUser: requestedUser,
+      requestedUser: requestedUser,
     });
   }
 );
@@ -113,24 +113,24 @@ router.delete(
         .json({ message: 'Invalid provided friendId param' });
     }
 
-    const followeeExists = await User.exists({ _id: unfolloweeId });
+    const requestedUser = await User.findOne({ _id: unfolloweeId });
 
-    if (!followeeExists) {
+    if (!requestedUser) {
       return res
         .status(404)
         .json({ message: 'No user at provided friendId param' });
-    } else if (!currUser.friendIds.includes(unfolloweeId)) {
+    } else if (!requestedUser.friendIds.includes(currUser._id)) {
       return res.status(401).json({ message: 'User already unfollowed' });
     }
 
-    currUser.friendIds = currUser.friendIds.filter(
-      (el) => el._id.toString() !== unfolloweeId
+    requestedUser.friendIds = requestedUser.friendIds.filter(
+      (el) => el._id.toString() !== currUser._id.toString()
     );
-    await currUser.save();
+    await requestedUser.save();
 
     res.json({
       message: 'Success! User unfollowed',
-      updatedRequestAuthor: currUser,
+      requestedUser: requestedUser,
     });
   }
 );
