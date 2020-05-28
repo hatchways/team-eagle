@@ -4,7 +4,7 @@ import React from 'react';
 export const UserContext = React.createContext();
 
 // This should be imported only by index.js
-export const ContextProvider = ({ children }) => {
+export const UserContextProvider = ({ children }) => {
   const [state, setState] = React.useState({});
 
   function getCurrent(callback) {
@@ -20,6 +20,7 @@ export const ContextProvider = ({ children }) => {
             ...state,
             ...data,
           });
+          return data;
         } else if (callback) {
           callback(res.status);
         }

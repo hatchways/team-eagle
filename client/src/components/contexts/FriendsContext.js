@@ -5,14 +5,16 @@ import { UserContext } from './UserContext';
 export const FriendsContext = React.createContext();
 
 // This should be imported only by index.js
-export const ContextProvider = ({ children }) => {
+export const FriendsContextProvider = ({ children }) => {
   const [state, setState] = React.useState({
     followers: [],
     followings: [],
     suggestions: [],
   });
 
-  function followers(targetId, callback) {
+  const user = React.useContext(UserContext);
+
+  function getFollowers(targetId, callback) {
     return fetch(`/users/${targetId}/friends/followers`, {
       method: 'GET',
       headers: {
@@ -22,8 +24,10 @@ export const ContextProvider = ({ children }) => {
     }).then((res) => {
       res.json().then((data) => {
         if (res.status === 200) {
-          const newState = Object.assign(state, { followers: data });
-          setState({ newState });
+          const newState = Object.assign({}, state, {
+            followers: data.friends,
+          });
+          setState(newState);
         } else {
           callback({ ...data, status: res.status });
         }
@@ -31,7 +35,7 @@ export const ContextProvider = ({ children }) => {
     });
   }
 
-  function followings(targetId, callback) {
+  function getFollowings(targetId, callback) {
     return fetch(`/users/${targetId}/friends/followings`, {
       method: 'GET',
       headers: {
@@ -41,8 +45,10 @@ export const ContextProvider = ({ children }) => {
     }).then((res) => {
       res.json().then((data) => {
         if (res.status === 200) {
-          const newState = Object.assign(state, { followings: data });
-          setState({ newState });
+          const newState = Object.assign({}, state, {
+            followings: data.friends,
+          });
+          setState(newState);
         } else {
           callback({ ...data, status: res.status });
         }
@@ -51,8 +57,7 @@ export const ContextProvider = ({ children }) => {
   }
 
   // [private]
-  function suggestions(callback) {
-    const user = React.useContext(UserContext);
+  function getSuggestions(callback) {
     if (!user._id) throw 'user is not logged in';
 
     return fetch(`/users/${user._id}/friends/suggestions`, {
@@ -64,8 +69,10 @@ export const ContextProvider = ({ children }) => {
     }).then((res) => {
       res.json().then((data) => {
         if (res.status === 200) {
-          const newState = Object.assign(state, { suggestions: data });
-          setState({ newState });
+          const newState = Object.assign({}, state, {
+            suggestions: data.suggestions,
+          });
+          setState(newState);
         } else {
           callback({ ...data, status: res.status });
         }
@@ -76,7 +83,6 @@ export const ContextProvider = ({ children }) => {
   // [private]
   // updates followings when called
   function follow(targetId, callback) {
-    const user = React.useContext(UserContext);
     if (!user._id) throw 'user is not logged in';
 
     return fetch(`/users/${user._id}/friends/${targetId}/follow`, {
@@ -88,7 +94,7 @@ export const ContextProvider = ({ children }) => {
     }).then((res) => {
       res.json().then((data) => {
         if (res.status === 200) {
-          followings(user._id, (err) => {
+          getFollowings(user._id, (err) => {
             throw err;
           });
         } else {
@@ -100,8 +106,7 @@ export const ContextProvider = ({ children }) => {
 
   // [private]
   // updates followings when called
-  function unfollow(callback) {
-    const user = React.useContext(UserContext);
+  function unfollow(targetId, callback) {
     if (!user._id) throw 'user is not logged in';
 
     return fetch(`/users/${user._id}/friends/${targetId}/follow`, {
@@ -113,7 +118,7 @@ export const ContextProvider = ({ children }) => {
     }).then((res) => {
       res.json().then((data) => {
         if (res.status === 200) {
-          followings(user._id, (err) => {
+          getFollowings(user._id, (err) => {
             throw err;
           });
         } else {
@@ -124,10 +129,17 @@ export const ContextProvider = ({ children }) => {
   }
 
   return (
-    <UserContext.Provider
-      value={{ ...state, followers, followings, suggestions, follow, unfollow }}
+    <FriendsContext.Provider
+      value={{
+        ...state,
+        getFollowers,
+        getFollowings,
+        getSuggestions,
+        follow,
+        unfollow,
+      }}
     >
       {children}
-    </UserContext.Provider>
+    </FriendsContext.Provider>
   );
 };

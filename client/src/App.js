@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 
 import { theme } from './themes/theme';
 import { UserContext } from './components/contexts/UserContext';
+import { FriendsContext } from './components/contexts/FriendsContext';
 
 import NavBar from './components/NavBar';
 import LandingPage from './pages/Landing/Landing';
@@ -13,11 +14,26 @@ import './App.css';
 
 function App() {
   const user = React.useContext(UserContext);
+  const friends = React.useContext(FriendsContext);
 
   React.useEffect(() => {
     // Verify if the user is validated and if so, setUser
-    if (!user._id) user.getCurrent();
-  });
+    if (!user._id) {
+      user.getCurrent();
+    }
+
+    if (user._id) {
+      friends.getFollowers(user._id, (err) => {
+        throw err;
+      });
+      friends.getFollowings(user._id, (err) => {
+        throw err;
+      });
+      friends.getSuggestions((err) => {
+        throw err;
+      });
+    }
+  }, [user]);
 
   return (
     <MuiThemeProvider theme={theme}>

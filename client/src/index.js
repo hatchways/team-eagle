@@ -3,12 +3,15 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import { ContextProvider } from './components/contexts/UserContext';
+import { UserContextProvider } from './components/contexts/UserContext';
+import { FriendsContextProvider } from './components/contexts/FriendsContext';
 
 ReactDOM.render(
-  <ContextProvider>
-    <App />
-  </ContextProvider>,
+  <UserContextProvider>
+    <FriendsContextProvider>
+      <App />
+    </FriendsContextProvider>
+  </UserContextProvider>,
   document.getElementById('root')
 );
 
