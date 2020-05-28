@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import {
   Box,
@@ -11,32 +11,33 @@ import {
 } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import CheckIcon from '@material-ui/icons/Check';
-import PollModal from '../../../components/polls/PollModal';
+import { UserContext } from '../../../components/UserContext';
 
 let nameMinLength = 3;
 let passwordMinLength = 6;
 
 export default function SignupForm(props) {
   const classes = props.classes;
+  const user = React.useContext(UserContext);
 
-  const [state, setState] = useState({
+  const [state, setState] = React.useState({
     name: '',
     email: '',
     password: '',
     confirmPassword: '',
 
-    nameError: false,
-    emailError: false,
-    passwordError: false,
-    confirmPasswordError: false,
+    nameError: '',
+    emailError: '',
+    passwordError: '',
+    confirmPasswordError: '',
 
-    snackbarOpen: false,
+    snackbarMessage: '',
   });
 
   function closeSnackbar() {
     setState({
       ...state,
-      snackbarOpen: false,
+      snackbarMessage: '',
     });
   }
 
@@ -49,56 +50,103 @@ export default function SignupForm(props) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    const { name, email, password, confirmPassword } = state;
+    const { name, email, password, confirmPassword } = { ...state };
 
-    let nameError = false;
-    let emailError = false;
-    let passwordError = false;
-    let confirmPasswordError = false;
-    let snackbarOpen = false;
+    const requiredFieldMessage = 'This is a required field';
+    const nameMinLengthMessage = `Name must contain at least ${nameMinLength} characters`;
+    const validEmailMessage = 'Please provide a valid email address';
+
+    const passwordMinLengthMessage = `Password must contain at least ${passwordMinLength} characters`;
+    const mismatchPasswords = 'Passwords do not match';
+
+    const genericSnackbarMessage = 'Some fields are invalid';
+    const serverErrorSnackbarMessage = 'Server error';
+
+    let nameError = '';
+    let emailError = '';
+    let passwordError = '';
+    let confirmPasswordError = '';
     let loading = false;
 
     // Validation
     if (!name) {
-      nameError = 'This is a required field';
+      nameError = requiredFieldMessage;
     } else if (name.length < nameMinLength) {
-      nameError = `Name must contain at least ${nameMinLength} characters`;
+      nameError = nameMinLengthMessage;
     }
 
     if (!email) {
-      emailError = 'This is a required field';
+      emailError = requiredFieldMessage;
     } else if (email.search('@') === -1) {
-      emailError = 'Please provide a valid email address';
+      emailError = validEmailMessage;
     }
 
     if (!password) {
-      passwordError = 'This is a required field';
+      passwordError = requiredFieldMessage;
     } else if (password.length < passwordMinLength) {
-      passwordError = `Password must contain at least ${passwordMinLength} characters`;
+      passwordError = passwordMinLengthMessage;
     }
 
     if (!confirmPassword) {
-      confirmPasswordError = 'This is a required field';
+      confirmPasswordError = requiredFieldMessage;
     } else if (confirmPassword !== password) {
-      confirmPasswordError = 'Passwords do not match';
+      confirmPasswordError = mismatchPasswords;
     }
 
     if (!nameError && !emailError && !passwordError && !confirmPasswordError) {
+      // No errors
+      setState({
+        ...state,
+        nameError: '',
+        emailError: '',
+        passwordError: '',
+        confirmPasswordError: '',
+        snackbarMessage: '',
+        loading: true,
+      });
       // Sends request to server
-      loading = true;
+      user.signup(
+        {
+          name: state.name,
+          email: state.email,
+          password: state.password,
+        },
+        (err) => {
+          if (err) {
+            if (err.status === 400) {
+              console.log(state);
+              setState({
+                ...state,
+                nameError: err.name || '',
+                emailError: err.email || '',
+                passwordError: err.password || '',
+                confirmPasswordError: '',
+              });
+            } else {
+              setState({
+                ...state,
+                nameError: '',
+                emailError: '',
+                passwordError: '',
+                snackbarMessage: serverErrorSnackbarMessage,
+                loading: false,
+              });
+            }
+          }
+        }
+      );
     } else {
-      snackbarOpen = true;
+      // Form has errors
+      setState({
+        ...state,
+        nameError,
+        emailError,
+        passwordError,
+        confirmPasswordError,
+        snackbarMessage: genericSnackbarMessage,
+        loading,
+      });
     }
-    // Updates the state
-    setState({
-      ...state,
-      nameError,
-      emailError,
-      passwordError,
-      confirmPasswordError,
-      snackbarOpen,
-      loading,
-    });
   }
 
   return (
@@ -179,7 +227,12 @@ export default function SignupForm(props) {
           required
         />
         <Box className={classes.submitBox}>
-          <Button onClick={handleSubmit} variant="contained" color="primary">
+          <Button
+            onClick={handleSubmit}
+            variant="contained"
+            color="primary"
+            type="submit"
+          >
             Create
           </Button>
           {state.loading ? (
@@ -188,7 +241,7 @@ export default function SignupForm(props) {
         </Box>
       </form>
       <Snackbar
-        open={state.snackbarOpen}
+        open={!!state.snackbarMessage}
         autoHideDuration={6000}
         onClose={closeSnackbar}
       >
@@ -197,7 +250,7 @@ export default function SignupForm(props) {
         state.passwordError ||
         state.confirmPasswordError ? (
           <Alert onClose={closeSnackbar} severity="error">
-            Some fields are invalid
+            {state.snackbarMessage}
           </Alert>
         ) : null}
       </Snackbar>
