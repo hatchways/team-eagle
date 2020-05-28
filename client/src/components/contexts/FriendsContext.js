@@ -51,10 +51,10 @@ export const FriendsContextProvider = ({ children }) => {
   }
 
   // [private]
-  function getSuggestions(callback) {
+  function getSuggestions(name = '', callback) {
     if (!user._id) throw new Error('user is not logged in');
 
-    return fetch(`/users/${user._id}/friends/suggestions`, {
+    return fetch(`/users/${user._id}/friends/suggestions?name=${name}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

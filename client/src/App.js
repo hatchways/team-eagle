@@ -29,7 +29,7 @@ function App() {
       friends.getFollowings(user._id, (err) => {
         throw new Error(err.message);
       });
-      friends.getSuggestions((err) => {
+      friends.getSuggestions('', (err) => {
         throw new Error(err.message);
       });
     }
