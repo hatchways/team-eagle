@@ -55,6 +55,8 @@ app.use(function (req, res, next) {
   next(createError(404));
 });
 
+// Socket.io works
+
 // Error handler
 app.use(function (err, req, res, next) {
   // Set locals, only providing error in development
