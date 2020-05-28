@@ -24,10 +24,7 @@ export const FriendsContextProvider = ({ children }) => {
     }).then((res) => {
       res.json().then((data) => {
         if (res.status === 200) {
-          const newState = Object.assign({}, state, {
-            followers: data.friends,
-          });
-          setState(newState);
+          setState({ ...state, followers: data.friends });
         } else {
           callback({ ...data, status: res.status });
         }
@@ -45,10 +42,7 @@ export const FriendsContextProvider = ({ children }) => {
     }).then((res) => {
       res.json().then((data) => {
         if (res.status === 200) {
-          const newState = Object.assign({}, state, {
-            followings: data.friends,
-          });
-          setState(newState);
+          setState({ ...state, followings: data.friends });
         } else {
           callback({ ...data, status: res.status });
         }
@@ -69,10 +63,7 @@ export const FriendsContextProvider = ({ children }) => {
     }).then((res) => {
       res.json().then((data) => {
         if (res.status === 200) {
-          const newState = Object.assign({}, state, {
-            suggestions: data.suggestions,
-          });
-          setState(newState);
+          setState({ ...state, suggestions: data.suggestions });
         } else {
           callback({ ...data, status: res.status });
         }
