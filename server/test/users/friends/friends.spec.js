@@ -231,7 +231,7 @@ describe('POST /users/:userId/friends/:friendId/follow', () => {
         .set('Cookie', this.cookie)
         .end((err, res) => {
           this.response = res;
-          this.loggedInUser = this.response.body.updatedRequestAuthor;
+          this.followedUser = this.response.body.followedUser;
           done();
         });
     });
@@ -240,9 +240,9 @@ describe('POST /users/:userId/friends/:friendId/follow', () => {
       this.response.should.have.status(200);
     });
 
-    it('it adds followee id to friendIds', () => {
-      expect(this.loggedInUser.friendIds).to.include(
-        this.followee._id.toString()
+    it('it adds followee id of request author to friendIds of followed user', () => {
+      expect(this.followedUser.friendIds).to.include(
+        this.loggedInUser._id.toString()
       );
     });
 

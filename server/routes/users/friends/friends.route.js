@@ -74,22 +74,24 @@ router.post(
         .json({ message: 'Invalid provided friendId param' });
     }
 
-    const followeeExists = await User.exists({ _id: followeeId });
+    const requestedUser = await User.findOne({ _id: followeeId });
 
-    if (!followeeExists) {
+    if (!requestedUser) {
       return res
         .status(404)
         .json({ message: 'No user at provided friendId param' });
-    } else if (currUser.friendIds.includes(followeeId)) {
+    } else if (requestedUser.friendIds.includes(currUser._id)) {
       return res.status(401).json({ message: 'User already followed' });
     }
 
-    currUser.friendIds.push(followeeId);
-    await currUser.save();
+    requestedUser.friendIds.push(currUser._id);
+    await requestedUser.save();
+
+    requestedUser.password = null;
 
     res.json({
       message: 'Success! User followed',
-      updatedRequestAuthor: currUser,
+      followedUser: requestedUser,
     });
   }
 );
