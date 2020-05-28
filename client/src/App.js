@@ -16,6 +16,7 @@ function App() {
 
   React.useEffect(() => {
     // Verify if the user is validated and if so, setUser
+    if (!user._id) user.getCurrent();
   });
 
   return (

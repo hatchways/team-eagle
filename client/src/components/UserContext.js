@@ -29,6 +29,26 @@ export const ContextProvider = ({ children }) => {
     ],
   });
 
+  function getCurrent(callback) {
+    fetch('/users/current', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }).then((res) => {
+      res.json().then((data) => {
+        if (res.status === 200) {
+          setState({
+            ...state,
+            ...data,
+          });
+        } else if (callback) {
+          callback(res.status);
+        }
+      });
+    });
+  }
+
   function signup(payload, callback) {
     fetch('/auth/register', {
       method: 'POST',
@@ -83,7 +103,9 @@ export const ContextProvider = ({ children }) => {
   }
 
   return (
-    <UserContext.Provider value={{ ...state, signup, login, logout }}>
+    <UserContext.Provider
+      value={{ ...state, getCurrent, signup, login, logout }}
+    >
       {children}
     </UserContext.Provider>
   );
