@@ -44,6 +44,8 @@ Auth Routes
 - `POST /polls`
 - `PUT /polls/<pollId>`
 - `DELETE /polls/<pollId>`
+- `GET /polls`
+- `GET /polls/friends`
 
 #### Protecting Endpoints
 
