@@ -32,7 +32,7 @@ router.post('/register', (req, res) => {
       newUser
         .save()
         .then((user) => {
-          const payload = { id: user.id };
+          const payload = { id: user._id };
           const token = user.signJWT(payload);
           const options = {
             httpOnly: true,
