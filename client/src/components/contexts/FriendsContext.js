@@ -12,6 +12,8 @@ export const FriendsContextProvider = ({ children }) => {
     suggestions: [],
   });
 
+  debugger;
+
   const user = React.useContext(UserContext);
 
   function getFollowers(targetId, callback) {
@@ -24,7 +26,7 @@ export const FriendsContextProvider = ({ children }) => {
     }).then((res) => {
       res.json().then((data) => {
         if (res.status === 200) {
-          setState({ ...state, followers: data.friends });
+          setState({ ...state, followers: data });
         } else {
           callback({ ...data, status: res.status });
         }
@@ -42,7 +44,7 @@ export const FriendsContextProvider = ({ children }) => {
     }).then((res) => {
       res.json().then((data) => {
         if (res.status === 200) {
-          setState({ ...state, followings: data.friends });
+          setState({ ...state, followings: data });
         } else {
           callback({ ...data, status: res.status });
         }
@@ -63,7 +65,7 @@ export const FriendsContextProvider = ({ children }) => {
     }).then((res) => {
       res.json().then((data) => {
         if (res.status === 200) {
-          setState({ ...state, suggestions: data.suggestions });
+          setState({ ...state, suggestions: data });
         } else {
           callback({ ...data, status: res.status });
         }

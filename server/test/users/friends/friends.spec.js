@@ -47,7 +47,7 @@ describe('GET /users/:userId/friends/followers', () => {
     });
 
     it('it returns a list of friends in an array', () => {
-      expect(this.response.body.friends).to.be.an('array');
+      expect(this.response.body).to.be.an('array');
     });
   });
 
@@ -68,7 +68,7 @@ describe('GET /users/:userId/friends/followers', () => {
     });
 
     it('it returns a list of friends of requested id in an array', () => {
-      expect(this.response.body.friends).to.be.an('array');
+      expect(this.response.body).to.be.an('array');
     });
   });
 });
@@ -112,7 +112,7 @@ describe('GET /users/:userId/friends/followings', () => {
     });
 
     it('it returns a list of friends in an array', () => {
-      expect(this.response.body.friends).to.be.an('array');
+      expect(this.response.body).to.be.an('array');
     });
   });
 
@@ -133,7 +133,7 @@ describe('GET /users/:userId/friends/followings', () => {
     });
 
     it('it returns a list of friends of requested id in an array', () => {
-      expect(this.response.body.friends).to.be.an('array');
+      expect(this.response.body).to.be.an('array');
     });
   });
 });
@@ -177,13 +177,11 @@ describe('GET /users/:userId/friends/suggestions', () => {
     });
 
     it('it returns a list of friends in an array', () => {
-      expect(this.response.body.suggestions).to.be.an('array');
+      expect(this.response.body).to.be.an('array');
     });
 
     it('it filters friend suggestions based on name param', () => {
-      expect(this.response.body.suggestions.map((e) => e.name)).to.include(
-        'seed user 2'
-      );
+      expect(this.response.body.map((e) => e.name)).to.include('seed user 2');
     });
   });
 

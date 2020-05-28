@@ -8,31 +8,31 @@ const User = require('../../../models/user');
 // @desc:   Find and return array of followers of userId
 // @access: Public
 router.get('/followers', async (req, res) => {
-  let user = await User.findById(req.params.userId)
+  let result = await User.findById(req.params.userId)
     .populate('friendIds')
     .exec();
-  let friends = user.friendIds;
+  let followers = result.friendIds;
 
   // filter out only wanted fields
-  friends = friends.map((friend) => {
+  followers = followers.map((friend) => {
     return (({ _id, email, name }) => ({ _id, email, name }))(friend);
   });
 
-  res.json({ friends });
+  res.json(followers);
 });
 
 // @route:  GET /users/:userId/friends/followings
 // @desc:   Find and return array of followings of userId
 // @access: Public
 router.get('/followings', async (req, res) => {
-  let friends = await User.find({ friendIds: req.params.userId });
+  let followings = await User.find({ friendIds: req.params.userId });
 
   // filter out only wanted fields
-  friends = friends.map((friend) => {
+  followings = followings.map((friend) => {
     return (({ _id, email, name }) => ({ _id, email, name }))(friend);
   });
 
-  res.json({ friends });
+  res.json(followings);
 });
 
 // @route:  GET /users/:userId/friends/suggestions?name=<query>
@@ -53,7 +53,7 @@ router.get(
       suggestions = await User.find({});
     }
 
-    return res.status(200).json({ suggestions });
+    return res.status(200).json(suggestions);
   }
 );
 
