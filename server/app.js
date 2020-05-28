@@ -6,11 +6,13 @@ const logger = require('morgan');
 const passport = require('passport');
 const cors = require('cors');
 
+// Users routes
+const usersRouter = require('./routes/users/users.route');
 // Auth routes
 const authRouter = require('./routes/auth/auth.route');
 // Poll routes
 const pollsRouter = require('./routes/polls/polls.route');
-// Friends Routes
+// Friends routes
 const friendsRouter = require('./routes/users/friends/friends.route');
 
 const { json, urlencoded } = express;
@@ -41,8 +43,8 @@ app.use(passport.initialize());
 // Passport config
 require('./config/passport')(passport);
 
-// Routes
-
+// Users Routes
+app.use('/users', usersRouter);
 // Auth Routes
 app.use('/auth', authRouter);
 // Poll Routes

@@ -9,45 +9,30 @@ const expect = chai.expect;
 
 describe('GET /users/current', () => {
   context('When user is logged in', () => {
-    beforeEach((done) => {
+    before(async () => {
       let user = {
         email: 'seedEmail1@gmail.com',
         password: '12345678',
       };
 
-      chai
-        .request(app)
-        .post('/auth/login')
-        .send(user)
-        .end((err, res) => {
-          this.response = res;
-          this.cookie = this.response.headers['set-cookie'].find((el) =>
-            el.includes('jwt=')
-          );
-          done();
-        });
-    });
+      const loginRes = await chai.request(app).post('/auth/login').send(user);
 
-    it('it returns 200 status code', (done) => {
-      chai
+      this.cookie = loginRes.headers['set-cookie'].find((el) =>
+        el.includes('jwt=')
+      );
+
+      this.response = await chai
         .request(app)
         .get('/users/current')
-        .set('Cookie', this.cookie)
-        .end((err, res) => {
-          res.should.have.status(200);
-          done();
-        });
+        .set('Cookie', this.cookie);
     });
 
-    it('it returns an instance of the logged in user', (done) => {
-      chai
-        .request(app)
-        .get('/users/current')
-        .set('Cookie', this.cookie)
-        .end((err, res) => {
-          expect(res._id).to.be.a('string');
-          done();
-        });
+    it('it returns 200 status code', () => {
+      this.response.should.have.status(200);
+    });
+
+    it('it returns an instance of the logged in user', () => {
+      expect(this.response.body._id).to.be.a('string');
     });
   });
 
