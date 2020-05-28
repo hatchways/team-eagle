@@ -7,7 +7,6 @@ import { UserContext } from '../UserContext';
 
 export default function PollModal(props) {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
   const [title, setTitle] = React.useState('');
   const [image1, setImage1] = React.useState('');
   const [image2, setImage2] = React.useState('');
@@ -24,13 +23,6 @@ export default function PollModal(props) {
     console.log(image1, image2);
   }, []);
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   const handleChange = (e) => {
     setTitle(e.target.value);
@@ -52,7 +44,7 @@ export default function PollModal(props) {
       .post('/polls', formData, config)
       .then((response) => {
         alert('Poll has been created');
-        handleClose();
+        props.toggle();
       })
       .catch((error) => {
         console.log(error);
@@ -114,24 +106,14 @@ export default function PollModal(props) {
   );
 
   return (
-    <div>
-      <Button
-        variant="contained"
-        color="secondary"
-        onClick={handleOpen}
-        style={useStyles.button}
-      >
-        Add Poll
-      </Button>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="poll-modal-title"
-        aria-describedby="poll-modal-description"
-      >
-        {loading ? loadingBody : body}
-      </Modal>
-    </div>
+    <Modal
+      open={props.mode}
+      onClose={props.toggle}
+      aria-labelledby="poll-modal-title"
+      aria-describedby="poll-modal-description"
+    >
+      {loading ? loadingBody : body}
+    </Modal>
   );
 }
 

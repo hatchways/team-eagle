@@ -16,7 +16,7 @@ import {
 import MenuIcon from '@material-ui/icons/Menu';
 import Thumbnail from './Thumbnail';
 import NavDrawer from './NavDrawer';
-import PollModal from './polls/PollModal';
+import AddPollButton from './polls/AddPollButton';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -125,7 +125,7 @@ export default function NavBar(props) {
               >
                 Create Poll
               </Button> */}
-              <PollModal view="add" />
+              <AddPollButton />
             </Grid>
           </Hidden>
           <Grid item>
