@@ -7,8 +7,6 @@ export const UserContext = React.createContext();
 export const ContextProvider = ({ children }) => {
   const [state, setState] = React.useState({});
 
-  debugger;
-
   function getCurrent(callback) {
     fetch('/users/current', {
       method: 'GET',
