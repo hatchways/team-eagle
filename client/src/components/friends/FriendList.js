@@ -79,15 +79,22 @@ export default function FriendList(props) {
     setState(initialState);
   }, [initialState]);
 
+  const handleSuggestionSearch = debounce((input) => {
+    friends.getSuggestions(input, (err) => {
+      throw new Error(err.message);
+    });
+  }, 250);
+
   /**
-   * Changes in search field in suggestions tab cause an
+   * Changes in search of suggestions tab cause an
    * API call since it's dynamic
    */
   const handleChange = (event) => {
     if (props.type === 'suggestions') {
-      friends.getSuggestions(event.target.value, (err) => {
-        throw new Error(err.message);
-      });
+      handleSuggestionSearch(event.target.value);
+    } else {
+      const searchRegex = new RegExp(event.target.value, 'i');
+      setState(initialState.filter((user) => user.name.match(searchRegex)));
     }
   };
 
