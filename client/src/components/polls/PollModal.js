@@ -1,16 +1,34 @@
-import React from 'react';
+import React, { useCallback, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button, Modal, TextField } from '@material-ui/core';
+import { useDropzone } from 'react-dropzone';
+import { UserContext } from '../UserContext';
 
 export default function PollModal(props) {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
   const [title, setTitle] = React.useState('');
   const [image1, setImage1] = React.useState('');
   const [image2, setImage2] = React.useState('');
   const [loading, setLoading] = React.useState(false);
   const [userId, setUserId] = React.useState('1234');
+  const user = React.useContext(UserContext);
+
+  useEffect(() => {
+    setUserId(user._id);
+  });
+
+  const onDrop = useCallback((acceptedFiles) => {
+    if (acceptedFiles.length != 2) {
+      alert('You can only upload only two files per poll. No less, no more.');
+    } else {
+      setImage1(acceptedFiles[0]);
+      setImage2(acceptedFiles[1]);
+    }
+    console.log(image1, image2);
+  }, []);
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   const handleOpen = () => {
     setOpen(true);
@@ -23,12 +41,6 @@ export default function PollModal(props) {
     switch (type) {
       case 'title':
         setTitle(e.target.value);
-        break;
-      case 'image1':
-        setImage1(e.target.files[0]);
-        break;
-      case 'image2':
-        setImage2(e.target.files[0]);
         break;
       default:
         break;
@@ -49,7 +61,7 @@ export default function PollModal(props) {
       },
     };
     await axios
-      .post('http://localhost:3001/polls', formData, config)
+      .post('/polls', formData, config)
       .then((response) => {
         alert('Poll has been created');
         handleClose();
@@ -77,23 +89,14 @@ export default function PollModal(props) {
             label="Title of the Poll"
             style={{ marginBottom: 20 }}
           />
-          <label>Select first image</label>
-          <TextField
-            onChange={(e) => handleChange(e, 'image1')}
-            fullWidth
-            id="standard-basic"
-            label="Upload Image 1"
-            type="file"
-            style={{ marginBottom: 20 }}
-          />
-          <label>Select second image</label>
-          <TextField
-            onChange={(e) => handleChange(e, 'image2')}
-            fullWidth
-            id="standard-basic"
-            label="Upload Image 1"
-            type="file"
-          />
+          <div {...getRootProps()} className={classes.dropzone}>
+            <input {...getInputProps()} />
+            {isDragActive ? (
+              <p>Drop the files here ...</p>
+            ) : (
+              <p>Drag 'n' drop some files here, or click to select files</p>
+            )}
+          </div>
           <Button
             mt={3}
             variant="contained"
@@ -145,6 +148,14 @@ export default function PollModal(props) {
 }
 
 const useStyles = makeStyles((theme) => ({
+  dropzone: {
+    width: 350,
+    height: 300,
+    backgroundColor: '#e8e8e8',
+    padding: 20,
+    color: 'black',
+    marginBottom: 30,
+  },
   button: {
     backgroundColor: 'black',
     color: 'white',

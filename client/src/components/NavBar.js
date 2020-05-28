@@ -16,6 +16,7 @@ import {
 import MenuIcon from '@material-ui/icons/Menu';
 import Thumbnail from './Thumbnail';
 import NavDrawer from './NavDrawer';
+import PollModal from './polls/PollModal';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -116,14 +117,15 @@ export default function NavBar(props) {
           </Hidden>
           <Hidden xsDown>
             <Grid item>
-              <Button
+              {/* <Button
                 variant="outlined"
                 component={RouterLink}
                 className={classes.link}
                 to="/create-poll"
               >
                 Create Poll
-              </Button>
+              </Button> */}
+              <PollModal view="add" />
             </Grid>
           </Hidden>
           <Grid item>

@@ -12,6 +12,7 @@ import {
 import { Alert } from '@material-ui/lab';
 import CheckIcon from '@material-ui/icons/Check';
 import { UserContext } from '../../../components/UserContext';
+import PollModal from '../../../components/polls/PollModal';
 
 let nameMinLength = 3;
 let passwordMinLength = 6;
@@ -235,6 +236,7 @@ export default function SignupForm(props) {
           >
             Create
           </Button>
+          <PollModal view="add" />
           {state.loading ? (
             <CircularProgress className={classes.progressIcon} />
           ) : null}
