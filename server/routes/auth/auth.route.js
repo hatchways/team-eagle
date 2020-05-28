@@ -34,10 +34,17 @@ router.post('/register', (req, res) => {
         .then((user) => {
           const payload = { id: user.id };
           const token = user.signJWT(payload);
+          const options = {
+            httpOnly: true,
+          };
+
+          if (process.env.NODE_ENV === 'production') {
+            options.secure = true; // Only send cookies with https protocol
+          }
 
           user.password = null;
 
-          res.cookie('jwt', token, { httpOnly: true, secure: true }).json(user);
+          res.cookie('jwt', token, options).json(user);
         })
         .catch((err) => console.log(err));
     }
@@ -68,10 +75,17 @@ router.post('/login', (req, res) => {
     if (isMatch) {
       const payload = { id: user.id };
       const token = user.signJWT(payload);
+      const options = {
+        httpOnly: true,
+      };
+
+      if (process.env.NODE_ENV === 'production') {
+        options.secure = true; // Only send cookies with https protocol
+      }
 
       user.password = null;
 
-      res.cookie('jwt', token, { httpOnly: true, secure: true }).json(user);
+      res.cookie('jwt', token, options).json(user);
     } else {
       res.status(400).json({ message: 'Incorrect credentials' });
     }
