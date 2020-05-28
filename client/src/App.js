@@ -22,9 +22,14 @@ function App() {
     <MuiThemeProvider theme={theme}>
       <BrowserRouter>
         {user._id ? (
-          <Route path="/">
-            <NavBar />
-          </Route>
+          <>
+            <Route path="/">
+              <NavBar />
+            </Route>
+            <Switch>
+              <Route exact path="/friends" render={() => <FriendsLayout />} />
+            </Switch>
+          </>
         ) : (
           <Switch>
             <Route
@@ -37,7 +42,6 @@ function App() {
               path="/login"
               render={() => <LandingPage form="login" />}
             />
-            <Route exact path="/friends" render={() => <FriendsLayout />} />
             <Route path="*">
               <Redirect to="/signup" />
             </Route>

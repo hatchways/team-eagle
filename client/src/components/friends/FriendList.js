@@ -12,7 +12,6 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'column',
-    marginTop: '15vh',
   },
   container: {
     width: '100%',

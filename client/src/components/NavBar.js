@@ -80,7 +80,7 @@ export default function NavBar(props) {
   return (
     <>
       <NavDrawer isOpen={state.isDrawerOpen} toggleDrawer={toggleDrawer} />
-      <AppBar className={classes.root}>
+      <AppBar position="relative" className={classes.root}>
         <Grid container className={classes.grid} spacing={5}>
           <Hidden smDown>
             <Grid item className={classes.logo}>
