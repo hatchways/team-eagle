@@ -24,13 +24,13 @@ function App() {
 
     if (user._id) {
       friends.getFollowers(user._id, (err) => {
-        throw err;
+        throw new Error(err.message);
       });
       friends.getFollowings(user._id, (err) => {
-        throw err;
+        throw new Error(err.message);
       });
       friends.getSuggestions((err) => {
-        throw err;
+        throw new Error(err.message);
       });
     }
   }, [user]);

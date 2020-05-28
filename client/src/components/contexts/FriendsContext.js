@@ -12,8 +12,6 @@ export const FriendsContextProvider = ({ children }) => {
     suggestions: [],
   });
 
-  debugger;
-
   const user = React.useContext(UserContext);
 
   function getFollowers(targetId, callback) {
@@ -54,7 +52,7 @@ export const FriendsContextProvider = ({ children }) => {
 
   // [private]
   function getSuggestions(callback) {
-    if (!user._id) throw 'user is not logged in';
+    if (!user._id) throw new Error('user is not logged in');
 
     return fetch(`/users/${user._id}/friends/suggestions`, {
       method: 'GET',
@@ -76,7 +74,7 @@ export const FriendsContextProvider = ({ children }) => {
   // [private]
   // updates followings when called
   function follow(targetId, callback) {
-    if (!user._id) throw 'user is not logged in';
+    if (!user._id) throw new Error('user is not logged in');
 
     return fetch(`/users/${user._id}/friends/${targetId}/follow`, {
       method: 'POST',
@@ -88,7 +86,7 @@ export const FriendsContextProvider = ({ children }) => {
       res.json().then((data) => {
         if (res.status === 200) {
           getFollowings(user._id, (err) => {
-            throw err;
+            throw new Error(err.message);
           });
         } else {
           callback({ ...data, status: res.status });
@@ -100,7 +98,7 @@ export const FriendsContextProvider = ({ children }) => {
   // [private]
   // updates followings when called
   function unfollow(targetId, callback) {
-    if (!user._id) throw 'user is not logged in';
+    if (!user._id) throw new Error('user is not logged in');
 
     return fetch(`/users/${user._id}/friends/${targetId}/follow`, {
       method: 'DELETE',
@@ -112,7 +110,7 @@ export const FriendsContextProvider = ({ children }) => {
       res.json().then((data) => {
         if (res.status === 200) {
           getFollowings(user._id, (err) => {
-            throw err;
+            throw new Error(err.message);
           });
         } else {
           callback({ ...data, status: res.status });
