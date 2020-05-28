@@ -13,7 +13,7 @@ export const ContextProvider = ({ children }) => {
   });
 
   function followers(targetId, callback) {
-    fetch(`/users/${targetId}/friends/followers`, {
+    return fetch(`/users/${targetId}/friends/followers`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -32,7 +32,7 @@ export const ContextProvider = ({ children }) => {
   }
 
   function followings(targetId, callback) {
-    fetch(`/users/${targetId}/friends/followings`, {
+    return fetch(`/users/${targetId}/friends/followings`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -55,7 +55,7 @@ export const ContextProvider = ({ children }) => {
     const user = React.useContext(UserContext);
     if (!user._id) throw 'user is not logged in';
 
-    fetch(`/users/${user._id}/friends/suggestions`, {
+    return fetch(`/users/${user._id}/friends/suggestions`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -79,7 +79,7 @@ export const ContextProvider = ({ children }) => {
     const user = React.useContext(UserContext);
     if (!user._id) throw 'user is not logged in';
 
-    fetch(`/users/${user._id}/friends/${targetId}/follow`, {
+    return fetch(`/users/${user._id}/friends/${targetId}/follow`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -104,7 +104,7 @@ export const ContextProvider = ({ children }) => {
     const user = React.useContext(UserContext);
     if (!user._id) throw 'user is not logged in';
 
-    fetch(`/users/${user._id}/friends/${targetId}/follow`, {
+    return fetch(`/users/${user._id}/friends/${targetId}/follow`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
