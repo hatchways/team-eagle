@@ -22,11 +22,9 @@ function App() {
     <MuiThemeProvider theme={theme}>
       <BrowserRouter>
         {user._id ? (
-          <>
-            <Route path="/">
-              <NavBar />
-            </Route>
-          </>
+          <Route path="/">
+            <NavBar />
+          </Route>
         ) : (
           <Switch>
             <Route

@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function FriendsIndex() {
+export default function FriendList() {
   const classes = useStyles();
   const [state, setState] = useState([0, 0, 1, 3, 4, 5, 8, 9, 10, 12]);
   const [textField, setTextField] = useState('');
