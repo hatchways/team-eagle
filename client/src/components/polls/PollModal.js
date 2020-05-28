@@ -7,17 +7,12 @@ import { UserContext } from '../UserContext';
 
 export default function PollModal(props) {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const [title, setTitle] = React.useState('');
   const [image1, setImage1] = React.useState('');
   const [image2, setImage2] = React.useState('');
   const [loading, setLoading] = React.useState(false);
-  const [userId, setUserId] = React.useState('1234');
   const user = React.useContext(UserContext);
-
-  useEffect(() => {
-    setUserId(user._id);
-  });
 
   const onDrop = useCallback((acceptedFiles) => {
     if (acceptedFiles.length != 2) {
@@ -37,22 +32,15 @@ export default function PollModal(props) {
     setOpen(false);
   };
 
-  const handleChange = (e, type) => {
-    switch (type) {
-      case 'title':
-        setTitle(e.target.value);
-        break;
-      default:
-        break;
-    }
+  const handleChange = (e) => {
+    setTitle(e.target.value);
   };
 
   const handleSubmit = async () => {
     setLoading(true);
     const formData = new FormData();
-    console.log(loading);
     formData.set('title', title);
-    formData.set('userId', userId);
+    formData.set('userId', user._id);
     formData.append('image1', image1);
     formData.append('image2', image2);
     const config = {
@@ -82,7 +70,7 @@ export default function PollModal(props) {
         </h2>
         <form className="poll-form" noValidate autoComplete="off">
           <TextField
-            onChange={(e) => handleChange(e, 'title')}
+            onChange={(e) => handleChange(e)}
             name="title"
             fullWidth
             id="standard-basic"
