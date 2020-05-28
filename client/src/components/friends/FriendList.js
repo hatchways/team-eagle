@@ -78,7 +78,7 @@ export default function FriendList(props) {
   // continous update
   React.useEffect(() => {
     setState(initialState);
-  }, [...initialState]);
+  }, [initialState.lengthFriendList]);
 
   const handleSuggestionSearch = debounce((input) => {
     friends.getSuggestions(input, (err) => {
@@ -124,7 +124,7 @@ export default function FriendList(props) {
                 labelId={labelId}
                 isFollowable={isFollowable}
               />
-              <Divider light />
+              <Divider key={`${labelId}-divider`} light />
             </>
           );
         })}

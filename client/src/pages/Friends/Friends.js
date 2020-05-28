@@ -73,11 +73,11 @@ export default function FriendsLayout() {
       <TabPanel component={'span'} value={value} index={0}>
         <FriendList type="suggestions" />
       </TabPanel>
-      <TabPanel type="followers" component={'span'} value={value} index={1}>
-        <FriendList />
+      <TabPanel component={'span'} value={value} index={1}>
+        <FriendList type="followers" />
       </TabPanel>
-      <TabPanel type="followings" component={'span'} value={value} index={2}>
-        <FriendList />
+      <TabPanel component={'span'} value={value} index={2}>
+        <FriendList type="followings" />
       </TabPanel>
     </div>
   );

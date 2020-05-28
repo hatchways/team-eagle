@@ -53,7 +53,7 @@ export default function FriendListItem(props) {
         });
     } else {
       friends
-        .follow(user._id, (err) => {
+        .unfollow(user._id, (err) => {
           throw new Error(err.message);
         })
         .then(() => {
@@ -84,5 +84,5 @@ export default function FriendListItem(props) {
 FriendListItem.propTypes = {
   user: PropTypes.object.isRequired,
   labelId: PropTypes.string.isRequired,
-  isFollowable: PropTypes.string.isRequired,
+  isFollowable: PropTypes.bool.isRequired,
 };

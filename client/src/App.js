@@ -17,22 +17,24 @@ function App() {
   const friends = React.useContext(FriendsContext);
 
   React.useEffect(() => {
-    // Verify if the user is validated and if so, setUser
-    if (!user._id) {
-      user.getCurrent();
-    }
+    const fetchData = async () => {
+      if (!user._id) {
+        await user.getCurrent();
+      }
 
-    if (user._id) {
-      friends.getFollowers(user._id, (err) => {
-        throw new Error(err.message);
-      });
-      friends.getFollowings(user._id, (err) => {
-        throw new Error(err.message);
-      });
-      friends.getSuggestions('', (err) => {
-        throw new Error(err.message);
-      });
-    }
+      if (user._id) {
+        await friends.getFollowers(user._id, (err) => {
+          throw new Error(err.message);
+        });
+        await friends.getFollowings(user._id, (err) => {
+          throw new Error(err.message);
+        });
+        await friends.getSuggestions('', (err) => {
+          throw new Error(err.message);
+        });
+      }
+    };
+    fetchData();
   }, [user]);
 
   return (
