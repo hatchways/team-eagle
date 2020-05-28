@@ -130,7 +130,7 @@ router.get(
     const polls = [];
 
     friends.map((friend) => {
-      Poll.find({ userId: friend._id }, (err, docs) => {
+      Poll.find({ userId: friend.id }, (err, docs) => {
         if (err) return res.status(400).json({ error: err });
         polls.push(docs);
       });
