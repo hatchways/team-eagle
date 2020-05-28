@@ -3,6 +3,7 @@ const passport = require('passport');
 const mongoose = require('mongoose');
 const router = express.Router({ mergeParams: true });
 const User = require('../../../models/user');
+const routeUtil = require('../../util');
 
 // @route:  GET /users/:userId/friends/followers
 // @desc:   Find and return array of followers of userId
@@ -14,9 +15,7 @@ router.get('/followers', async (req, res) => {
   let followers = result.friendIds;
 
   // filter out only wanted fields
-  followers = followers.map((friend) => {
-    return (({ _id, email, name }) => ({ _id, email, name }))(friend);
-  });
+  followers = routeUtil.parseArrOfUserObjs(followers);
 
   res.json(followers);
 });
@@ -28,9 +27,7 @@ router.get('/followings', async (req, res) => {
   let followings = await User.find({ friendIds: req.params.userId });
 
   // filter out only wanted fields
-  followings = followings.map((friend) => {
-    return (({ _id, email, name }) => ({ _id, email, name }))(friend);
-  });
+  followings = routeUtil.parseArrOfUserObjs(followings);
 
   res.json(followings);
 });
@@ -52,6 +49,9 @@ router.get(
     } else {
       suggestions = await User.find({});
     }
+
+    // filter out only wanted fields
+    suggestions = routeUtil.parseArrOfUserObjs(suggestions);
 
     return res.status(200).json(suggestions);
   }
