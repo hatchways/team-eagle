@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import green from '@material-ui/core/colors/green';
 import red from '@material-ui/core/colors/red';
@@ -9,6 +10,7 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Chip from '@material-ui/core/Chip';
 import Avatar from '@material-ui/core/Avatar';
 import testImg from '../../images/img1.png';
+import { FriendsContext } from '../contexts/FriendsContext';
 
 const useStyles = makeStyles((theme) => ({
   chipGreen: {
@@ -17,6 +19,9 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       backgroundColor: green[400],
     },
+    '&:focus': {
+      backgroundColor: green[300],
+    },
   },
   chipRed: {
     width: 100,
@@ -24,38 +29,60 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       backgroundColor: red[400],
     },
+    '&:focus': {
+      backgroundColor: red[300],
+    },
   },
 }));
 
 export default function FriendListItem(props) {
   const classes = useStyles();
-  // Props are going to include an instance of a user
+  const friends = React.useContext(FriendsContext);
+  const user = props.user;
+  const labelId = props.labelId;
+  const [isFollowable, setIsFollowable] = useState(props.isFollowable);
 
   const handleClick = () => {
-    /**
-     * Pass prop from parent saying whether this user is followed or not.
-     * Make API call based on above info.
-     */
-    return 'you clicked';
+    if (isFollowable) {
+      friends
+        .follow(user._id, (err) => {
+          throw new Error(err.message);
+        })
+        .then(() => {
+          setIsFollowable(false);
+        });
+    } else {
+      friends
+        .follow(user._id, (err) => {
+          throw new Error(err.message);
+        })
+        .then(() => {
+          setIsFollowable(true);
+        });
+    }
   };
 
-  const name = props.name;
-  const labelId = props.labelId;
   const value = 2;
   return (
     <ListItem key={value} button>
       <ListItemAvatar>
-        <Avatar alt={`${name}'s avatar`} src={testImg} />
+        <Avatar alt={`${user.name}'s avatar`} src={testImg} />
       </ListItemAvatar>
-      <ListItemText id={labelId} primary={name} />
+      <ListItemText id={labelId} primary={user.name} />
       <ListItemSecondaryAction>
         <Chip
-          className={value % 2 === 0 ? classes.chipGreen : classes.chipRed}
-          color={value % 2 === 0 ? 'primary' : 'secondary'}
-          label={value % 2 === 0 ? 'follow' : 'unfollow'}
+          className={isFollowable ? classes.chipGreen : classes.chipRed}
+          color={isFollowable ? 'primary' : 'secondary'}
+          label={isFollowable ? 'follow' : 'unfollow'}
           onClick={handleClick}
         />
       </ListItemSecondaryAction>
     </ListItem>
   );
 }
+
+FriendListItem.propTypes = {
+  user: PropTypes.object.isRequired,
+  labelId: PropTypes.string.isRequired,
+  isFollowable: PropTypes.string.isRequired,
+};

@@ -49,6 +49,7 @@ export default function FriendList(props) {
   }
 
   const [state, setState] = useState(initialState);
+  const followingsSet = new Set(friends.followings);
 
   // first mount
   React.useEffect(() => {
@@ -77,7 +78,7 @@ export default function FriendList(props) {
   // continous update
   React.useEffect(() => {
     setState(initialState);
-  }, [initialState]);
+  }, [...initialState]);
 
   const handleSuggestionSearch = debounce((input) => {
     friends.getSuggestions(input, (err) => {
@@ -113,12 +114,15 @@ export default function FriendList(props) {
       <List dense className={classes.container}>
         {state.map((user) => {
           const labelId = `checkbox-list-secondary-label-${user._id}`;
+          const isFollowable = !followingsSet.has(user);
+
           return (
             <>
               <FriendListItem
                 key={`${labelId}-parent`}
+                user={user}
                 labelId={labelId}
-                name={user.name}
+                isFollowable={isFollowable}
               />
               <Divider light />
             </>
