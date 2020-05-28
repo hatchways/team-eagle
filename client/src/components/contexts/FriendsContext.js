@@ -24,7 +24,9 @@ export const FriendsContextProvider = ({ children }) => {
     }).then((res) => {
       res.json().then((data) => {
         if (res.status === 200) {
-          setState({ ...state, followers: data });
+          setState((prevState) => {
+            return { ...prevState, followers: data };
+          });
         } else {
           callback({ ...data, status: res.status });
         }
@@ -42,7 +44,9 @@ export const FriendsContextProvider = ({ children }) => {
     }).then((res) => {
       res.json().then((data) => {
         if (res.status === 200) {
-          setState({ ...state, followings: data });
+          setState((prevState) => {
+            return { ...prevState, followings: data };
+          });
         } else {
           callback({ ...data, status: res.status });
         }
@@ -63,7 +67,9 @@ export const FriendsContextProvider = ({ children }) => {
     }).then((res) => {
       res.json().then((data) => {
         if (res.status === 200) {
-          setState({ ...state, suggestions: data });
+          setState((prevState) => {
+            return { ...prevState, suggestions: data };
+          });
         } else {
           callback({ ...data, status: res.status });
         }
