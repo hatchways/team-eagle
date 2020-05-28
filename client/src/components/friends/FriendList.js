@@ -7,6 +7,7 @@ import FriendListItem from './FriendListItem';
 import TextField from '@material-ui/core/TextField';
 import { debounce } from '../../util/util';
 import { FriendsContext } from '../contexts/FriendsContext';
+import { UserContext } from '../contexts/UserContext';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,36 +30,65 @@ const useStyles = makeStyles((theme) => ({
 export default function FriendList(props) {
   const classes = useStyles();
   const friends = React.useContext(FriendsContext);
+  const user = React.useContext(UserContext);
 
-  let stateBasedOnType;
+  let initialState;
   switch (props.type) {
     case 'suggestions':
-      stateBasedOnType = friends.suggestions;
+      initialState = friends.suggestions;
       break;
     case 'followers':
-      stateBasedOnType = friends.followers;
+      initialState = friends.followers;
       break;
     case 'followings':
-      stateBasedOnType = friends.followings;
+      initialState = friends.followings;
       break;
     default:
-      stateBasedOnType = [];
+      initialState = [];
       break;
   }
 
-  const [state, setState] = useState(stateBasedOnType);
-  const [textField, setTextField] = useState('');
+  const [state, setState] = useState(initialState);
+
+  // first mount
+  React.useEffect(() => {
+    switch (props.type) {
+      case 'suggestions':
+        friends.getSuggestions('', (err) => {
+          throw new Error(err.message);
+        });
+        break;
+      case 'followers':
+        friends.getFollowers(user._id, (err) => {
+          throw new Error(err.message);
+        });
+        break;
+      case 'followings':
+        friends.getFollowings(user._id, (err) => {
+          throw new Error(err.message);
+        });
+        break;
+      default:
+        initialState = [];
+        break;
+    }
+  }, []);
+
+  // continous update
+  React.useEffect(() => {
+    setState(initialState);
+  }, [initialState]);
 
   /**
-   * A user will have a follow button next to it if it's not in the current
-   * user's list of friends.
-   * And the opposite is true for unfollow
+   * Changes in search field in suggestions tab cause an
+   * API call since it's dynamic
    */
   const handleChange = (event) => {
-    debounce(() => {
-      /* API util function here */
-    }, 250);
-    setTextField(event.target.value);
+    if (props.type === 'suggestions') {
+      friends.getSuggestions(event.target.value, (err) => {
+        throw new Error(err.message);
+      });
+    }
   };
 
   return (
