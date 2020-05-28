@@ -49,7 +49,7 @@ export default function FriendList(props) {
   }
 
   const [state, setState] = useState(initialState);
-  const followingsSet = new Set(friends.followings);
+  const followingIdsSet = new Set(friends.followings.map((el) => el._id));
 
   // first mount
   React.useEffect(() => {
@@ -114,7 +114,7 @@ export default function FriendList(props) {
       <List dense className={classes.container}>
         {state.map((user) => {
           const labelId = `checkbox-list-secondary-label-${user._id}`;
-          const isFollowable = !followingsSet.has(user);
+          const isFollowable = !followingIdsSet.has(user._id);
 
           return (
             <>
