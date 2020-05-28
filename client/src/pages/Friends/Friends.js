@@ -71,12 +71,12 @@ export default function FriendsLayout() {
         </Tabs>
       </AppBar>
       <TabPanel component={'span'} value={value} index={0}>
+        <FriendList type="suggestions" />
+      </TabPanel>
+      <TabPanel type="followers" component={'span'} value={value} index={1}>
         <FriendList />
       </TabPanel>
-      <TabPanel component={'span'} value={value} index={1}>
-        <FriendList />
-      </TabPanel>
-      <TabPanel component={'span'} value={value} index={2}>
+      <TabPanel type="followings" component={'span'} value={value} index={2}>
         <FriendList />
       </TabPanel>
     </div>

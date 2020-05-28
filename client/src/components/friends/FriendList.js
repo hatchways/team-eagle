@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import FriendListItem from './FriendListItem';
 import TextField from '@material-ui/core/TextField';
 import { debounce } from '../../util/util';
+import { FriendsContext } from '../contexts/FriendsContext';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,10 +26,29 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function FriendList() {
+export default function FriendList(props) {
   const classes = useStyles();
-  const [state, setState] = useState([0, 0, 1, 3, 4, 5, 8, 9, 10, 12]);
+  const friends = React.useContext(FriendsContext);
+
+  let stateBasedOnType;
+  switch (props.type) {
+    case 'suggestions':
+      stateBasedOnType = friends.suggestions;
+      break;
+    case 'followers':
+      stateBasedOnType = friends.followers;
+      break;
+    case 'followings':
+      stateBasedOnType = friends.followings;
+      break;
+    default:
+      stateBasedOnType = [];
+      break;
+  }
+
+  const [state, setState] = useState(stateBasedOnType);
   const [textField, setTextField] = useState('');
+
   /**
    * A user will have a follow button next to it if it's not in the current
    * user's list of friends.
@@ -53,14 +74,14 @@ export default function FriendList() {
         onChange={handleChange}
       />
       <List dense className={classes.container}>
-        {state.map((value) => {
-          const labelId = `checkbox-list-secondary-label-${value}`;
+        {state.map((user) => {
+          const labelId = `checkbox-list-secondary-label-${user._id}`;
           return (
             <>
               <FriendListItem
                 key={`${labelId}-parent`}
                 labelId={labelId}
-                value={value}
+                name={user.name}
               />
               <Divider light />
             </>
@@ -70,3 +91,7 @@ export default function FriendList() {
     </div>
   );
 }
+
+FriendList.propTypes = {
+  type: PropTypes.string.isRequired,
+};

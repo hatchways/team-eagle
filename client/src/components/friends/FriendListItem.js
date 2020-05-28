@@ -39,15 +39,15 @@ export default function FriendListItem(props) {
     return 'you clicked';
   };
 
-  const value = props.value;
+  const name = props.name;
   const labelId = props.labelId;
-
+  const value = 2;
   return (
     <ListItem key={value} button>
       <ListItemAvatar>
-        <Avatar alt={`Avatar n°${value + 1}`} src={testImg} />
+        <Avatar alt={`${name}'s avatar`} src={testImg} />
       </ListItemAvatar>
-      <ListItemText id={labelId} primary={`Line item ${value + 1}`} />
+      <ListItemText id={labelId} primary={name} />
       <ListItemSecondaryAction>
         <Chip
           className={value % 2 === 0 ? classes.chipGreen : classes.chipRed}
