@@ -7,7 +7,6 @@ import { UserContext } from './components/UserContext';
 
 import NavBar from './components/NavBar';
 import LandingPage from './pages/Landing/Landing';
-import FriendsIndex from './pages/Friends/components/FriendsIndex';
 
 import './App.css';
 
@@ -16,6 +15,7 @@ function App() {
 
   React.useEffect(() => {
     // Verify if the user is validated and if so, setUser
+    if (!user._id) user.getCurrent();
   });
 
   return (
