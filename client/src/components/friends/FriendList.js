@@ -78,7 +78,7 @@ export default function FriendList(props) {
   // continous update
   React.useEffect(() => {
     setState(initialState);
-  }, [initialState.lengthFriendList]);
+  }, [initialState.length]);
 
   const handleSuggestionSearch = debounce((input) => {
     friends.getSuggestions(input, (err) => {
