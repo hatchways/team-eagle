@@ -10,6 +10,38 @@ import image from '../../images/woman-laptop.png';
 import SignupForm from './components/SignupForm';
 import LoginForm from './components/LoginForm';
 
+export default function AuthLayout(props) {
+  const classes = useStyles();
+
+  return (
+    <Box className={classes.root}>
+      <Container className={classes.nav} component="nav">
+        <ForumRoundedIcon className={classes.forumIcon} />
+        <Button
+          component={RouterLink}
+          variant="outlined"
+          className={classes.link}
+          to={props.form === 'signup' ? '/login' : '/signup'}
+        >
+          {props.form === 'signup' ? 'Log In' : 'Sign Up'}
+        </Button>
+      </Container>
+      <Container className={classes.wrapper} component="main">
+        <Box className={classes.leftSide}>
+          <Card className={classes.card}>
+            {props.form === 'signup' ? (
+              <SignupForm classes={classes} />
+            ) : (
+              <LoginForm classes={classes} />
+            )}
+          </Card>
+        </Box>
+      </Container>
+      <Box className={classes.imageContainer}></Box>
+    </Box>
+  );
+}
+
 const useStyles = makeStyles((theme) => ({
   root: {
     position: 'relative',
@@ -102,35 +134,3 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-
-export default function AuthLayout(props) {
-  const classes = useStyles();
-
-  return (
-    <Box className={classes.root}>
-      <Container className={classes.nav} component="nav">
-        <ForumRoundedIcon className={classes.forumIcon} />
-        <Button
-          component={RouterLink}
-          variant="outlined"
-          className={classes.link}
-          to={props.form === 'signup' ? '/login' : '/signup'}
-        >
-          {props.form === 'signup' ? 'Log In' : 'Sign Up'}
-        </Button>
-      </Container>
-      <Container className={classes.wrapper} component="main">
-        <Box className={classes.leftSide}>
-          <Card className={classes.card}>
-            {props.form === 'signup' ? (
-              <SignupForm classes={classes} />
-            ) : (
-              <LoginForm classes={classes} />
-            )}
-          </Card>
-        </Box>
-      </Container>
-      <Box className={classes.imageContainer}></Box>
-    </Box>
-  );
-}
