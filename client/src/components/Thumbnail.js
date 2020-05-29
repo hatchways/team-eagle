@@ -15,6 +15,7 @@ const useStyles = (props) =>
 // props.marginRight (bool) => sets default marginRight
 
 export default function Thumbnail(props) {
+  console.log(props.invisible);
   const picture = null;
   if (props.user) {
     if (props.user.picture) {
@@ -23,7 +24,11 @@ export default function Thumbnail(props) {
   }
 
   return (
-    <Badge color="primary" variant="dot" invisible={props.invisible}>
+    <Badge
+      color="secondary"
+      variant="dot"
+      invisible={props.invisible ? props.invisible : 'yes'}
+    >
       <Avatar src={picture ? picture : ''} {...props}>
         {!picture && <PersonIcon />}
       </Avatar>
