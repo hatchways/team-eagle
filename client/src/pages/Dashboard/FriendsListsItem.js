@@ -15,12 +15,19 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import CloseIcon from '@material-ui/icons/Close';
 import Thumbnail from 'components/Thumbnail';
 
+const headerHeight = 60;
+
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: 280,
+    width: '100%',
+    height: '100%',
+    boxShadow: theme.shadows[3],
     '& a': {
       color: theme.palette.text.primary,
     },
+  },
+  header: {
+    height: headerHeight,
   },
   heading: {
     border: 'none',
@@ -30,8 +37,8 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
   },
   list: {
-    maxHeight: 200,
     overflowY: 'auto',
+    height: `calc(100% - ${headerHeight + theme.spacing(2)}px)`,
   },
 }));
 
@@ -52,7 +59,7 @@ export default function FriendsListsItem(props) {
 
   return (
     <Paper className={classes.root} square={true} onClick={handleClick}>
-      <Grid container alignItems="center">
+      <Grid container alignItems="center" className={classes.header}>
         <Grid item className={classes.heading} component="button">
           <Typography variant="h3">{props.title}</Typography>
           <Typography variant="subtitle1">{subtitle()}</Typography>

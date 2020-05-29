@@ -21,7 +21,7 @@ router.post(
     if (errors.length > 0) return res.status(400).json({ error: errors });
     const poll = new Poll({
       title: req.body.title,
-      userId: req.user.id,
+      userId: req.user._id,
     });
     // Trying to save the poll
     try {
@@ -108,11 +108,11 @@ router.get(
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
     const user = req.user;
-    const polls = [];
+    let polls = [];
     Poll.find({ userId: user._id }, (err, docs) => {
       if (err) return res.status(400).json({ error: err });
-      polls.push[docs];
-      return res.status(200).json({ status: polls });
+      polls = polls.concat(docs);
+      return res.status(200).json({ polls });
     });
   }
 );
@@ -124,19 +124,17 @@ router.get(
 router.get(
   '/friends',
   passport.authenticate('jwt', { session: true }),
-  (req, res) => {
+  async (req, res) => {
     const user = req.user;
     const friends = user.friendIds;
-    const polls = [];
+    let polls = [];
 
-    friends.map((friend) => {
-      Poll.find({ userId: friend }, (err, docs) => {
-        if (err) return res.status(400).json({ error: err });
-        polls.push(docs);
-      });
+    Poll.find({ userId: { $in: friends } }, (err, docs) => {
+      if (err) return res.status(400).json({ error: err });
+      polls = polls.concat(docs);
     });
 
-    return res.status(200).json({ polls: polls });
+    return res.status(200).json();
   }
 );
 
