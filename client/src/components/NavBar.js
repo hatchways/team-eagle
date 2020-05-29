@@ -16,17 +16,13 @@ import {
 import MenuIcon from '@material-ui/icons/Menu';
 import Thumbnail from './Thumbnail';
 import NavDrawer from './NavDrawer';
+import AddPollButton from './polls/AddPollButton';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.common.white,
     height: theme.spacing(10),
     color: theme.palette.common.black,
-  },
-  thumbnail: {
-    borderRadius: '50%',
-    objectFit: 'cover',
-    marginRight: theme.spacing(1),
   },
   grid: {
     flexGrow: 1,
@@ -39,9 +35,6 @@ const useStyles = makeStyles((theme) => ({
   },
   logo: {
     flexGrow: 1,
-  },
-  link: {
-    fontWeight: 700,
   },
 }));
 
@@ -87,43 +80,31 @@ export default function NavBar(props) {
               [LOGO HERE]
             </Grid>
             <Grid item>
-              <Link
-                component={RouterLink}
-                className={classes.link}
-                to="/friends"
-              >
+              <Link component={RouterLink} to="/friends">
                 Friends
               </Link>
             </Grid>
             <Grid item>
-              <Link
-                component={RouterLink}
-                className={classes.link}
-                to="/friends-polls"
-              >
+              <Link component={RouterLink} to="/friends-polls">
                 Friends' Polls
               </Link>
             </Grid>
             <Grid item>
-              <Link
-                component={RouterLink}
-                className={classes.link}
-                to="/opinions"
-              >
+              <Link component={RouterLink} to="/opinions">
                 Opinions
               </Link>
             </Grid>
           </Hidden>
           <Hidden xsDown>
             <Grid item>
-              <Button
+              {/* <Button
                 variant="outlined"
                 component={RouterLink}
-                className={classes.link}
                 to="/create-poll"
               >
                 Create Poll
-              </Button>
+              </Button> */}
+              <AddPollButton />
             </Grid>
           </Hidden>
           <Grid item>
@@ -133,7 +114,7 @@ export default function NavBar(props) {
               className={classes.link}
               onClick={openProfileMenu}
             >
-              <Thumbnail className={classes.thumbnail} user={user} />
+              <Thumbnail marginRight={true} picture={user.picture} />
               My Profile
             </Button>
             <Menu

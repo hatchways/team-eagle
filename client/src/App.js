@@ -44,6 +44,7 @@ function App() {
           <>
             <Route path="/">
               <NavBar />
+              <Dashboard />
             </Route>
             <Switch>
               <Route exact path="/friends" render={() => <FriendsLayout />} />
