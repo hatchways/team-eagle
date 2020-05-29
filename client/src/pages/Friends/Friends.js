@@ -43,7 +43,11 @@ function a11yProps(index) {
 const useStyles = makeStyles((theme) => ({
   root: {
     width: 'max-content;',
-    margin: '10vw auto 0 auto;',
+    margin: '4vw auto 0 auto;',
+  },
+  label: {
+    marginBottom: '3vw;',
+    textAlign: 'center',
   },
   [theme.breakpoints.down('sm')]: {
     root: {
@@ -67,6 +71,9 @@ export default function FriendsLayout() {
 
   return (
     <div className={classes.root}>
+      <Typography variant="h5" className={classes.label}>
+        Friends
+      </Typography>
       <Tabs
         value={value}
         onChange={handleChange}
