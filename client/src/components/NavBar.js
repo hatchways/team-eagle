@@ -17,12 +17,14 @@ import MenuIcon from '@material-ui/icons/Menu';
 import Thumbnail from './Thumbnail';
 import NavDrawer from './NavDrawer';
 import AddPollButton from 'components/polls/AddPollButton';
+import logoImg from '../images/logo.png';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.common.white,
-    height: theme.spacing(10),
+    height: theme.spacing(11),
     color: theme.palette.common.black,
+    padding: '0 2vw;',
   },
   grid: {
     flexGrow: 1,
@@ -35,6 +37,11 @@ const useStyles = makeStyles((theme) => ({
   },
   logo: {
     flexGrow: 1,
+  },
+  [theme.breakpoints.down('sm')]: {
+    root: {
+      height: theme.spacing(10),
+    },
   },
 }));
 
@@ -77,7 +84,9 @@ export default function NavBar(props) {
         <Grid container className={classes.grid} spacing={5}>
           <Hidden smDown>
             <Grid item className={classes.logo}>
-              [LOGO HERE]
+              <Link component={RouterLink} to="/">
+                <img src={logoImg} />
+              </Link>
             </Grid>
             <Grid item>
               <Link component={RouterLink} to="/friends">
