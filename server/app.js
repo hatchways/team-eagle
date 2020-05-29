@@ -6,12 +6,14 @@ const logger = require('morgan');
 const passport = require('passport');
 const cors = require('cors');
 
+// Users routes
+const usersRouter = require('./routes/users/users.route');
 // Auth routes
-const registerRouter = require('./routes/auth/register.route');
-const loginRouter = require('./routes/auth/login.route');
-const logoutRouter = require('./routes/auth/logout.route');
+const authRouter = require('./routes/auth/auth.route');
 // Poll routes
 const pollsRouter = require('./routes/polls/polls.route');
+// Friends routes
+const friendsRouter = require('./routes/users/friends/friends.route');
 
 const { json, urlencoded } = express;
 
@@ -41,14 +43,14 @@ app.use(passport.initialize());
 // Passport config
 require('./config/passport')(passport);
 
-// Routes
-
-// Login Routes
-app.use('/auth/register', registerRouter);
-app.use('/auth/login', loginRouter);
-app.use('/auth/logout', logoutRouter);
+// Users Routes
+app.use('/users', usersRouter);
+// Auth Routes
+app.use('/auth', authRouter);
 // Poll Routes
 app.use('/polls', pollsRouter);
+// Friends Routes
+app.use('/users/:userId/friends', friendsRouter);
 
 // Catch 404 and forward to error handler
 app.use(function (req, res, next) {

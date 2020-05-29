@@ -24,7 +24,7 @@ export default function AuthLayout(props) {
           to={props.form === 'signup' ? '/login' : '/signup'}
         >
           {props.form === 'signup' ? 'Log In' : 'Sign Up'}
-        </Button>        
+        </Button>
       </Container>
       <Container className={classes.wrapper} component="main">
         <Box className={classes.leftSide}>
