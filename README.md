@@ -39,13 +39,21 @@ Auth Routes
 - `POST /auth/login`
 - `DELETE /auth/logout`
 
-  Polls Routes
+Polls Routes
 
 - `POST /polls`
 - `PUT /polls/<pollId>`
 - `DELETE /polls/<pollId>`
 - `GET /polls`
 - `GET /polls/friends`
+
+Friends
+
+- `GET /users/:userId/friends/followers`
+- `GET /users/:userId/friends/followings`
+- `GET /users/:userId/friends/suggestions?name=<query>`
+- `POST /users/:userId/friends/:friendId/follow`
+- `DELETE /users/:userId/friends/:friendId/follow`
 
 #### Protecting Endpoints
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { UserContext } from './UserContext';
+import { UserContext } from './contexts/UserContext';
 import { Link as RouterLink } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import {
@@ -73,7 +73,7 @@ export default function NavBar(props) {
   return (
     <>
       <NavDrawer isOpen={state.isDrawerOpen} toggleDrawer={toggleDrawer} />
-      <AppBar className={classes.root}>
+      <AppBar position="relative" className={classes.root}>
         <Grid container className={classes.grid} spacing={5}>
           <Hidden smDown>
             <Grid item className={classes.logo}>

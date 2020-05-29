@@ -2,32 +2,55 @@ import React from 'react';
 import { MuiThemeProvider } from '@material-ui/core';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 
-import { theme } from 'themes/theme';
-import { UserContext } from 'components/UserContext';
+import { theme } from './themes/theme';
+import { UserContext } from './components/contexts/UserContext';
+import { FriendsContext } from './components/contexts/FriendsContext';
 
-import NavBar from 'components/NavBar';
-import LandingPage from 'pages/Landing/Landing';
-import Dashboard from 'pages/Dashboard/Dashboard';
+import NavBar from './components/NavBar';
+import LandingPage from './pages/Landing/Landing';
+import FriendsLayout from './pages/Friends/Friends';
+import Dashboard from './pages/Dashboard/Dashboard';
 
 import './App.css';
 
 function App() {
   const user = React.useContext(UserContext);
+  const friends = React.useContext(FriendsContext);
 
   React.useEffect(() => {
-    // Verify if the user is validated and if so, setUser
-    if (!user._id) user.getCurrent();
-  });
+    const fetchData = async () => {
+      if (!user._id) {
+        await user.getCurrent();
+      }
+
+      if (user._id) {
+        await friends.getFollowers(user._id, (err) => {
+          throw new Error(err.message);
+        });
+        await friends.getFollowings(user._id, (err) => {
+          throw new Error(err.message);
+        });
+        await friends.getSuggestions('', (err) => {
+          throw new Error(err.message);
+        });
+      }
+    };
+    fetchData();
+  }, [user]);
 
   return (
     <MuiThemeProvider theme={theme}>
       <BrowserRouter>
         {user._id ? (
           <>
-            <Route path="/">
-              <NavBar />
-              <Dashboard />
-            </Route>
+            <NavBar />
+            <Switch>
+              <Route exact path="/friends" component={FriendsLayout} />
+              <Route exact path="/" component={Dashboard} />
+              <Route path="*">
+                <Redirect to="/" />
+              </Route>
+            </Switch>
           </>
         ) : (
           <Switch>

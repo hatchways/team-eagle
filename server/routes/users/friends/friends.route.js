@@ -3,21 +3,33 @@ const passport = require('passport');
 const mongoose = require('mongoose');
 const router = express.Router({ mergeParams: true });
 const User = require('../../../models/user');
+const routeUtil = require('../../util');
 
-// @route:  GET /users/:userId/friends
-// @desc:   Find and return array of friends of specified userId
+// @route:  GET /users/:userId/friends/followers
+// @desc:   Find and return array of followers of userId
 // @access: Public
-router.get('/', async (req, res) => {
-  let user = await User.findById(req.params.userId)
+router.get('/followers', async (req, res) => {
+  let result = await User.findById(req.params.userId)
     .populate('friendIds')
     .exec();
-  let friends = user.friendIds;
-  // filter out only wanted fields
-  friends = friends.map((friend) => {
-    return (({ _id, email, name }) => ({ _id, email, name }))(friend);
-  });
+  let followers = result.friendIds;
 
-  res.json({ friends: user.friendIds });
+  // filter out only wanted fields
+  followers = routeUtil.parseArrOfUserObjs(followers);
+
+  res.json(followers);
+});
+
+// @route:  GET /users/:userId/friends/followings
+// @desc:   Find and return array of followings of userId
+// @access: Public
+router.get('/followings', async (req, res) => {
+  let followings = await User.find({ friendIds: req.params.userId });
+
+  // filter out only wanted fields
+  followings = routeUtil.parseArrOfUserObjs(followings);
+
+  res.json(followings);
 });
 
 // @route:  GET /users/:userId/friends/suggestions?name=<query>
@@ -32,13 +44,21 @@ router.get(
 
     if (nameQuery) {
       suggestions = await User.find({
-        name: new RegExp(nameQuery, 'i'),
+        $and: [
+          { name: new RegExp(nameQuery, 'i') },
+          { friendIds: { $nin: [req.params.userId] } },
+        ],
       });
     } else {
-      suggestions = await User.find({});
+      suggestions = await User.find({
+        friendIds: { $nin: [req.params.userId] },
+      });
     }
 
-    return res.status(200).json({ suggestions });
+    // filter out only wanted fields
+    suggestions = routeUtil.parseArrOfUserObjs(suggestions);
+
+    return res.status(200).json(suggestions);
   }
 );
 
@@ -59,22 +79,24 @@ router.post(
         .json({ message: 'Invalid provided friendId param' });
     }
 
-    const followeeExists = await User.exists({ _id: followeeId });
+    const requestedUser = await User.findOne({ _id: followeeId });
 
-    if (!followeeExists) {
+    if (!requestedUser) {
       return res
         .status(404)
         .json({ message: 'No user at provided friendId param' });
-    } else if (currUser.friendIds.includes(followeeId)) {
+    } else if (requestedUser.friendIds.includes(currUser._id)) {
       return res.status(401).json({ message: 'User already followed' });
     }
 
-    currUser.friendIds.push(followeeId);
-    await currUser.save();
+    requestedUser.friendIds.push(currUser._id);
+    await requestedUser.save();
+
+    requestedUser.password = null;
 
     res.json({
       message: 'Success! User followed',
-      updatedRequestAuthor: currUser,
+      requestedUser: requestedUser,
     });
   }
 );
@@ -96,24 +118,24 @@ router.delete(
         .json({ message: 'Invalid provided friendId param' });
     }
 
-    const followeeExists = await User.exists({ _id: unfolloweeId });
+    const requestedUser = await User.findOne({ _id: unfolloweeId });
 
-    if (!followeeExists) {
+    if (!requestedUser) {
       return res
         .status(404)
         .json({ message: 'No user at provided friendId param' });
-    } else if (!currUser.friendIds.includes(unfolloweeId)) {
+    } else if (!requestedUser.friendIds.includes(currUser._id)) {
       return res.status(401).json({ message: 'User already unfollowed' });
     }
 
-    currUser.friendIds = currUser.friendIds.filter(
-      (el) => el._id.toString() !== unfolloweeId
+    requestedUser.friendIds = requestedUser.friendIds.filter(
+      (el) => el._id.toString() !== currUser._id.toString()
     );
-    await currUser.save();
+    await requestedUser.save();
 
     res.json({
       message: 'Success! User unfollowed',
-      updatedRequestAuthor: currUser,
+      requestedUser: requestedUser,
     });
   }
 );

@@ -10,7 +10,7 @@ chai.use(chaiHttp);
 
 const expect = chai.expect;
 
-describe('GET /users/:userId/friends', () => {
+describe('GET /users/:userId/friends/followers', () => {
   before((done) => {
     let user = {
       email: 'seedEmail1@gmail.com',
@@ -34,7 +34,7 @@ describe('GET /users/:userId/friends', () => {
     before((done) => {
       chai
         .request(app)
-        .get(`/users/${this.loggedInUser._id}/friends`)
+        .get(`/users/${this.loggedInUser._id}/friends/followers`)
         .set('Cookie', this.cookie)
         .end((err, res) => {
           this.response = res;
@@ -47,7 +47,7 @@ describe('GET /users/:userId/friends', () => {
     });
 
     it('it returns a list of friends in an array', () => {
-      expect(this.response.body.friends).to.be.an('array');
+      expect(this.response.body).to.be.an('array');
     });
   });
 
@@ -56,7 +56,7 @@ describe('GET /users/:userId/friends', () => {
       // user is assumed to not be logged in if a cookie isn't sent in request
       chai
         .request(app)
-        .get(`/users/${this.loggedInUser._id}/friends`)
+        .get(`/users/${this.loggedInUser._id}/friends/followers`)
         .end((err, res) => {
           this.response = res;
           done();
@@ -68,7 +68,72 @@ describe('GET /users/:userId/friends', () => {
     });
 
     it('it returns a list of friends of requested id in an array', () => {
-      expect(this.response.body.friends).to.be.an('array');
+      expect(this.response.body).to.be.an('array');
+    });
+  });
+});
+
+/******************************************************************************/
+
+describe('GET /users/:userId/friends/followings', () => {
+  before((done) => {
+    let user = {
+      email: 'seedEmail8@gmail.com',
+      password: '12345678',
+    };
+
+    chai
+      .request(app)
+      .post('/auth/login')
+      .send(user)
+      .end((err, res) => {
+        this.loggedInUser = res.body;
+        this.cookie = res.headers['set-cookie'].find((el) =>
+          el.includes('jwt=')
+        );
+        done();
+      });
+  });
+
+  context('When request author is logged in', () => {
+    before((done) => {
+      chai
+        .request(app)
+        .get(`/users/${this.loggedInUser._id}/friends/followings`)
+        .set('Cookie', this.cookie)
+        .end((err, res) => {
+          this.response = res;
+          done();
+        });
+    });
+
+    it('it returns 200 status code', () => {
+      this.response.should.have.status(200);
+    });
+
+    it('it returns a list of friends in an array', () => {
+      expect(this.response.body).to.be.an('array');
+    });
+  });
+
+  context('When request author is not logged in', () => {
+    before((done) => {
+      // user is assumed to not be logged in if a cookie isn't sent in request
+      chai
+        .request(app)
+        .get(`/users/${this.loggedInUser._id}/friends/followings`)
+        .end((err, res) => {
+          this.response = res;
+          done();
+        });
+    });
+
+    it('it returns 200 status code', () => {
+      this.response.should.have.status(200);
+    });
+
+    it('it returns a list of friends of requested id in an array', () => {
+      expect(this.response.body).to.be.an('array');
     });
   });
 });
@@ -112,13 +177,11 @@ describe('GET /users/:userId/friends/suggestions', () => {
     });
 
     it('it returns a list of friends in an array', () => {
-      expect(this.response.body.suggestions).to.be.an('array');
+      expect(this.response.body).to.be.an('array');
     });
 
     it('it filters friend suggestions based on name param', () => {
-      expect(this.response.body.suggestions.map((e) => e.name)).to.include(
-        'seed user 2'
-      );
+      expect(this.response.body.map((e) => e.name)).to.include('seed user 2');
     });
   });
 
@@ -168,7 +231,7 @@ describe('POST /users/:userId/friends/:friendId/follow', () => {
         .set('Cookie', this.cookie)
         .end((err, res) => {
           this.response = res;
-          this.loggedInUser = this.response.body.updatedRequestAuthor;
+          this.requestedUser = this.response.body.requestedUser;
           done();
         });
     });
@@ -177,9 +240,9 @@ describe('POST /users/:userId/friends/:friendId/follow', () => {
       this.response.should.have.status(200);
     });
 
-    it('it adds followee id to friendIds', () => {
-      expect(this.loggedInUser.friendIds).to.include(
-        this.followee._id.toString()
+    it('it adds followee id of request author to friendIds of followed user', () => {
+      expect(this.requestedUser.friendIds).to.include(
+        this.loggedInUser._id.toString()
       );
     });
 
@@ -241,6 +304,13 @@ describe('DELETE /users/:userId/friends/:friendId/follow', () => {
     this.cookie = loginRes.headers['set-cookie'].find((el) =>
       el.includes('jwt=')
     );
+
+    await chai
+      .request(app)
+      .post(
+        `/users/${this.loggedInUser._id}/friends/${this.unFollowee._id}/follow`
+      )
+      .set('Cookie', this.cookie);
   });
 
   context('When request author is logged in', () => {
@@ -253,7 +323,7 @@ describe('DELETE /users/:userId/friends/:friendId/follow', () => {
         .set('Cookie', this.cookie)
         .end((err, res) => {
           this.response = res;
-          this.loggedInUser = this.response.body.updatedRequestAuthor;
+          this.requestedUser = this.response.body.requestedUser;
           done();
         });
     });
@@ -263,8 +333,8 @@ describe('DELETE /users/:userId/friends/:friendId/follow', () => {
     });
 
     it('it removes unfollowee id from friendIds', () => {
-      expect(this.loggedInUser.friendIds).to.not.include(
-        this.unFollowee._id.toString()
+      expect(this.requestedUser.friendIds).to.not.include(
+        this.loggedInUser._id.toString()
       );
     });
 

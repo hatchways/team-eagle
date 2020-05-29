@@ -4,33 +4,11 @@ import React from 'react';
 export const UserContext = React.createContext();
 
 // This should be imported only by index.js
-export const ContextProvider = ({ children }) => {
-  const [state, setState] = React.useState({
-    // Temporary to avoid needing to login everytime
-    _id: '123',
-    name: 'Thiago',
-    friends: [
-      {
-        _id: '1234',
-        name: 'Daniel',
-      },
-      {
-        _id: '123123',
-        name: 'Sarah',
-      },
-      {
-        _id: '12414124',
-        name: 'William',
-      },
-      {
-        _id: '512512',
-        name: 'John',
-      },
-    ],
-  });
+export const UserContextProvider = ({ children }) => {
+  const [state, setState] = React.useState({});
 
   function getCurrent(callback) {
-    fetch('/users/current', {
+    return fetch('/users/current', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -42,6 +20,7 @@ export const ContextProvider = ({ children }) => {
             ...state,
             ...data,
           });
+          return data;
         } else if (callback) {
           callback(res.status);
         }
@@ -50,7 +29,7 @@ export const ContextProvider = ({ children }) => {
   }
 
   function signup(payload, callback) {
-    fetch('/auth/register', {
+    return fetch('/auth/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -72,7 +51,7 @@ export const ContextProvider = ({ children }) => {
   }
 
   function login(payload, callback) {
-    fetch('/auth/login', {
+    return fetch('/auth/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -91,7 +70,7 @@ export const ContextProvider = ({ children }) => {
   }
 
   function logout(callback) {
-    fetch('/auth/logout', {
+    return fetch('/auth/logout', {
       method: 'DELETE',
     }).then((res) => {
       if (res.status === 200) {

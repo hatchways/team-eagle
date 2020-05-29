@@ -1,9 +1,14 @@
 # Poll App. Hatchways Project
 
-## How to Add the Poll Button anywhere
+### How to Add the Poll Button anywhere
 
 1. import PollModal from "<components>/polls/PollModal";
 2. Put <PollModal view="edit or add"> anywhere you want to display the button
+
+### User Friends Logic
+
+- Any _follower_ of the current/target user is considered a friend
+  - Friend information (suggestions, followers, and followings) can be found through `FriendsContext`
 
 ## Instructions
 

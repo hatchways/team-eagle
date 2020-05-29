@@ -1,5 +1,6 @@
 import React from 'react';
-import { UserContext } from 'components/UserContext';
+import { UserContext } from '../../components/contexts/UserContext';
+import { FriendsContext } from '../../components/contexts/FriendsContext';
 import { Link as RouterLink } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Typography, List, ListItem, Grid } from '@material-ui/core';
@@ -20,15 +21,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Friends(props) {
-  const user = React.useContext(UserContext);
+export default function Friends() {
+  const friends = React.useContext(FriendsContext);
   const classes = useStyles();
 
   return (
     <Box className={classes.root}>
       <Typography variant="h2">Friends</Typography>
       <List>
-        {user.friends.map((friend, i) => {
+        {friends.followers.map((friend, i) => {
           return (
             <ListItem key={i} className={classes.listItem}>
               <Grid

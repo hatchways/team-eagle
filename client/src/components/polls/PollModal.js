@@ -15,7 +15,7 @@ import {
 } from '@material-ui/core';
 import ImageIcon from '@material-ui/icons/Image';
 import { useDropzone } from 'react-dropzone';
-import { UserContext } from '../UserContext';
+import { UserContext } from '../contexts/UserContext';
 
 export default function PollModal(props) {
   const classes = useStyles();

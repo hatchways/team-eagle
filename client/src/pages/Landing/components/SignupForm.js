@@ -11,7 +11,7 @@ import {
 } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import CheckIcon from '@material-ui/icons/Check';
-import { UserContext } from '../../../components/UserContext';
+import { UserContext } from '../../../components/contexts/UserContext';
 
 let nameMinLength = 3;
 let passwordMinLength = 6;
