@@ -3,7 +3,7 @@ import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button, Modal, TextField } from '@material-ui/core';
 import { useDropzone } from 'react-dropzone';
-import { UserContext } from '../UserContext';
+import { UserContext } from '../contexts/UserContext';
 
 export default function PollModal(props) {
   const classes = useStyles();

@@ -1,5 +1,5 @@
 import React from 'react';
-import { UserContext } from 'components/UserContext';
+import { UserContext } from '../../components/contexts/UserContext';
 import { Link as RouterLink } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button, Grid, Container } from '@material-ui/core';

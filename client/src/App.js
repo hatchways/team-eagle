@@ -9,6 +9,7 @@ import { FriendsContext } from './components/contexts/FriendsContext';
 import NavBar from './components/NavBar';
 import LandingPage from './pages/Landing/Landing';
 import FriendsLayout from './pages/Friends/Friends';
+import Dashboard from './pages/Dashboard/Dashboard';
 
 import './App.css';
 
@@ -42,8 +43,8 @@ function App() {
       <BrowserRouter>
         {user._id ? (
           <>
-            <Route path="/">
-              <NavBar />
+            <NavBar />
+            <Route exact path="/">
               <Dashboard />
             </Route>
             <Switch>

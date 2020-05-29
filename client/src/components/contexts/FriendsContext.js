@@ -1,5 +1,5 @@
 import React from 'react';
-import { UserContext } from './UserContext';
+import { UserContext } from '../contexts/UserContext';
 
 // This is what each component should import
 export const FriendsContext = React.createContext();

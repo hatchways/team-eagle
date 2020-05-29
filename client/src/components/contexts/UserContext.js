@@ -5,7 +5,29 @@ export const UserContext = React.createContext();
 
 // This should be imported only by index.js
 export const UserContextProvider = ({ children }) => {
-  const [state, setState] = React.useState({});
+  const [state, setState] = React.useState({
+    // Temporary to avoid needing to login everytime
+    _id: '123',
+    name: 'Thiago',
+    friends: [
+      {
+        _id: '1234',
+        name: 'Daniel',
+      },
+      {
+        _id: '123123',
+        name: 'Sarah',
+      },
+      {
+        _id: '12414124',
+        name: 'William',
+      },
+      {
+        _id: '512512',
+        name: 'John',
+      },
+    ],
+  });
 
   function getCurrent(callback) {
     return fetch('/users/current', {
