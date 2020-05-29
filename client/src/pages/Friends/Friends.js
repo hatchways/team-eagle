@@ -45,6 +45,16 @@ const useStyles = makeStyles((theme) => ({
     width: 'max-content;',
     margin: '10vw auto 0 auto;',
   },
+  [theme.breakpoints.down('sm')]: {
+    root: {
+      width: '80%;',
+    },
+  },
+  [theme.breakpoints.down('xs')]: {
+    root: {
+      width: '100%;',
+    },
+  },
 }));
 
 export default function FriendsLayout() {

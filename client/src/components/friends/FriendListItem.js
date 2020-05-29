@@ -13,8 +13,10 @@ import testImg from '../../images/img1.png';
 import { FriendsContext } from '../contexts/FriendsContext';
 
 const useStyles = makeStyles((theme) => ({
-  chipGreen: {
+  chip: {
     width: 100,
+  },
+  chipGreen: {
     backgroundColor: green[300],
     '&:hover': {
       backgroundColor: green[400],
@@ -24,13 +26,17 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   chipRed: {
-    width: 100,
     backgroundColor: red[300],
     '&:hover': {
       backgroundColor: red[400],
     },
     '&:focus': {
       backgroundColor: red[300],
+    },
+  },
+  [theme.breakpoints.down('sm')]: {
+    chip: {
+      width: 70,
     },
   },
 }));
@@ -71,7 +77,9 @@ export default function FriendListItem(props) {
       <ListItemText id={labelId} primary={user.name} />
       <ListItemSecondaryAction>
         <Chip
-          className={isFollowable ? classes.chipGreen : classes.chipRed}
+          className={`${classes.chip} ${
+            isFollowable ? classes.chipGreen : classes.chipRed
+          }`}
           color={isFollowable ? 'primary' : 'secondary'}
           label={isFollowable ? 'follow' : 'unfollow'}
           onClick={handleClick}

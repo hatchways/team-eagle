@@ -1,6 +1,15 @@
 import { createMuiTheme } from '@material-ui/core';
 
 export const theme = createMuiTheme({
+  breakpoints: {
+    values: {
+      xs: 400,
+      sm: 600,
+      md: 960,
+      lg: 1280,
+      xl: 1920,
+    },
+  },
   // Use the overrides to set defaults
   overrides: {
     MuiButton: {

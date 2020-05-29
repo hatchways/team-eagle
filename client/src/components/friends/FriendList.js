@@ -13,17 +13,14 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     alignItems: 'center',
+    maxWidth: 600,
     justifyContent: 'center',
     flexDirection: 'column',
   },
-  container: {
+  listContainer: {
     width: '100%',
-    maxWidth: 500,
+    maxWidth: 600,
     backgroundColor: theme.palette.background.paper,
-  },
-  textField: {
-    width: '100%',
-    maxWidth: 500,
   },
 }));
 
@@ -104,14 +101,13 @@ export default function FriendList(props) {
       <TextField
         multiline={true}
         rows={1}
-        className={classes.textField}
         id="outlined-basic"
         fullWidth
         label="Search"
         variant="outlined"
         onChange={handleChange}
       />
-      <List dense className={classes.container}>
+      <List dense className={classes.listContainer}>
         {state.map((user, idx) => {
           const labelId = `checkbox-list-secondary-label-${user._id}`;
           const isFollowable = !followingIdsSet.has(user._id);
