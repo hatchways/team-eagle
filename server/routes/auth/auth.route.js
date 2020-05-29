@@ -76,7 +76,7 @@ router.post('/login', (req, res) => {
       const payload = { id: user.id };
       const token = user.signJWT(payload);
       const options = {
-        httpOnly: true,
+        httpOnly: false,
       };
 
       if (process.env.NODE_ENV === 'production') {

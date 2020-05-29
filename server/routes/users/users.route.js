@@ -15,4 +15,30 @@ router.get(
   }
 );
 
+// @route: GET /users/active
+// @desc: Mark the current user as active
+// @access: Private
+router.get(
+  '/active',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    const user = req.user;
+    user.makeActive();
+    return res.json(user);
+  }
+);
+
+// @route: GET /users/deactive
+// @desc: Mark the current user as deactive
+// @access: Private
+router.get(
+  '/disactive',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    const user = req.user;
+    user.makeDisactive();
+    return res.json(user);
+  }
+);
+
 module.exports = router;

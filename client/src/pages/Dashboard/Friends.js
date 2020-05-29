@@ -43,6 +43,7 @@ export default function Friends() {
                   picture={friend.picture}
                   marginRight={true}
                   component="span"
+                  invisible="yes"
                 />
                 {friend.name}
               </Grid>

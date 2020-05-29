@@ -19,6 +19,10 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
+  active: {
+    type: Boolean,
+    required: false,
+  },
   friendIds: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -57,6 +61,16 @@ UserSchema.methods.signJWT = function (payload) {
     keys.secretOrKey,
     { expiresIn: 31556926 } // 1 year in seconds
   );
+};
+
+UserSchema.methods.makeActive = function () {
+  this.active = true;
+  this.save();
+};
+
+UserSchema.methods.makeDisactive = function () {
+  this.active = false;
+  this.save();
 };
 
 module.exports = User = mongoose.model('users', UserSchema);
