@@ -16,7 +16,7 @@ const useStyles = (props) =>
 
 export default function Thumbnail(props) {
   const classes = useStyles(props)();
-
+  debugger;
   return (
     <Avatar src={props.picture || ''} className={classes.root}>
       {props.picture ? null : <PersonIcon />}
