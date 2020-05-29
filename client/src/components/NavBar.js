@@ -23,11 +23,6 @@ const useStyles = makeStyles((theme) => ({
     height: theme.spacing(10),
     color: theme.palette.common.black,
   },
-  thumbnail: {
-    borderRadius: '50%',
-    objectFit: 'cover',
-    marginRight: theme.spacing(1),
-  },
   grid: {
     flexGrow: 1,
     justifyContent: 'space-between',
@@ -39,9 +34,6 @@ const useStyles = makeStyles((theme) => ({
   },
   logo: {
     flexGrow: 1,
-  },
-  link: {
-    fontWeight: 700,
   },
 }));
 
@@ -87,29 +79,17 @@ export default function NavBar(props) {
               [LOGO HERE]
             </Grid>
             <Grid item>
-              <Link
-                component={RouterLink}
-                className={classes.link}
-                to="/friends"
-              >
+              <Link component={RouterLink} to="/friends">
                 Friends
               </Link>
             </Grid>
             <Grid item>
-              <Link
-                component={RouterLink}
-                className={classes.link}
-                to="/friends-polls"
-              >
+              <Link component={RouterLink} to="/friends-polls">
                 Friends' Polls
               </Link>
             </Grid>
             <Grid item>
-              <Link
-                component={RouterLink}
-                className={classes.link}
-                to="/opinions"
-              >
+              <Link component={RouterLink} to="/opinions">
                 Opinions
               </Link>
             </Grid>
@@ -119,7 +99,6 @@ export default function NavBar(props) {
               <Button
                 variant="outlined"
                 component={RouterLink}
-                className={classes.link}
                 to="/create-poll"
               >
                 Create Poll
@@ -133,7 +112,7 @@ export default function NavBar(props) {
               className={classes.link}
               onClick={openProfileMenu}
             >
-              <Thumbnail className={classes.thumbnail} user={user} />
+              <Thumbnail marginRight={true} picture={user.picture} />
               My Profile
             </Button>
             <Menu
