@@ -2,8 +2,10 @@ import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Button } from '@material-ui/core';
+import { getFriendsPolls } from 'util/api_util';
 
 import HorizontalFeed from 'components/HorizontalFeed';
+import AddPollButton from 'components/polls/AddPollButton';
 import Poll from './Poll';
 
 // Temporary
@@ -59,24 +61,36 @@ const polls = [
 ];
 
 export default function Polls(props) {
-  // const user = React.useContext(UserContext);
+  const [state, setState] = React.useState({
+    polls: null, // null indicates the request hasn't been made yet
+  });
+
+  React.useEffect(() => {
+    setTimeout(() => {
+      setState({
+        ...state,
+        polls,
+      });
+    }, 2000);
+    // getFriendsPolls((err, res) => {
+    //   if (err) console.log(err);
+    //   if (res) {
+    //     console.log(res);
+    //     setState({
+    //       ...state,
+    //       polls: res,
+    //     });
+    //   }
+    // });
+  }, []);
+
   return (
-    <HorizontalFeed
-      title={'Polls'}
-      subtitle="(32)"
-      button={
-        <Button variant="outlined" component={RouterLink} to="/create-poll">
-          Create Poll
-        </Button>
-      }
-    >
-      {polls.map((poll, i) => {
-        return (
-          <Grid item key={i}>
-            <Poll {...poll} />
-          </Grid>
-        );
-      })}
+    <HorizontalFeed title={'Polls'} subtitle="(32)" button={<AddPollButton />}>
+      {state.polls
+        ? state.polls.map((poll, i) => {
+            return <Poll key={i} {...poll} />;
+          })
+        : null}
     </HorizontalFeed>
   );
 }

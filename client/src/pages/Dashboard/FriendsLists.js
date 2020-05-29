@@ -62,6 +62,18 @@ const lists = [
 ];
 
 export default function FriendsLists(props) {
+  const [state, setState] = React.useState({
+    lists: null,
+  });
+  React.useEffect(() => {
+    // Placeholder to simulate fetch
+    setTimeout(() => {
+      setState({
+        ...state,
+        lists,
+      });
+    }, 1500);
+  }, []);
   return (
     <HorizontalFeed
       title={'Friends Lists'}
@@ -76,13 +88,11 @@ export default function FriendsLists(props) {
         </Button>
       }
     >
-      {lists.map((list, i) => {
-        return (
-          <Grid item key={i}>
-            <FriendsListsItem {...list} />
-          </Grid>
-        );
-      })}
+      {state.lists
+        ? state.lists.map((list, i) => {
+            return <FriendsListsItem key={i} {...list} />;
+          })
+        : null}
     </HorizontalFeed>
   );
 }

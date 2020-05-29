@@ -1,6 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Typography, IconButton, Grid, Container } from '@material-ui/core';
+import { Skeleton } from '@material-ui/lab';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 
 const useStyles = makeStyles((theme) => ({
@@ -11,15 +12,21 @@ const useStyles = makeStyles((theme) => ({
   header: {
     flexGrow: 1,
   },
-  gridOfPolls: {
+  gridContainer: {
     position: 'relative',
     flexWrap: 'nowrap',
     height: '100%',
     padding: 0,
     margin: 0,
   },
+  gridItem: {
+    minWidth: 280,
+    maxWidth: 280,
+    height: 280,
+  },
   scrollButton: {
     position: 'absolute',
+    padding: 0,
     top: 0,
     right: 0,
     height: '100%',
@@ -48,9 +55,29 @@ export default function HorizontalFeed(props) {
         </Grid>
         <Grid item>{props.button}</Grid>
       </Grid>
-      <Grid container spacing={2} className={classes.gridOfPolls}>
-        {props.children}
-        {props.children.length > 2 ? (
+      <Grid container spacing={2} className={classes.gridContainer}>
+        {!props.children ? (
+          <>
+            <Grid item>
+              <Skeleton variant="rect" width={280} height={280} />
+            </Grid>
+            <Grid item>
+              <Skeleton variant="rect" width={280} height={280} />
+            </Grid>
+            <Grid item>
+              <Skeleton variant="rect" width={280} height={280} />
+            </Grid>
+          </>
+        ) : (
+          props.children.map((Child, i) => {
+            return (
+              <Grid item key={i} className={classes.gridItem}>
+                {Child}
+              </Grid>
+            );
+          })
+        )}
+        {props.children && props.children.length > 2 ? (
           <IconButton className={classes.scrollButton}>
             <ArrowForwardIosIcon />
           </IconButton>
