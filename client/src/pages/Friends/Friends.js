@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
@@ -20,7 +19,7 @@ function TabPanel(props) {
       {...other}
     >
       {value === index && (
-        <Box p={3}>
+        <Box p={3} pt={2}>
           <Typography>{children}</Typography>
         </Box>
       )}
@@ -43,8 +42,8 @@ function a11yProps(index) {
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    flexGrow: 1,
-    backgroundColor: theme.palette.background.paper,
+    width: 'max-content;',
+    margin: '10vw auto 0 auto;',
   },
 }));
 
@@ -58,27 +57,27 @@ export default function FriendsLayout() {
 
   return (
     <div className={classes.root}>
-      <AppBar position="relative">
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          aria-label="user friend suggestions, followers, and followings"
-          centered
-        >
-          <Tab label="Suggestions" {...a11yProps(0)} />
-          <Tab label="Followers" {...a11yProps(1)} />
-          <Tab label="Followings" {...a11yProps(2)} />
-        </Tabs>
-      </AppBar>
-      <TabPanel component={'span'} value={value} index={0}>
-        <FriendList type="suggestions" />
-      </TabPanel>
-      <TabPanel component={'span'} value={value} index={1}>
-        <FriendList type="followers" />
-      </TabPanel>
-      <TabPanel component={'span'} value={value} index={2}>
-        <FriendList type="followings" />
-      </TabPanel>
+      <Tabs
+        value={value}
+        onChange={handleChange}
+        aria-label="user friend suggestions, followers, and followings"
+        centered
+      >
+        <Tab label="Suggestions" {...a11yProps(0)} />
+        <Tab label="Followers" {...a11yProps(1)} />
+        <Tab label="Followings" {...a11yProps(2)} />
+      </Tabs>
+      <Box boxShadow={1} bgcolor="background.paper">
+        <TabPanel component={'span'} value={value} index={0}>
+          <FriendList type="suggestions" />
+        </TabPanel>
+        <TabPanel component={'span'} value={value} index={1}>
+          <FriendList type="followers" />
+        </TabPanel>
+        <TabPanel component={'span'} value={value} index={2}>
+          <FriendList type="followings" />
+        </TabPanel>
+      </Box>
     </div>
   );
 }

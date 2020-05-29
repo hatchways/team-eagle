@@ -112,7 +112,7 @@ export default function FriendList(props) {
         onChange={handleChange}
       />
       <List dense className={classes.container}>
-        {state.map((user) => {
+        {state.map((user, idx) => {
           const labelId = `checkbox-list-secondary-label-${user._id}`;
           const isFollowable = !followingIdsSet.has(user._id);
 
@@ -124,7 +124,9 @@ export default function FriendList(props) {
                 labelId={labelId}
                 isFollowable={isFollowable}
               />
-              <Divider key={`${labelId}-divider`} light />
+              {idx === state.length - 1 ? null : (
+                <Divider key={`${labelId}-divider`} light />
+              )}
             </>
           );
         })}
