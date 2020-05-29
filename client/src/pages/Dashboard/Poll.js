@@ -5,12 +5,12 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: 280,
-    height: 280,
     textAlign: 'center',
     borderRadius: 0,
-    boxShadow: theme.shadows[3],
+    width: '100%',
+    height: '100%',
     textTransform: 'none',
+    boxShadow: theme.shadows[3],
     '& img': {
       width: 65,
       height: 65,

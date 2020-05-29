@@ -1,15 +1,33 @@
 import React, { useCallback, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
-import { Button, Modal, TextField } from '@material-ui/core';
+import {
+  Button,
+  Modal,
+  TextField,
+  Container,
+  CircularProgress,
+  Paper,
+  Typography,
+  List,
+  ListItem,
+  ListItemIcon,
+} from '@material-ui/core';
+import ImageIcon from '@material-ui/icons/Image';
 import { useDropzone } from 'react-dropzone';
 import { UserContext } from '../UserContext';
 
 export default function PollModal(props) {
   const classes = useStyles();
-  const [title, setTitle] = React.useState('');
-  const [image1, setImage1] = React.useState('');
-  const [image2, setImage2] = React.useState('');
+  const [state, setState] = React.useState({
+    title: '',
+    images: [],
+    loading: false,
+
+    titleError: '',
+    imagesError: '',
+  });
+
   const [loading, setLoading] = React.useState(false);
   const user = React.useContext(UserContext);
 
@@ -17,24 +35,55 @@ export default function PollModal(props) {
     if (acceptedFiles.length != 2) {
       alert('You can only upload only two files per poll. No less, no more.');
     } else {
-      setImage1(acceptedFiles[0]);
-      setImage2(acceptedFiles[1]);
+      setState({
+        ...state,
+        images: acceptedFiles,
+      });
     }
-    console.log(image1, image2);
   }, []);
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   const handleChange = (e) => {
-    setTitle(e.target.value);
+    setState({
+      ...state,
+      [e.target.name]: e.target.value || e.target.files,
+    });
   };
 
-  const handleSubmit = async () => {
-    setLoading(true);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    let titleError = '';
+    let imagesError = '';
+
+    const requiredField = 'All fields are required';
+    let errorCount = 0;
+
+    if (!state.title) {
+      titleError = requiredField;
+      errorCount++;
+    }
+    if (!state.images.length) {
+      imagesError = requiredField;
+      errorCount++;
+    }
+
+    if (errorCount) {
+      setState({
+        ...state,
+        titleError,
+        imagesError,
+      });
+      return;
+    }
+
+    setState({ ...state, loading: true });
+
     const formData = new FormData();
-    formData.set('title', title);
+    formData.set('title', state.title);
     formData.set('userId', user._id);
-    formData.append('image1', image1);
-    formData.append('image2', image2);
+    formData.append('image1', state.images[0]);
+    formData.append('image2', state.images[1]);
     const config = {
       headers: {
         'content-type': 'multipart/form-data',
@@ -51,91 +100,118 @@ export default function PollModal(props) {
       });
   };
 
-  const body = (
-    <div>
-      <div
-        style={{ top: '30%', marginLeft: '35vw', marginRight: 'auto' }}
-        className={classes.paper}
-      >
-        <h2 id="poll-modal-title">
-          {props.view === 'add' ? 'Add New Poll' : 'Edit poll'}
-        </h2>
-        <form className="poll-form" noValidate autoComplete="off">
-          <TextField
-            onChange={(e) => handleChange(e)}
-            name="title"
-            fullWidth
-            id="standard-basic"
-            label="Title of the Poll"
-            style={{ marginBottom: 20 }}
-          />
-          <div {...getRootProps()} className={classes.dropzone}>
-            <input {...getInputProps()} />
-            {isDragActive ? (
-              <p>Drop the files here ...</p>
-            ) : (
-              <p>Drag 'n' drop some files here, or click to select files</p>
-            )}
-          </div>
-          <Button
-            mt={3}
-            variant="contained"
-            color="secondary"
-            onClick={() => handleSubmit()}
-          >
-            Create/Update Poll
-          </Button>
-        </form>
-      </div>
-    </div>
-  );
-
-  const loadingBody = (
-    <div>
-      <div
-        style={{ top: '30%', marginLeft: '35vw', marginRight: 'auto' }}
-        className={classes.paper}
-      >
-        <h2 id="poll-modal-title" style={{ textAlign: 'center' }}>
-          Creating Your Poll.
-          <br /> Please wait for few seconds.
-          <br /> Good things come to those who wait.
-        </h2>
-      </div>
-    </div>
-  );
-
   return (
     <Modal
-      open={props.mode}
+      open={true}
       onClose={props.toggle}
       aria-labelledby="poll-modal-title"
       aria-describedby="poll-modal-description"
+      className={classes.modal}
     >
-      {loading ? loadingBody : body}
+      <Paper className={classes.paper}>
+        {state.loading ? (
+          <>
+            <Typography
+              id="poll-modal-title"
+              variant="h2"
+              component="p"
+              align="center"
+            >
+              Creating Your Poll...
+            </Typography>
+            <Container className={classes.progressContainer}>
+              <CircularProgress />
+            </Container>
+          </>
+        ) : (
+          <>
+            <Typography id="poll-modal-title" variant="h2">
+              {props.edit ? 'Edit Poll' : 'Create Poll'}
+            </Typography>
+            <form className="poll-form" noValidate autoComplete="off">
+              <TextField
+                onChange={handleChange}
+                name="title"
+                fullWidth
+                id="standard-basic"
+                label="Title"
+                helperText={state.titleError}
+                error={!!state.titleError}
+              />
+              <div
+                {...getRootProps()}
+                className={classes.dropzone}
+                style={{
+                  border: state.imagesError ? '1px solid red' : 'none',
+                }}
+              >
+                <input {...getInputProps()} />
+                {state.images.length ? (
+                  <List className={classes.list}>
+                    {state.images.map((image, i) => {
+                      return (
+                        <ListItem key={i} dense={true}>
+                          <ListItemIcon>
+                            <ImageIcon />
+                          </ListItemIcon>
+                          {image.name}
+                        </ListItem>
+                      );
+                    })}
+                  </List>
+                ) : isDragActive ? (
+                  <p>Drop the files here</p>
+                ) : (
+                  <p>Drag 'n' drop some files here, or click to select</p>
+                )}
+              </div>
+              <Button
+                mt={3}
+                variant="contained"
+                color="secondary"
+                onClick={handleSubmit}
+              >
+                {props.edit ? 'Edit Poll' : 'Create poll'}
+              </Button>
+            </form>
+          </>
+        )}
+      </Paper>
     </Modal>
   );
 }
 
 const useStyles = makeStyles((theme) => ({
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  list: {
+    height: theme.spacing(6),
+  },
   dropzone: {
     width: 350,
     height: 300,
-    backgroundColor: '#e8e8e8',
-    padding: 20,
-    color: 'black',
-    marginBottom: 30,
-  },
-  button: {
-    backgroundColor: 'black',
-    color: 'white',
+    backgroundColor: theme.palette.grey[200],
+    padding: theme.spacing(4),
+    marginBottom: theme.spacing(4),
+    textAlign: 'center',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    cursor: 'pointer',
   },
   paper: {
-    position: 'absolute',
     width: 400,
-    backgroundColor: theme.palette.background.paper,
-    border: '2px solid #000',
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3),
+    padding: theme.spacing(6),
+  },
+  progressContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginTop: theme.spacing(5),
+    '& svg': {
+      color: theme.palette.secondary.main,
+    },
   },
 }));
