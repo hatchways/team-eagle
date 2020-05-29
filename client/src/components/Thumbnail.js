@@ -16,8 +16,10 @@ const useStyles = (props) =>
 
 export default function Thumbnail(props) {
   const picture = null;
-  if (props.user.picture) {
-    const { picture } = props.user;
+  if (props.user) {
+    if (props.user.picture) {
+      picture = props.user.picture;
+    }
   }
 
   return (
