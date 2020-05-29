@@ -15,7 +15,7 @@ import RecentActorsIcon from '@material-ui/icons/RecentActors';
 import ContactSupportIcon from '@material-ui/icons/ContactSupport';
 import AddIcon from '@material-ui/icons/Add';
 import socketIOClient from 'socket.io-client';
-import { UserContext } from './UserContext';
+import { UserContext } from './contexts/UserContext';
 
 const list = [
   {
