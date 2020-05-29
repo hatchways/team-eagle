@@ -43,10 +43,10 @@ function App() {
       <BrowserRouter>
         {user._id ? (
           <>
+            <NavBar />
             <Switch>
-              <NavBar />
-              <Route exact path="/" component={() => <Dashboard />} />
-              <Route exact path="/friends" render={() => <FriendsLayout />} />
+              <Route exact path="/friends" component={FriendsLayout} />
+              <Route exact path="/" component={Dashboard} />
               <Route path="*">
                 <Redirect to="/" />
               </Route>
