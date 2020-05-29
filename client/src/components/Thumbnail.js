@@ -15,8 +15,10 @@ const useStyles = (props) =>
 // props.marginRight (bool) => sets default marginRight
 
 export default function Thumbnail(props) {
-  const classes = useStyles(props)();
-  const { picture } = props.user;
+  const picture = null;
+  if (props.user.picture) {
+    const { picture } = props.user;
+  }
 
   return (
     <Badge color="primary" variant="dot" invisible={props.invisible}>
