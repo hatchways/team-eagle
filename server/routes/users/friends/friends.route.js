@@ -44,10 +44,15 @@ router.get(
 
     if (nameQuery) {
       suggestions = await User.find({
-        name: new RegExp(nameQuery, 'i'),
+        $and: [
+          { name: new RegExp(nameQuery, 'i') },
+          { friendIds: { $nin: [req.params.userId] } },
+        ],
       });
     } else {
-      suggestions = await User.find({});
+      suggestions = await User.find({
+        friendIds: { $nin: [req.params.userId] },
+      });
     }
 
     // filter out only wanted fields
