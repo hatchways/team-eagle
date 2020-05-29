@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
-import FriendListItem from './FriendListItem';
+import FriendCollectionItem from './FriendCollectionItem';
 import TextField from '@material-ui/core/TextField';
 import { debounce } from '../../util/util';
 import { FriendsContext } from '../contexts/FriendsContext';
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function FriendList(props) {
+export default function FriendCollection(props) {
   const classes = useStyles();
   const friends = React.useContext(FriendsContext);
   const user = React.useContext(UserContext);
@@ -114,7 +114,7 @@ export default function FriendList(props) {
 
           return (
             <>
-              <FriendListItem
+              <FriendCollectionItem
                 key={`${labelId}-parent`}
                 user={user}
                 labelId={labelId}
@@ -131,6 +131,6 @@ export default function FriendList(props) {
   );
 }
 
-FriendList.propTypes = {
+FriendCollection.propTypes = {
   type: PropTypes.string.isRequired,
 };

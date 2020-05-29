@@ -5,7 +5,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import FriendList from '../../components/friends/FriendList';
+import FriendCollection from '../../components/friends/FriendCollection';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -86,13 +86,13 @@ export default function FriendsLayout() {
       </Tabs>
       <Box boxShadow={1} bgcolor="background.paper">
         <TabPanel component={'span'} value={value} index={0}>
-          <FriendList type="suggestions" />
+          <FriendCollection type="suggestions" />
         </TabPanel>
         <TabPanel component={'span'} value={value} index={1}>
-          <FriendList type="followers" />
+          <FriendCollection type="followers" />
         </TabPanel>
         <TabPanel component={'span'} value={value} index={2}>
-          <FriendList type="followings" />
+          <FriendCollection type="followings" />
         </TabPanel>
       </Box>
     </div>
