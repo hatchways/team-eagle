@@ -28,7 +28,6 @@ export default function PollModal(props) {
     imagesError: '',
   });
 
-  const [loading, setLoading] = React.useState(false);
   const user = React.useContext(UserContext);
 
   const onDrop = useCallback((acceptedFiles) => {
@@ -191,8 +190,8 @@ const useStyles = makeStyles((theme) => ({
     height: theme.spacing(6),
   },
   dropzone: {
-    width: 350,
     height: 300,
+    maxHeight: '25vh',
     backgroundColor: theme.palette.grey[200],
     padding: theme.spacing(4),
     marginBottom: theme.spacing(4),
@@ -203,8 +202,13 @@ const useStyles = makeStyles((theme) => ({
     cursor: 'pointer',
   },
   paper: {
+    maxHeight: '75vh',
     width: 400,
+    maxWidth: '75vw',
     padding: theme.spacing(6),
+    [theme.breakpoints.down('xs')]: {
+      padding: theme.spacing(2),
+    },
   },
   progressContainer: {
     display: 'flex',
