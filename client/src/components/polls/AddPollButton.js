@@ -14,7 +14,7 @@ function AddPollButton(props) {
     <div>
       {mode && <PollModal toggle={toggleMode} mode={mode} />}
       <Button variant="contained" color="secondary" onClick={toggleMode}>
-        Add Poll
+        {props.edit ? 'Edit Poll' : 'Create poll'}
       </Button>
     </div>
   );
