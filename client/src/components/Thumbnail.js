@@ -16,11 +16,12 @@ const useStyles = (props) =>
 
 export default function Thumbnail(props) {
   const classes = useStyles(props)();
+  const { picture } = props.user;
 
   return (
     <Badge color="primary" variant="dot" invisible={props.invisible}>
-      <Avatar src={props.user.picture || ''} {...props}>
-        {props.user.picture ? null : <PersonIcon />}
+      <Avatar src={picture ? picture : ''} {...props}>
+        {!picture && <PersonIcon />}
       </Avatar>
     </Badge>
   );
