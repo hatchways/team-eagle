@@ -10,9 +10,11 @@
     "cors": "^2.8.5",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-dropzone": "^11.0.1",
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.0.1",
-    "react-spinners": "^0.8.3"
+    "react-spinners": "^0.8.3",
+    "superagent": "^5.2.2"
   },
   "scripts": {
     "start": "react-scripts start",
