@@ -99,4 +99,45 @@ router.put(
   }
 );
 
+// @route GET /polls
+// @desc To fetch the polls of user (not friends)
+// @params none
+// @access private
+router.get(
+  '/',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    const user = req.user;
+    const polls = [];
+    Poll.find({ userId: user._id }, (err, docs) => {
+      if (err) return res.status(400).json({ error: err });
+      polls.push[docs];
+      return res.status(200).json({ status: polls });
+    });
+  }
+);
+
+// @route GET /polls/friends
+// @desc To fetch the polls of user's friends
+// @params none
+// @access private
+router.get(
+  '/friends',
+  passport.authenticate('jwt', { session: true }),
+  (req, res) => {
+    const user = req.user;
+    const friends = user.friendIds;
+    const polls = [];
+
+    friends.map((friend) => {
+      Poll.find({ userId: friend }, (err, docs) => {
+        if (err) return res.status(400).json({ error: err });
+        polls.push(docs);
+      });
+    });
+
+    return res.status(200).json({ polls: polls });
+  }
+);
+
 module.exports = router;
