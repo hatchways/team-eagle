@@ -63,4 +63,14 @@ UserSchema.methods.signJWT = function (payload) {
   );
 };
 
+UserSchema.methods.makeActive = function () {
+  this.active = true;
+  this.save();
+};
+
+UserSchema.methods.makeDisactive = function () {
+  this.active = false;
+  this.save();
+};
+
 module.exports = User = mongoose.model('users', UserSchema);

@@ -32,6 +32,8 @@ The upload functions will take the credentials from your local .env file. Please
 User Routes
 
 - `GET /users/current`
+- `GET /users/active`
+- `GET /users/disactive`
 
 Auth Routes
 

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import {
@@ -14,6 +14,8 @@ import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople';
 import RecentActorsIcon from '@material-ui/icons/RecentActors';
 import ContactSupportIcon from '@material-ui/icons/ContactSupport';
 import AddIcon from '@material-ui/icons/Add';
+import socketIOClient from 'socket.io-client';
+import { UserContext } from './UserContext';
 
 const list = [
   {
@@ -58,6 +60,18 @@ const useStyles = makeStyles((theme) => ({
 
 export default function NavDrawer(props) {
   const classes = useStyles();
+  const user = useContext(UserContext);
+
+  useEffect(() => {
+    const socket = socketIOClient('http://localhost:3001');
+    socket.emit('logged', { userId: user._id });
+    socket.on('makeactive', (data) => {
+      fetch('/users/active').then((response) => {});
+    });
+    socket.on('makedisactive', (data) => {
+      fetch('/users/disactive').then((response) => {});
+    });
+  });
 
   return (
     <Drawer
