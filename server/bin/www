@@ -9,6 +9,7 @@ require("dotenv").config();
 
 var app = require("../app");
 var http = require("http");
+const socketIo = require("socket.io");
 
 /**
  * Get port from environment and store in Express.
@@ -22,10 +23,23 @@ app.set("port", port);
  */
 
 var server = http.createServer(app);
+const io = socketIo(server);
 
 /**
  * Listen on provided port, on all network interfaces.
  */
+
+io.on("connection", (socket)=>{
+  console.log("new client is connected");  
+  socket.on("logged", (data)=>{        
+    socket.emit("makeactive", {userId:data.userId});
+  });
+
+  socket.on("disconnect", ()=>{
+    socket.emit("makedisactive", {data:"data"})
+    console.log("client disconnected");    
+  })
+})
 
 server.listen(port);
 server.on("error", onError);

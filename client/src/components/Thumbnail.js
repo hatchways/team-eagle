@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Avatar } from '@material-ui/core';
+import { Avatar, Badge } from '@material-ui/core';
 import PersonIcon from '@material-ui/icons/Person';
 
 const useStyles = (props) =>
@@ -16,9 +16,22 @@ const useStyles = (props) =>
 
 export default function Thumbnail(props) {
   const classes = useStyles(props)();
+  const picture = null;
+  if (props.user) {
+    if (props.user.picture) {
+      picture = props.user.picture;
+    }
+  }
+
   return (
-    <Avatar src={props.picture || ''} className={classes.root}>
-      {props.picture ? null : <PersonIcon />}
-    </Avatar>
+    <Badge
+      color="secondary"
+      variant="dot"
+      invisible={props.invisible ? props.invisible : 'yes'}
+    >
+      <Avatar src={picture ? picture : ''} {...props}>
+        {!picture && <PersonIcon />}
+      </Avatar>
+    </Badge>
   );
 }
