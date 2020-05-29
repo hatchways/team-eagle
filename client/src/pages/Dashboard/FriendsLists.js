@@ -16,6 +16,8 @@ const lists = [
       {
         _id: '12412423123124',
         name: 'David Smith',
+        picture:
+          'https://images.unsplash.com/photo-1511623785848-021573a3a04f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80',
       },
       {
         _id: '1222',
@@ -24,10 +26,14 @@ const lists = [
       {
         _id: '414142',
         name: 'Anna Devine',
+        picture:
+          'https://images.unsplash.com/photo-1559637621-d766677659e8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=934&q=80',
       },
       {
         _id: '142124',
         name: 'Lucy Berger',
+        picture:
+          'https://images.unsplash.com/photo-1558482240-4e3c42448028?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80',
       },
     ],
   },
@@ -38,10 +44,14 @@ const lists = [
       {
         _id: '414142',
         name: 'Anna Devine',
+        picture:
+          'https://images.unsplash.com/photo-1559637621-d766677659e8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=934&q=80',
       },
       {
         _id: '142124',
         name: 'Lucy Berger',
+        picture:
+          'https://images.unsplash.com/photo-1558482240-4e3c42448028?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80',
       },
     ],
   },
@@ -56,6 +66,8 @@ const lists = [
       {
         _id: '142124',
         name: 'Lucy Berger',
+        picture:
+          'https://images.unsplash.com/photo-1558482240-4e3c42448028?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80',
       },
     ],
   },

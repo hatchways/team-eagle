@@ -78,7 +78,7 @@ export default function FriendsListsItem(props) {
               <ListItemIcon component={RouterLink} to={'/'}>
                 <CloseIcon />
               </ListItemIcon>
-              <Thumbnail image={friend.picture} marginRight={true} />
+              <Thumbnail picture={friend.picture} marginRight={true} />
               {friend.name}
             </ListItem>
           );
