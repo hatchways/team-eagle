@@ -14,17 +14,20 @@ export const UserContextProvider = ({ children }) => {
         'Content-Type': 'application/json',
       },
     }).then((res) => {
-      res.json().then((data) => {
-        if (res.status === 200) {
-          setState({
-            ...state,
-            ...data,
-          });
-          return data;
-        } else if (callback) {
-          callback(res.status);
-        }
-      });
+      res
+        .json()
+        .then((data) => {
+          if (res.status === 200) {
+            setState({
+              ...state,
+              ...data,
+            });
+            return data;
+          } else if (callback) {
+            callback(res.status);
+          }
+        })
+        .catch((error) => console.log(error));
     });
   }
 
