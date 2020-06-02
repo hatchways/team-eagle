@@ -138,4 +138,22 @@ router.get(
   }
 );
 
+// @route GET /polls/:pollId
+// @desc To fetch the polls of user's friends
+// @params none
+// @access private
+router.get(
+  '/:pollId',
+  passport.authenticate('jwt', { session: true }),
+  async (req, res) => {
+    const poll = await Poll.findById(req.params.pollId);
+
+    if (!poll) {
+      return res.status(404).json({ message: 'Poll not found' });
+    }
+
+    return res.status(200).json(poll);
+  }
+);
+
 module.exports = router;
