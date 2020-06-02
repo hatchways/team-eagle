@@ -20,6 +20,13 @@ const PollSchema = new Schema({
         type: String,
         required: true,
       },
+      voteIds: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          required: true,
+          ref: 'votes',
+        },
+      ],
     },
   ],
 });
