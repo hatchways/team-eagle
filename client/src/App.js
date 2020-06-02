@@ -16,21 +16,19 @@ import './App.css';
 function App() {
   const user = React.useContext(UserContext);
   const friends = React.useContext(FriendsContext);
-  const [loading, setLoading] = useState(false);
+  const [userLoading, setUserLoading] = useState(false);
 
   React.useEffect(() => {
     const fetchData = async () => {
       if (!user._id) {
-        // if user is not here, show loading, and start fetch
-        setLoading(true);
+        setUserLoading(true);
         await user.getCurrent((err) => {
-          // if user is not found, don't show loading
-          setLoading(false);
+          setUserLoading(false);
         });
       }
 
       if (user._id) {
-        setLoading(false);
+        setUserLoading(false);
         await friends.getFollowers(user._id, (err) => {
           throw new Error(err.message);
         });
@@ -45,12 +43,9 @@ function App() {
     fetchData();
   }, [user]);
 
-  if (loading) {
-    return (
-      <MuiThemeProvider theme={theme}>
-        {/* Loading component here */}
-      </MuiThemeProvider>
-    );
+  if (userLoading) {
+    // display white screen while fetching user
+    return null;
   }
 
   return (
