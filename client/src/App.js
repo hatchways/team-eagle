@@ -26,9 +26,7 @@ function App() {
         await user.getCurrent((err) => {
           setUserLoading(false);
         });
-      }
-
-      if (user._id) {
+      } else {
         setUserLoading(false);
         await friends.getFollowers(user._id, (err) => {
           throw new Error(err.message);
