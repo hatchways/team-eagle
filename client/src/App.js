@@ -10,6 +10,7 @@ import NavBar from './components/NavBar';
 import LandingPage from './pages/Landing/Landing';
 import FriendsLayout from './pages/Friends/Friends';
 import Dashboard from './pages/Dashboard/Dashboard';
+import Loading from './components/Loading';
 
 import './App.css';
 
@@ -44,8 +45,11 @@ function App() {
   }, [user]);
 
   if (userLoading) {
-    // display white screen while fetching user
-    return null;
+    return (
+      <MuiThemeProvider theme={theme}>
+        <Loading />
+      </MuiThemeProvider>
+    );
   }
 
   return (
