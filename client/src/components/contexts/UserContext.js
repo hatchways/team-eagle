@@ -27,7 +27,9 @@ export const UserContextProvider = ({ children }) => {
             callback(res.status);
           }
         })
-        .catch((error) => console.log(error));
+        .catch(() => {
+          callback(res.status);
+        });
     });
   }
 

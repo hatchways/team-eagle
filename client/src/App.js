@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { MuiThemeProvider } from '@material-ui/core';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 
@@ -16,14 +16,21 @@ import './App.css';
 function App() {
   const user = React.useContext(UserContext);
   const friends = React.useContext(FriendsContext);
+  const [loading, setLoading] = useState(false);
 
   React.useEffect(() => {
     const fetchData = async () => {
       if (!user._id) {
-        await user.getCurrent();
+        // if user is not here, show loading, and start fetch
+        setLoading(true);
+        await user.getCurrent((err) => {
+          // if user is not found, don't show loading
+          setLoading(false);
+        });
       }
 
       if (user._id) {
+        setLoading(false);
         await friends.getFollowers(user._id, (err) => {
           throw new Error(err.message);
         });
@@ -37,6 +44,14 @@ function App() {
     };
     fetchData();
   }, [user]);
+
+  if (loading) {
+    return (
+      <MuiThemeProvider theme={theme}>
+        {/* Loading component here */}
+      </MuiThemeProvider>
+    );
+  }
 
   return (
     <MuiThemeProvider theme={theme}>
