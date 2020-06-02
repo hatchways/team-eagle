@@ -25,7 +25,7 @@ const UserSchema = new Schema({
   },
   friendIds: [
     {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       required: true,
       ref: 'users',
     },

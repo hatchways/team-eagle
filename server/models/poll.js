@@ -7,7 +7,7 @@ const PollSchema = new Schema({
     required: true,
   },
   userId: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     required: true,
     ref: 'users',
   },
@@ -23,7 +23,7 @@ const PollSchema = new Schema({
       },
       voteIds: [
         {
-          type: mongoose.Schema.Types.ObjectId,
+          type: Schema.Types.ObjectId,
           required: true,
           ref: 'votes',
         },
