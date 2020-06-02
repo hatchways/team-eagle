@@ -1,39 +1,21 @@
 import React from 'react';
-
-import { Link as RouterLink } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Card, Container, Button } from '@material-ui/core';
 import ForumRoundedIcon from '@material-ui/icons/ForumRounded';
-
 import image from '../../images/woman-laptop.png';
-
-import SignupForm from './components/SignupForm';
+import AuthNav from './AuthNav';
 import LoginForm from './components/LoginForm';
 
-export default function AuthLayout(props) {
+export default function Login(props) {
   const classes = useStyles();
 
   return (
     <Box className={classes.root}>
-      <Container className={classes.nav} component="nav">
-        <ForumRoundedIcon className={classes.forumIcon} />
-        <Button
-          component={RouterLink}
-          variant="outlined"
-          className={classes.link}
-          to={props.form === 'signup' ? '/login' : '/signup'}
-        >
-          {props.form === 'signup' ? 'Log In' : 'Sign Up'}
-        </Button>
-      </Container>
+      <AuthNav button="signup" />
       <Container className={classes.wrapper} component="main">
         <Box className={classes.leftSide}>
           <Card className={classes.card}>
-            {props.form === 'signup' ? (
-              <SignupForm classes={classes} />
-            ) : (
-              <LoginForm classes={classes} />
-            )}
+            <LoginForm classes={classes} />
           </Card>
         </Box>
       </Container>
