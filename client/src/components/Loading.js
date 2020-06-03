@@ -9,18 +9,14 @@ const useStyles = makeStyles(() => ({
     justifyContent: 'center',
     height: '100vh',
   },
-  circularProgress: {
-    width: '11vh !important',
-    height: '11vh !important',
-  },
 }));
 
-export default function CircularIndeterminate() {
+export default function Loading() {
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
-      <CircularProgress className={classes.circularProgress} />
+      <CircularProgress size="11vh" />
     </div>
   );
 }
