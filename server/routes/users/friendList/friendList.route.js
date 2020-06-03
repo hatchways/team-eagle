@@ -6,6 +6,10 @@ const User = require('../../../models/user');
 const FriendList = require('../../../models/friendList');
 const routeUtil = require('../../util');
 
+// TODO:
+// Add authentication
+// Replace req.params.userId for req.user._id
+
 function getUserLists(userId) {
   return new Promise((resolve, reject) => {
     FriendList.find({ userId }, (err, docs) => {
