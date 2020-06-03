@@ -40,6 +40,9 @@ const useStyles = makeStyles((theme) => ({
     overflowY: 'auto',
     height: `calc(100% - ${headerHeight + theme.spacing(2)}px)`,
   },
+  listItemIcon: {
+    minWidth: '25px',
+  },
 }));
 
 export default function FriendsListsItem(props) {
@@ -75,7 +78,11 @@ export default function FriendsListsItem(props) {
         {props.friends.map((friend, i) => {
           return (
             <ListItem key={i} component={RouterLink} to={'/' + friend._id}>
-              <ListItemIcon component={RouterLink} to={'/'}>
+              <ListItemIcon
+                className={classes.listItemIcon}
+                component={RouterLink}
+                to={'/'}
+              >
                 <CloseIcon />
               </ListItemIcon>
               <Thumbnail picture={friend.picture} marginRight={true} />
