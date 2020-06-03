@@ -1,23 +1,9 @@
 const express = require('express');
 const passport = require('passport');
 const mongoose = require('mongoose');
-const router = express.Router({ mergeParams: true });
+const router = express.Router();
 const FriendList = require('../../models/friendList');
-
-// All calls respond with the updated array of lists
-function getUserLists(userId) {
-  return new Promise((resolve, reject) => {
-    FriendList.find({ userId }, (err, docs) => {
-      if (err) reject(err);
-      FriendList.populate(docs, {
-        path: 'friendIds',
-        select: ['name', 'active'],
-      })
-        .then((result) => resolve(result))
-        .catch((err) => reject(err));
-    });
-  });
-}
+const { getUserLists } = require('./utils');
 
 // @route:  GET /friendLists
 // @desc:   Get all user's friends lists
