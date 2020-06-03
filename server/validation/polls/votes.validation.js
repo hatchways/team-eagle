@@ -25,25 +25,6 @@ module.exports = async function validatePollVoteReq(req) {
     return { isValid, statusCode, message };
   }
 
-  // Find and validate poll author
-  const pollAuthor = await poll.populate('userId');
-  if (!pollAuthor) {
-    isValid = false;
-    statusCode = 400;
-    message = 'Poll author is no longer active on this platform';
-
-    return { isValid, statusCode, message };
-  }
-
-  // Check if requesting user is a friend of the author of the poll
-  if (!pollAuthor.friendIds.includes(req.user._id)) {
-    isValid = false;
-    statusCode = 401;
-    message = 'You must follow poll author to vote on their poll';
-
-    return { isValid, statusCode, message };
-  }
-
   isValid = true;
   return { isValid, statusCode, message };
 };
