@@ -1,9 +1,11 @@
 const express = require('express');
+const passport = require('passport');
 const router = express.Router();
+
 const Poll = require('../../models/poll');
 const Vote = require('../../models/vote');
 const upload = require('./utils');
-const passport = require('passport');
+const validatePollVoteReq = require('../../validation/polls/votes.validation');
 
 // @route POST /polls
 // @desc To add a new poll
@@ -165,17 +167,10 @@ router.post(
   '/:pollId/:imageIdx/vote',
   passport.authenticate('jwt', { session: true }),
   async (req, res) => {
-    const imageIdx = req.params.imageIdx;
-    if (imageIdx !== 0 || imageIdx !== 1) {
-      return res.status(401).json({
-        message: 'You must include imageIdx in API URL. And it must be 0 or 1.',
-      });
-    }
+    const { isValid, statusCode, message } = await validatePollVoteReq(req);
 
-    const poll = await Poll.findById(req.params.pollId);
-
-    if (!poll) {
-      return res.status(404).json({ message: 'Poll not found' });
+    if (!isValid) {
+      return res.status(statusCode).json({ message: message });
     }
 
     const vote = new Vote({
@@ -204,17 +199,10 @@ router.delete(
   '/:pollId/:imageIdx/vote',
   passport.authenticate('jwt', { session: true }),
   async (req, res) => {
-    const imageIdx = req.params.imageIdx;
-    if (imageIdx !== 0 || imageIdx !== 1) {
-      return res.status(401).json({
-        message: 'You must include imageIdx in API URL. And it must be 0 or 1.',
-      });
-    }
+    const { isValid, statusCode, message } = await validatePollVoteReq(req);
 
-    const poll = await Poll.findById(req.params.pollId);
-
-    if (!poll) {
-      return res.status(404).json({ message: 'Poll not found' });
+    if (!isValid) {
+      return res.status(statusCode).json({ message: message });
     }
 
     const vote = await Vote.find({
