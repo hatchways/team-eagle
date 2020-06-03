@@ -2,14 +2,15 @@ import React, { useState } from 'react';
 import { MuiThemeProvider } from '@material-ui/core';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 
-import { theme } from './themes/theme';
-import { UserContext } from './components/contexts/UserContext';
-import { FriendsContext } from './components/contexts/FriendsContext';
+import { theme } from 'themes/theme';
+import { UserContext } from 'components/contexts/UserContext';
+import { FriendsContext } from 'components/contexts/FriendsContext';
 
-import NavBar from './components/NavBar';
-import LandingPage from './pages/Landing/Landing';
-import FriendsLayout from './pages/Friends/Friends';
-import Dashboard from './pages/Dashboard/Dashboard';
+import Loading from 'components/Loading';
+import NavBar from 'components/NavBar';
+import LandingPage from 'pages/Landing/Landing';
+import FriendsLayout from 'pages/Friends/Friends';
+import Dashboard from 'pages/Dashboard/Dashboard';
 
 import './App.css';
 

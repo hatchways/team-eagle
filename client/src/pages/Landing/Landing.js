@@ -5,12 +5,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Box, Card, Container, Button } from '@material-ui/core';
 import ForumRoundedIcon from '@material-ui/icons/ForumRounded';
 
-import image from '../../images/woman-laptop.png';
+import image from 'images/woman-laptop.png';
 
-import SignupForm from './components/SignupForm';
-import LoginForm from './components/LoginForm';
+import SignupForm from './SignupForm';
+import LoginForm from './LoginForm';
 
-export default function AuthLayout(props) {
+export default function Landing(props) {
   const classes = useStyles();
 
   return (
@@ -19,7 +19,8 @@ export default function AuthLayout(props) {
         <ForumRoundedIcon className={classes.forumIcon} />
         <Button
           component={RouterLink}
-          variant="outlined"
+          variant="contained"
+          color="secondary"
           className={classes.link}
           to={props.form === 'signup' ? '/login' : '/signup'}
         >
@@ -56,8 +57,8 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     top: 0,
     right: 0,
-    color: theme.palette.common.white,
-    borderColor: theme.palette.common.white,
+    // color: theme.palette.common.white,
+    // borderColor: theme.palette.common.white,
   },
   forumIcon: {
     marginTop: theme.spacing(6),
