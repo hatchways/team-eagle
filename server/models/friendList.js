@@ -10,6 +10,7 @@ const FriendListSchema = new Schema({
     type: Schema.Types.ObjectId,
     required: true,
     ref: 'users',
+    index: true,
   },
   friendIds: [
     {
