@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Poll = require('../../models/poll');
+const Vote = require('../../models/vote');
 const upload = require('./utils');
 const passport = require('passport');
 
@@ -139,7 +140,7 @@ router.get(
 );
 
 // @route GET /polls/:pollId
-// @desc To fetch the polls of user's friends
+// @desc To fetch a single poll using pollId
 // @params none
 // @access private
 router.get(
@@ -151,6 +152,34 @@ router.get(
     if (!poll) {
       return res.status(404).json({ message: 'Poll not found' });
     }
+
+    return res.status(200).json(poll);
+  }
+);
+
+// @route POST /polls/:pollId/vote
+// @desc To fetch the polls of user's friends
+// @params none
+// @access private
+router.post(
+  '/:pollId/vote',
+  passport.authenticate('jwt', { session: true }),
+  async (req, res) => {
+    const poll = await Poll.findById(req.params.pollId);
+
+    if (!poll) {
+      return res.status(404).json({ message: 'Poll not found' });
+    }
+
+    const vote = new Vote({ userId: req.user._id, pollId: req.params.pollId });
+    await vote.save();
+
+    if (!vote) {
+      return res.status(400).json({ message: 'Vote failed to save' });
+    }
+
+    poll.voteIds.push(vote._id);
+    await poll.save();
 
     return res.status(200).json(poll);
   }
