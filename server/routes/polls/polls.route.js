@@ -5,7 +5,7 @@ const router = express.Router();
 const Poll = require('../../models/poll');
 const Vote = require('../../models/vote');
 const upload = require('./utils');
-const validatePollVoteReq = require('../../validation/polls/votes.validation');
+const validatePollVoteReq = require('../../validation/polls/vote.validation');
 
 // @route POST /polls
 // @desc To add a new poll
