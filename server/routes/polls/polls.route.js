@@ -157,14 +157,23 @@ router.get(
   }
 );
 
-// @route POST /polls/:pollId/vote
-// @desc To fetch the polls of user's friends
+// @route POST /polls/:pollId/:imageIdx/vote
+// @desc To vote on poll
 // @params none
 // @access private
 router.post(
-  '/:pollId/vote',
+  '/:pollId/:imageIdx/vote',
   passport.authenticate('jwt', { session: true }),
   async (req, res) => {
+    if (req.params.imageIdx !== 0 || req.params.imageIdx !== 1) {
+      return res
+        .status(401)
+        .json({
+          message:
+            'You must include imageIdx in API URL. And it must be 0 or 1.',
+        });
+    }
+
     const poll = await Poll.findById(req.params.pollId);
 
     if (!poll) {
@@ -178,7 +187,7 @@ router.post(
       return res.status(400).json({ message: 'Vote failed to save' });
     }
 
-    poll.voteIds.push(vote._id);
+    poll.images[req.params.imageIdx].voteIds.push(vote._id);
     await poll.save();
 
     return res.status(200).json(poll);
