@@ -6,13 +6,15 @@ const VoteSchema = new Schema({
     type: Schema.Types.ObjectId,
     required: true,
     ref: 'users',
+    index: true,
   },
   pollId: {
     type: Schema.Types.ObjectId,
     required: true,
     ref: 'polls',
+    index: true,
   },
-  c: {
+  pollImageIdx: {
     type: Number,
     required: true,
   },
