@@ -216,9 +216,7 @@ router.delete(
     await vote.remove();
 
     // remove voteId from image's voteIds array
-    poll.images[imageIdx].voteIds = poll.images[imageIdx].voteIds.filter(
-      (voteId) => voteId !== vote._id
-    );
+    poll.images[imageIdx].voteIds.pull(vote._id);
     await poll.save();
 
     return res.status(200).json(poll);
