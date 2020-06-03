@@ -32,17 +32,7 @@ router.post('/register', (req, res) => {
       newUser
         .save()
         .then((user) => {
-          const payload = { id: user._id };
-          const token = user.signJWT(payload);
-          const options = {
-            httpOnly: true,
-          };
-
-          if (process.env.NODE_ENV === 'production') {
-            options.secure = true; // Only send cookies with https protocol
-          }
-
-          user.password = null;
+          const { token, options } = user.loginRegisterClientResponse();
 
           res.cookie('jwt', token, options).json(user);
         })
@@ -73,17 +63,7 @@ router.post('/login', (req, res) => {
 
     const isMatch = user.checkPassword(password);
     if (isMatch) {
-      const payload = { id: user._id };
-      const token = user.signJWT(payload);
-      const options = {
-        httpOnly: false,
-      };
-
-      if (process.env.NODE_ENV === 'production') {
-        options.secure = true; // Only send cookies with https protocol
-      }
-
-      user.password = null;
+      const { token, options } = user.loginRegisterClientResponse();
 
       res.cookie('jwt', token, options).json(user);
     } else {
