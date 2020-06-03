@@ -165,13 +165,11 @@ router.post(
   '/:pollId/:imageIdx/vote',
   passport.authenticate('jwt', { session: true }),
   async (req, res) => {
-    if (req.params.imageIdx !== 0 || req.params.imageIdx !== 1) {
-      return res
-        .status(401)
-        .json({
-          message:
-            'You must include imageIdx in API URL. And it must be 0 or 1.',
-        });
+    const imageIdx = req.params.imageIdx;
+    if (imageIdx !== 0 || imageIdx !== 1) {
+      return res.status(401).json({
+        message: 'You must include imageIdx in API URL. And it must be 0 or 1.',
+      });
     }
 
     const poll = await Poll.findById(req.params.pollId);
@@ -187,7 +185,48 @@ router.post(
       return res.status(400).json({ message: 'Vote failed to save' });
     }
 
-    poll.images[req.params.imageIdx].voteIds.push(vote._id);
+    poll.images[imageIdx].voteIds.push(vote._id);
+    await poll.save();
+
+    return res.status(200).json(poll);
+  }
+);
+
+// @route DELETE /polls/:pollId/:imageIdx/vote
+// @desc To delete vote on poll
+// @params none
+// @access private
+router.delete(
+  '/:pollId/:imageIdx/vote',
+  passport.authenticate('jwt', { session: true }),
+  async (req, res) => {
+    const imageIdx = req.params.imageIdx;
+    if (imageIdx !== 0 || imageIdx !== 1) {
+      return res.status(401).json({
+        message: 'You must include imageIdx in API URL. And it must be 0 or 1.',
+      });
+    }
+
+    const poll = await Poll.findById(req.params.pollId);
+
+    if (!poll) {
+      return res.status(404).json({ message: 'Poll not found' });
+    }
+
+    const vote = await Vote.find({
+      $and: [{ userId: req.user._id }, { pollId: req.params.pollId }],
+    });
+
+    if (!vote) {
+      return res.status(404).json({ message: 'Failed to find vote' });
+    }
+
+    await vote.remove();
+
+    // remove voteId from image's voteIds array
+    poll.images[imageIdx].voteIds = poll.images[imageIdx].voteIds.filter(
+      (voteId) => voteId !== vote._id
+    );
     await poll.save();
 
     return res.status(200).json(poll);
