@@ -1,8 +1,11 @@
 const express = require('express');
-const router = express.Router();
-const Poll = require('../../models/polls');
-const upload = require('./utils');
 const passport = require('passport');
+const router = express.Router();
+
+const Poll = require('../../models/poll');
+const Vote = require('../../models/vote');
+const upload = require('./utils');
+const validatePollVoteReq = require('../../validation/polls/vote.validation');
 
 // @route POST /polls
 // @desc To add a new poll
@@ -135,6 +138,88 @@ router.get(
     });
 
     return res.status(200).json();
+  }
+);
+
+// @route GET /polls/:pollId
+// @desc To fetch a single poll using pollId
+// @params none
+// @access private
+router.get(
+  '/:pollId',
+  passport.authenticate('jwt', { session: true }),
+  async (req, res) => {
+    const poll = await Poll.findById(req.params.pollId);
+
+    if (!poll) {
+      return res.status(404).json({ message: 'Poll not found' });
+    }
+
+    return res.status(200).json(poll);
+  }
+);
+
+// @route POST /polls/:pollId/:imageIdx/vote
+// @desc To vote on poll
+// @params none
+// @access private
+router.post(
+  '/:pollId/:imageIdx/vote',
+  passport.authenticate('jwt', { session: true }),
+  async (req, res) => {
+    const { isValid, statusCode, message } = await validatePollVoteReq(req);
+
+    if (!isValid) {
+      return res.status(statusCode).json({ message: message });
+    }
+
+    const vote = new Vote({
+      userId: req.user._id,
+      pollId: req.params.pollId,
+      pollImageIdx: imageIdx,
+    });
+    await vote.save();
+
+    if (!vote) {
+      return res.status(400).json({ message: 'Vote failed to save' });
+    }
+
+    poll.images[imageIdx].voteIds.push(vote._id);
+    await poll.save();
+
+    return res.status(200).json(poll);
+  }
+);
+
+// @route DELETE /polls/:pollId/:imageIdx/vote
+// @desc To delete vote on poll
+// @params none
+// @access private
+router.delete(
+  '/:pollId/:imageIdx/vote',
+  passport.authenticate('jwt', { session: true }),
+  async (req, res) => {
+    const { isValid, statusCode, message } = await validatePollVoteReq(req);
+
+    if (!isValid) {
+      return res.status(statusCode).json({ message: message });
+    }
+
+    const vote = await Vote.find({
+      $and: [{ userId: req.user._id }, { pollId: req.params.pollId }],
+    });
+
+    if (!vote) {
+      return res.status(404).json({ message: 'Failed to find vote' });
+    }
+
+    await vote.remove();
+
+    // remove voteId from image's voteIds array
+    poll.images[imageIdx].voteIds.pull(vote._id);
+    await poll.save();
+
+    return res.status(200).json(poll);
   }
 );
 

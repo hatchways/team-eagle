@@ -7,8 +7,9 @@ const PollSchema = new Schema({
     required: true,
   },
   userId: {
-    type: String,
+    type: Schema.Types.ObjectId,
     required: true,
+    ref: 'users',
   },
   date: {
     type: Date,
@@ -20,6 +21,13 @@ const PollSchema = new Schema({
         type: String,
         required: true,
       },
+      voteIds: [
+        {
+          type: Schema.Types.ObjectId,
+          required: true,
+          ref: 'votes',
+        },
+      ],
     },
   ],
 });

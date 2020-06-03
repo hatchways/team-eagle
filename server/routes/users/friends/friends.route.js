@@ -3,7 +3,7 @@ const passport = require('passport');
 const mongoose = require('mongoose');
 const router = express.Router({ mergeParams: true });
 const User = require('../../../models/user');
-const routeUtil = require('../../util');
+const routeUtil = require('../util');
 
 // @route:  GET /users/:userId/friends/followers
 // @desc:   Find and return array of followers of userId
