@@ -52,7 +52,7 @@ router.delete(
     const pollId = req.params['pollId'];
     Poll.findById(pollId, function (err, poll) {
       if (err) return res.status(400).json({ error: 'poll not found' });
-      else if (poll._id != req.user.id)
+      else if (poll._id != req.user._id)
         return res.status(400).json({ error: 'unauthorised deletion' });
       poll.remove();
       return res.status(200).json({ status: 'ok' });
@@ -76,7 +76,7 @@ router.put(
     Poll.findById(pollId, (err, poll) => {
       if (err) return console.log(err);
       // Update the title if the title exists
-      else if (poll.userId != req.user.id)
+      else if (poll.userId != req.user._id)
         return res.status(400).json({ error: 'unauthorised deletion' });
       if (req.body.title) {
         if (req.body.title != poll.title) {

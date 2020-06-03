@@ -73,7 +73,7 @@ router.post('/login', (req, res) => {
 
     const isMatch = user.checkPassword(password);
     if (isMatch) {
-      const payload = { id: user.id };
+      const payload = { id: user._id };
       const token = user.signJWT(payload);
       const options = {
         httpOnly: false,
