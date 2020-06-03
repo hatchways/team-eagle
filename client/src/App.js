@@ -7,10 +7,11 @@ import { UserContext } from './components/contexts/UserContext';
 import { FriendsContext } from './components/contexts/FriendsContext';
 
 import NavBar from './components/NavBar';
-import LandingPage from './pages/Landing/Landing';
 import FriendsLayout from './pages/Friends/Friends';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Loading from './components/Loading';
+import Login from './pages/Landing/Login';
+import Signup from './pages/Landing/Signup';
 
 import './App.css';
 
@@ -66,18 +67,10 @@ function App() {
           </>
         ) : (
           <Switch>
-            <Route
-              exact
-              path="/signup"
-              render={() => <LandingPage form="signup" />}
-            />
-            <Route
-              exact
-              path="/login"
-              render={() => <LandingPage form="login" />}
-            />
+            <Route exact path="/signup" component={Signup} />
+            <Route exact path="/login" component={Login} />
             <Route path="*">
-              <Redirect to="/signup" />
+              <Redirect to="/login" />
             </Route>
           </Switch>
         )}
