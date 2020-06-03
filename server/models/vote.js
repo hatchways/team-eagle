@@ -12,6 +12,10 @@ const VoteSchema = new Schema({
     required: true,
     ref: 'polls',
   },
+  c: {
+    type: Number,
+    required: true,
+  },
 });
 
 module.exports = Vote = mongoose.model('votes', VoteSchema);

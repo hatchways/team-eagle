@@ -178,7 +178,11 @@ router.post(
       return res.status(404).json({ message: 'Poll not found' });
     }
 
-    const vote = new Vote({ userId: req.user._id, pollId: req.params.pollId });
+    const vote = new Vote({
+      userId: req.user._id,
+      pollId: req.params.pollId,
+      pollImageIdx: imageIdx,
+    });
     await vote.save();
 
     if (!vote) {
