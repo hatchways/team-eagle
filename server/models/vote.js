@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+mongoose.set('useCreateIndex', true);
 const Schema = mongoose.Schema;
 
 const VoteSchema = new Schema({
@@ -6,18 +7,18 @@ const VoteSchema = new Schema({
     type: Schema.Types.ObjectId,
     required: true,
     ref: 'users',
-    index: true,
   },
   pollId: {
     type: Schema.Types.ObjectId,
     required: true,
     ref: 'polls',
-    index: true,
   },
   pollImageIdx: {
     type: Number,
     required: true,
   },
 });
+
+VoteSchema.index({ userId: 1, pollId: 1 });
 
 module.exports = Vote = mongoose.model('votes', VoteSchema);
