@@ -7,6 +7,7 @@ import { useDashboardStyles } from '../Dashboard/Dashboard';
 import Friends from '../Dashboard/Friends';
 import PollImages from '../Dashboard/PollImages';
 import PollPageHeader from './PollPageHeader';
+import VoteListItem from './VoteListItem';
 
 const useStyles = makeStyles((theme) => ({
   uColorGrey: {
@@ -34,12 +35,12 @@ export default function Poll() {
       {
         url:
           'https://images-na.ssl-images-amazon.com/images/I/61mSyjeYXWL._AC_UX679_.jpg',
-        votes: 12,
+        numVotes: 12,
       },
       {
         url:
           'https://lp2.hm.com/hmgoepprod?set=quality[79],source[/94/36/9436b50129c000035f451e0524d74e0f08006338.jpg],origin[dam],category[kids_babyboy_topstshirts],type[DESCRIPTIVESTILLLIFE],res[s],hmver[1]&call=url[file:/product/main]',
-        votes: 20,
+        numVotes: 20,
       },
     ],
   };
@@ -103,6 +104,9 @@ export default function Poll() {
             imageSize="15vh"
             favIconSize="5px"
           />
+          {mockVotes.map((voteItem) => (
+            <VoteListItem key={voteItem._id} vote={voteItem} />
+          ))}
         </Grid>
       </Grid>
     </Container>

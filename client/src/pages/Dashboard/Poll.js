@@ -46,7 +46,7 @@ export default function Polls(props) {
           className={classes.subtitle}
         >
           {props.images.reduce((acc, image) => {
-            return acc + image.votes;
+            return acc + image.numVotes;
           }, 0) + ' answers'}
         </Typography>
         <PollImages images={props.images} />

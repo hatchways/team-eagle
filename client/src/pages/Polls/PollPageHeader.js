@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
 function PollPageHeader(props) {
   const classes = useStyles();
   const voteTotal = props.mockPoll.images.reduce(
-    (accum, img) => accum + img.votes,
+    (accum, img) => accum + img.numVotes,
     0
   );
 

@@ -23,7 +23,7 @@ export default function PollImages(props) {
               <Grid item>
                 <FavoriteIcon fontSize={favIconSize} color="secondary" />
               </Grid>
-              <Grid item>{image.votes}</Grid>
+              <Grid item>{image.numVotes}</Grid>
             </Grid>
           </Grid>
         );
