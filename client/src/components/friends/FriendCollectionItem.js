@@ -10,6 +10,7 @@ import {
   Avatar,
 } from '@material-ui/core';
 import { green, red } from '@material-ui/core/colors';
+
 import testImg from '../../images/img1.png';
 import { FriendsContext } from '../contexts/FriendsContext';
 

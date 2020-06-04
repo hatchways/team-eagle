@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-import { Grid, Hidden, Container } from '@material-ui/core';
+import { Grid, Hidden, Container, Typography } from '@material-ui/core';
 
 import { dashboardUseStyles } from '../Dashboard/Dashboard';
 import Friends from '../Dashboard/Friends';
@@ -9,6 +9,9 @@ import Friends from '../Dashboard/Friends';
 const useStyles = makeStyles((theme) => ({
   uColorGrey: {
     color: theme.palette.grey[500],
+  },
+  uPaddingLeft: {
+    paddingLeft: theme.spacing(6),
   },
   backLinkText: {
     textDecoration: 'underline',
@@ -30,7 +33,10 @@ export default function Poll(props) {
             <Friends />
           </Grid>
         </Hidden>
-        <Grid item className={dashboardClasses.rightSide}>
+        <Grid
+          item
+          className={`${dashboardClasses.rightSide} ${classes.uPaddingLeft}`}
+        >
           <span
             onClick={props.history.goBack}
             className={`${classes.backLinkContainer} ${classes.uColorGrey}`}
@@ -38,6 +44,12 @@ export default function Poll(props) {
             <span> &lt; </span>
             <span className={classes.backLinkText}> Back </span>
           </span>
+          <br />
+          <br />
+          <Typography variant="h2" gutterBottom>
+            Which one do you like?
+          </Typography>
+          <span className={classes.uColorGrey}> 24 answers </span>
         </Grid>
       </Grid>
     </Container>
