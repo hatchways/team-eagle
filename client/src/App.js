@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
 import { MuiThemeProvider } from '@material-ui/core';
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
+import {
+  BrowserRouter,
+  HashRouter,
+  Route,
+  Switch,
+  Redirect,
+} from 'react-router-dom';
 
 import { theme } from './themes/theme';
 import { UserContext } from './components/contexts/UserContext';
@@ -12,6 +18,7 @@ import Dashboard from './pages/Dashboard/Dashboard';
 import Loading from './components/Loading';
 import Login from './pages/Landing/Login';
 import Signup from './pages/Landing/Signup';
+import PollHome from './pages/Polls/PollHome';
 
 import './App.css';
 
@@ -53,12 +60,13 @@ function App() {
 
   return (
     <MuiThemeProvider theme={theme}>
-      <BrowserRouter>
+      <HashRouter>
         {user._id ? (
           <>
             <NavBar />
             <Switch>
               <Route exact path="/friends" component={FriendsLayout} />
+              <Route exact path="/polls" component={PollHome} />
               <Route exact path="/" component={Dashboard} />
               <Route path="*">
                 <Redirect to="/" />
@@ -74,7 +82,7 @@ function App() {
             </Route>
           </Switch>
         )}
-      </BrowserRouter>
+      </HashRouter>
     </MuiThemeProvider>
   );
 }
