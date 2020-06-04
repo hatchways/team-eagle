@@ -24,6 +24,7 @@ const PollSchema = new Schema({
       numVotes: {
         type: Number,
         required: true,
+        default: 0,
       },
     },
   ],
