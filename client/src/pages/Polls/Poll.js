@@ -1,9 +1,39 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Hidden, Container } from '@material-ui/core';
 
 import Friends from '../Dashboard/Friends';
+
+export default function Poll(props) {
+  const classes = useStyles();
+
+  const handleBack = () => {
+    props.history.goBack();
+  };
+
+  return (
+    <Container className={classes.root}>
+      <Grid container>
+        <Hidden smDown>
+          <Grid item className={classes.leftSide}>
+            <Friends />
+          </Grid>
+        </Hidden>
+        <Grid item className={classes.rightSide}>
+          <span
+            onClick={handleBack}
+            className={`${classes.backLinkContainer} ${classes.uColorGrey}`}
+          >
+            <span> &lt; </span>
+            <span className={classes.backLinkText}> Back </span>
+          </span>
+        </Grid>
+      </Grid>
+    </Container>
+  );
+}
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,22 +54,17 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: theme.spacing(2),
     flexGrow: 1,
   },
+  uColorGrey: {
+    color: theme.palette.grey[500],
+  },
+  backLinkText: {
+    textDecoration: 'underline',
+  },
+  backLinkContainer: {
+    cursor: 'pointer',
+  },
 }));
 
-export default function Poll(props) {
-  const classes = useStyles();
-  return (
-    <Container className={classes.root}>
-      <Grid container>
-        <Hidden smDown>
-          <Grid item className={classes.leftSide}>
-            <Friends />
-          </Grid>
-        </Hidden>
-        <Grid item className={classes.rightSide}>
-          Hello world
-        </Grid>
-      </Grid>
-    </Container>
-  );
-}
+Poll.propTypes = {
+  history: PropTypes.object.isRequired,
+};
