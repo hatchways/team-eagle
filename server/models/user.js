@@ -73,4 +73,23 @@ UserSchema.methods.makeDisactive = function () {
   this.save();
 };
 
+UserSchema.methods.loginRegisterClientResponse = function () {
+  const payload = { id: this._id };
+  const token = this.signJWT(payload);
+  const options = {
+    httpOnly: true,
+  };
+
+  if (process.env.NODE_ENV === 'production') {
+    options.secure = true; // Only send cookies with https protocol
+  }
+
+  this.password = null;
+
+  return {
+    token,
+    options,
+  };
+};
+
 module.exports = User = mongoose.model('users', UserSchema);

@@ -8,6 +8,9 @@ const useStyles = (props) =>
     root: {
       marginRight: props.marginRight ? theme.spacing(1) : 0,
     },
+    badge: {
+      paddingRight: '7px',
+    },
   }));
 
 // Custom props:
@@ -16,7 +19,7 @@ const useStyles = (props) =>
 
 export default function Thumbnail(props) {
   const classes = useStyles(props)();
-  const picture = null;
+  const picture = props.picture;
   if (props.user) {
     if (props.user.picture) {
       picture = props.user.picture;
@@ -25,6 +28,7 @@ export default function Thumbnail(props) {
 
   return (
     <Badge
+      className={classes.badge}
       color="secondary"
       variant="dot"
       invisible={props.invisible ? props.invisible : 'yes'}
