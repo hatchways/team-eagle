@@ -10,6 +10,7 @@ import NavBar from './components/NavBar';
 import LandingPage from './pages/Landing/Landing';
 import FriendsLayout from './pages/Friends/Friends';
 import Dashboard from './pages/Dashboard/Dashboard';
+import Poll from './pages/Polls/Poll';
 
 import './App.css';
 
@@ -45,6 +46,7 @@ function App() {
           <>
             <NavBar />
             <Switch>
+              <Route exact path="/polls/:pollId" component={Poll} />
               <Route exact path="/friends" component={FriendsLayout} />
               <Route exact path="/" component={Dashboard} />
               <Route path="*">
