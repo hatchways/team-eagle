@@ -1,29 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Hidden, Container } from '@material-ui/core';
 
+import { dashboardUseStyles } from '../Dashboard/Dashboard';
 import Friends from '../Dashboard/Friends';
 
 export default function Poll(props) {
+  const dashboardClasses = dashboardUseStyles();
   const classes = useStyles();
 
-  const handleBack = () => {
-    props.history.goBack();
-  };
-
   return (
-    <Container className={classes.root}>
+    <Container className={dashboardClasses.root}>
       <Grid container>
         <Hidden smDown>
-          <Grid item className={classes.leftSide}>
+          <Grid item className={dashboardClasses.leftSide}>
             <Friends />
           </Grid>
         </Hidden>
-        <Grid item className={classes.rightSide}>
+        <Grid item className={dashboardClasses.rightSide}>
           <span
-            onClick={handleBack}
+            onClick={props.history.goBack}
             className={`${classes.backLinkContainer} ${classes.uColorGrey}`}
           >
             <span> &lt; </span>
@@ -36,24 +33,6 @@ export default function Poll(props) {
 }
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    paddingTop: theme.spacing(10),
-    minHeight: '100vh',
-    display: 'flex',
-  },
-  leftSide: {
-    width: 200,
-    paddingTop: theme.spacing(5),
-    borderRight: `1px solid ${theme.palette.grey[200]}`,
-    height: '100%',
-  },
-  rightSide: {
-    width: `calc(100% - 200px)`,
-    paddingTop: theme.spacing(5),
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
-    flexGrow: 1,
-  },
   uColorGrey: {
     color: theme.palette.grey[500],
   },
