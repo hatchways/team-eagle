@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-import { Grid, Hidden, Container, Typography } from '@material-ui/core';
+import { Grid, Hidden, Container } from '@material-ui/core';
 
 import { useDashboardStyles } from '../Dashboard/Dashboard';
 import Friends from '../Dashboard/Friends';
 import PollImages from '../Dashboard/PollImages';
 import PollPageHeader from './PollPageHeader';
-import VoteListItem from './VoteListItem';
+import VoteList from './VoteList';
 
 const useStyles = makeStyles((theme) => ({
   uColorGrey: {
@@ -104,9 +104,7 @@ export default function Poll() {
             imageSize="15vh"
             favIconSize="5px"
           />
-          {mockVotes.map((voteItem) => (
-            <VoteListItem key={voteItem._id} vote={voteItem} />
-          ))}
+          <VoteList mockVotes={mockVotes} />
         </Grid>
       </Grid>
     </Container>
