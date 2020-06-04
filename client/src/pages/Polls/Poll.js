@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Hidden, Container, Typography } from '@material-ui/core';
 
-import { dashboardUseStyles } from '../Dashboard/Dashboard';
+import { useDashboardStyles } from '../Dashboard/Dashboard';
 import Friends from '../Dashboard/Friends';
 
 const useStyles = makeStyles((theme) => ({
@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Poll(props) {
-  const dashboardClasses = dashboardUseStyles();
+  const dashboardClasses = useDashboardStyles();
   const classes = useStyles();
 
   return (
