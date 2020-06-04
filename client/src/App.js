@@ -11,7 +11,7 @@ import Loading from './components/Loading';
 import LandingPage from './pages/Landing/Landing';
 import FriendsLayout from './pages/Friends/Friends';
 import Dashboard from './pages/Dashboard/Dashboard';
-import Poll from './pages/Polls/Poll';
+import Poll from './pages/Poll/Poll';
 
 import './App.css';
 
