@@ -4,15 +4,24 @@ import { Grid } from '@material-ui/core';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 
 export default function PollImages(props) {
+  const imageSize = props.imageSize ? props.imageSize : '65px';
+  const favIconSize = props.favIconSize ? props.favIconSize : 'default';
+  const justifyContainer = props.justifyContainer
+    ? props.justifyContainer
+    : 'center';
+
   return (
-    <Grid container justify="center" spacing={2}>
+    <Grid justify={justifyContainer} container spacing={2}>
       {props.images.map((image, i) => {
         return (
           <Grid item key={i}>
-            <img src={image.url} />
+            <img
+              style={{ width: imageSize, height: imageSize }}
+              src={image.url}
+            />
             <Grid container justify="center">
               <Grid item>
-                <FavoriteIcon color="secondary" />
+                <FavoriteIcon fontSize={favIconSize} color="secondary" />
               </Grid>
               <Grid item>{image.votes}</Grid>
             </Grid>
@@ -25,4 +34,7 @@ export default function PollImages(props) {
 
 PollImages.propTypes = {
   images: PropTypes.array.isRequired,
+  imageSize: PropTypes.string,
+  favIconSize: PropTypes.string,
+  justifyContainer: PropTypes.string,
 };
