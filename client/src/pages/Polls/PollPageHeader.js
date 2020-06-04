@@ -5,6 +5,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Typography } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    marginBottom: theme.spacing(5),
+  },
   uColorGrey: {
     color: theme.palette.grey[500],
   },
@@ -27,7 +30,7 @@ function PollPageHeader(props) {
   );
 
   return (
-    <>
+    <div className={classes.root}>
       <span
         onClick={props.history.goBack}
         className={`${classes.backLinkContainer} ${classes.uColorGrey}`}
@@ -41,7 +44,7 @@ function PollPageHeader(props) {
         {props.mockPoll.title}
       </Typography>
       <span className={classes.uColorGrey}> {voteTotal} answers </span>
-    </>
+    </div>
   );
 }
 
