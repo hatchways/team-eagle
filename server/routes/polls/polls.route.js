@@ -184,7 +184,8 @@ router.post(
       return res.status(400).json({ message: 'Vote failed to save' });
     }
 
-    poll.images[imageIdx].voteIds.push(vote._id);
+    // increase numVotes in poll
+    poll.images[imageIdx].numVotes += 1;
     await poll.save();
 
     return res.status(200).json(poll);
@@ -215,8 +216,8 @@ router.delete(
 
     await vote.remove();
 
-    // remove voteId from image's voteIds array
-    poll.images[imageIdx].voteIds.pull(vote._id);
+    // decrease numVotes in poll
+    if (poll.images[imageIdx].numVotes > 0) poll.images[imageIdx].numVotes -= 1;
     await poll.save();
 
     return res.status(200).json(poll);
