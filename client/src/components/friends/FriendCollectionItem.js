@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import green from '@material-ui/core/colors/green';
-import red from '@material-ui/core/colors/red';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import Chip from '@material-ui/core/Chip';
-import Avatar from '@material-ui/core/Avatar';
+import {
+  makeStyles,
+  ListItem,
+  ListItemSecondaryAction,
+  ListItemText,
+  ListItemAvatar,
+  Chip,
+  Avatar,
+} from '@material-ui/core';
+import { green, red } from '@material-ui/core/colors';
 import testImg from '../../images/img1.png';
 import { FriendsContext } from '../contexts/FriendsContext';
 

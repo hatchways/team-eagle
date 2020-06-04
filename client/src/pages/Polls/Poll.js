@@ -6,6 +6,18 @@ import { Grid, Hidden, Container } from '@material-ui/core';
 import { dashboardUseStyles } from '../Dashboard/Dashboard';
 import Friends from '../Dashboard/Friends';
 
+const useStyles = makeStyles((theme) => ({
+  uColorGrey: {
+    color: theme.palette.grey[500],
+  },
+  backLinkText: {
+    textDecoration: 'underline',
+  },
+  backLinkContainer: {
+    cursor: 'pointer',
+  },
+}));
+
 export default function Poll(props) {
   const dashboardClasses = dashboardUseStyles();
   const classes = useStyles();
@@ -31,18 +43,6 @@ export default function Poll(props) {
     </Container>
   );
 }
-
-const useStyles = makeStyles((theme) => ({
-  uColorGrey: {
-    color: theme.palette.grey[500],
-  },
-  backLinkText: {
-    textDecoration: 'underline',
-  },
-  backLinkContainer: {
-    cursor: 'pointer',
-  },
-}));
 
 Poll.propTypes = {
   history: PropTypes.object.isRequired,
