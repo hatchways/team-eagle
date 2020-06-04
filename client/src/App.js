@@ -7,18 +7,18 @@ import { UserContext } from 'components/contexts/UserContext';
 import { FriendsContext } from 'components/contexts/FriendsContext';
 
 import NavBar from './components/NavBar';
+import Loading from './components/Loading';
 import LandingPage from './pages/Landing/Landing';
 import FriendsLayout from './pages/Friends/Friends';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Poll from './pages/Polls/Poll';
-import Loading from './components/Loading';
 
 import './App.css';
 
 function App() {
   const user = React.useContext(UserContext);
   const friends = React.useContext(FriendsContext);
-  const [userLoading, setUserLoading] = useState(false);
+  const [userLoading, setUserLoading] = useState(true);
 
   React.useEffect(() => {
     const fetchData = async () => {
