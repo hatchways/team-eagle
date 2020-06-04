@@ -10,7 +10,6 @@ import {
   Avatar,
 } from '@material-ui/core';
 import { green, red } from '@material-ui/core/colors';
-
 import testImg from '../../images/img1.png';
 import { FriendsContext } from '../contexts/FriendsContext';
 
@@ -45,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function FriendListItem(props) {
+export default function FriendCollectionItem(props) {
   const classes = useStyles();
   const friends = React.useContext(FriendsContext);
   const user = props.user;
@@ -72,9 +71,8 @@ export default function FriendListItem(props) {
     }
   };
 
-  const value = 2;
   return (
-    <ListItem key={value} button>
+    <ListItem button>
       <ListItemAvatar>
         <Avatar alt={`${user.name}'s avatar`} src={testImg} />
       </ListItemAvatar>
@@ -91,7 +89,7 @@ export default function FriendListItem(props) {
   );
 }
 
-FriendListItem.propTypes = {
+FriendCollectionItem.propTypes = {
   user: PropTypes.object.isRequired,
   labelId: PropTypes.string.isRequired,
   isFollowable: PropTypes.bool.isRequired,
