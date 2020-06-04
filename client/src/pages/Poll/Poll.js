@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
   uColorGrey: {
     color: theme.palette.grey[500],
   },
-  uPaddingLeft: {
+  uPadding: {
     paddingLeft: theme.spacing(6),
   },
   backLinkText: {
@@ -21,6 +21,12 @@ const useStyles = makeStyles((theme) => ({
   },
   backLinkContainer: {
     cursor: 'pointer',
+  },
+  [theme.breakpoints.down('sm')]: {
+    uPadding: {
+      paddingTop: theme.spacing(0),
+      paddingLeft: theme.spacing(2),
+    },
   },
 }));
 
@@ -35,12 +41,12 @@ export default function Poll() {
       {
         url:
           'https://images-na.ssl-images-amazon.com/images/I/61mSyjeYXWL._AC_UX679_.jpg',
-        numVotes: 12,
+        numVotes: 2,
       },
       {
         url:
           'https://lp2.hm.com/hmgoepprod?set=quality[79],source[/94/36/9436b50129c000035f451e0524d74e0f08006338.jpg],origin[dam],category[kids_babyboy_topstshirts],type[DESCRIPTIVESTILLLIFE],res[s],hmver[1]&call=url[file:/product/main]',
-        numVotes: 20,
+        numVotes: 1,
       },
     ],
   };
@@ -56,7 +62,7 @@ export default function Poll() {
       },
       imageIdx: 0,
       createdAt: '2020-03-10T23:44:56.289Z',
-      updatedAt: '2020-03-10T23:47:56.289Z',
+      updatedAt: '2020-06-03T23:47:56.289Z',
     },
     {
       _id: '12412423123124',
@@ -68,7 +74,7 @@ export default function Poll() {
       },
       imageIdx: 1,
       createdAt: '2020-03-10T23:44:56.289Z',
-      updatedAt: '2020-03-10T23:49:56.289Z',
+      updatedAt: '2020-05-31T23:49:56.289Z',
     },
     {
       _id: '12412423123124',
@@ -80,7 +86,7 @@ export default function Poll() {
       },
       imageIdx: 0,
       createdAt: '2020-03-10T23:44:56.289Z',
-      updatedAt: '2020-03-10T23:50:56.289Z',
+      updatedAt: '2020-05-20T23:50:56.289Z',
     },
   ];
 
@@ -94,7 +100,7 @@ export default function Poll() {
         </Hidden>
         <Grid
           item
-          className={`${dashboardClasses.rightSide} ${classes.uPaddingLeft}`}
+          className={`${dashboardClasses.rightSide} ${classes.uPadding}`}
         >
           <PollPageHeader mockPoll={mockPoll} />
 
@@ -104,7 +110,7 @@ export default function Poll() {
             imageSize="15vh"
             favIconSize="5px"
           />
-          <VoteList mockVotes={mockVotes} />
+          <VoteList poll={mockPoll} mockVotes={mockVotes} />
         </Grid>
       </Grid>
     </Container>
