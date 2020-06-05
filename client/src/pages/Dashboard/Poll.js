@@ -30,6 +30,10 @@ export default function Polls(props) {
     alert('open');
   }
 
+  function getVotes(imageIndex) {
+    return props.images[imageIndex].voteIds.length;
+  }
+
   return (
     <Button
       className={classes.root}
@@ -44,20 +48,18 @@ export default function Polls(props) {
           component="div"
           className={classes.subtitle}
         >
-          {props.images.reduce((acc, image) => {
-            return acc + image.votes;
-          }, 0) + ' answers'}
+          {getVotes(0) + getVotes(1) + ' answers'}
         </Typography>
         <Grid container justify="center" spacing={2}>
           {props.images.map((image, i) => {
             return (
               <Grid item key={i}>
-                <img src={image.url} />
+                <img src={image.url} alt="Poll image" />
                 <Grid container justify="center">
                   <Grid item>
                     <FavoriteIcon color="secondary" />
                   </Grid>
-                  <Grid item>{image.votes}</Grid>
+                  <Grid item>{getVotes(i)}</Grid>
                 </Grid>
               </Grid>
             );

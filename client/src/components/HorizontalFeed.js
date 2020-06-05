@@ -55,34 +55,38 @@ export default function HorizontalFeed(props) {
         </Grid>
         <Grid item>{props.button}</Grid>
       </Grid>
-      <Grid container spacing={2} className={classes.gridContainer}>
-        {!props.children ? (
-          <>
-            <Grid item>
-              <Skeleton variant="rect" width={280} height={280} />
-            </Grid>
-            <Grid item>
-              <Skeleton variant="rect" width={280} height={280} />
-            </Grid>
-            <Grid item>
-              <Skeleton variant="rect" width={280} height={280} />
-            </Grid>
-          </>
-        ) : (
-          props.children.map((Child, i) => {
-            return (
-              <Grid item key={i} className={classes.gridItem}>
-                {Child}
+      {props.noContent ? (
+        <Typography variant="subtitle1">There's nothing here</Typography>
+      ) : (
+        <Grid container spacing={2} className={classes.gridContainer}>
+          {!props.children ? (
+            <>
+              <Grid item>
+                <Skeleton variant="rect" width={280} height={280} />
               </Grid>
-            );
-          })
-        )}
-        {props.children && props.children.length > 2 ? (
-          <IconButton className={classes.scrollButton}>
-            <ArrowForwardIosIcon />
-          </IconButton>
-        ) : null}
-      </Grid>
+              <Grid item>
+                <Skeleton variant="rect" width={280} height={280} />
+              </Grid>
+              <Grid item>
+                <Skeleton variant="rect" width={280} height={280} />
+              </Grid>
+            </>
+          ) : (
+            props.children.map((Child, i) => {
+              return (
+                <Grid item key={i} className={classes.gridItem}>
+                  {Child}
+                </Grid>
+              );
+            })
+          )}
+          {props.children && props.children.length > 2 ? (
+            <IconButton className={classes.scrollButton}>
+              <ArrowForwardIosIcon />
+            </IconButton>
+          ) : null}
+        </Grid>
+      )}
     </Container>
   );
 }
