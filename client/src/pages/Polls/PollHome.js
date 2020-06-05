@@ -78,12 +78,38 @@ export default function PollHome(props) {
     setState({ ...state, currentPage: value });
   };
 
-  const sortPolls = (sortBy) => {
+  const sortPolls = (e, sortBy) => {
+    e.preventDefault();
+    let pollsTemp = state.polls;
+    // Switch to choose the sorter
     switch (sortBy) {
       case 'votesAsc':
-        currentPolls.sort(function (a, b) {
+        //  Sorting by least votes
+        pollsTemp.sort(function (a, b) {
           return a.votes - b.votes;
         });
+        setState({ ...state, polls: pollsTemp });
+        break;
+      case 'votesDsc':
+        // Sorting by most votes
+        pollsTemp.sort(function (a, b) {
+          return b.votes - a.votes;
+        });
+        setState({ ...state, polls: pollsTemp });
+        break;
+      case 'dateAsc':
+        // Sorting by newest
+        pollsTemp.sort(function (a, b) {
+          return a.date - b.date;
+        });
+        setState({ ...state, polls: pollsTemp });
+        break;
+      case 'dateDsc':
+        // Sorting by oldest
+        pollsTemp.sort(function (a, b) {
+          return b.date - a.date;
+        });
+        setState({ ...state, polls: pollsTemp });
         break;
       default:
         console.log('wrong options in sorter');
@@ -118,20 +144,32 @@ export default function PollHome(props) {
         <div className={classes.sorters}>
           Sorty By:
           <a href="#">
-            <Chip label="Latest First" className={classes.chip} />
+            <Chip
+              label="Latest First"
+              className={classes.chip}
+              onClick={(e) => sortPolls(e, 'dateDsc')}
+            />
           </a>
           <a href="#">
-            <Chip label="Oldest First" className={classes.chip} />
+            <Chip
+              label="Oldest First"
+              className={classes.chip}
+              onClick={(e) => sortPolls(e, 'dateAsc')}
+            />
           </a>
           <a href="#">
             <Chip
               label="Most Voted"
               className={classes.chip}
-              onClick={sortPolls('votesAsc')}
+              onClick={(e) => sortPolls(e, 'votesDsc')}
             />
           </a>
           <a href="#">
-            <Chip label="Least Voted" className={classes.chip} />
+            <Chip
+              label="Least Voted"
+              className={classes.chip}
+              onClick={(e) => sortPolls(e, 'votesAsc')}
+            />
           </a>
         </div>
         <Grid container spacing={2}>
