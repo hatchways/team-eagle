@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
+import { makeStyles, List, Divider, TextField } from '@material-ui/core';
+
 import FriendCollectionItem from './FriendCollectionItem';
-import TextField from '@material-ui/core/TextField';
 import { debounce } from '../../util/util';
 import { FriendsContext } from '../contexts/FriendsContext';
 import { UserContext } from '../contexts/UserContext';
@@ -84,8 +82,8 @@ export default function FriendCollection(props) {
   }, 250);
 
   /**
-   * Changes in search of suggestions tab cause an
-   * API call since it's dynamic
+   * Typing in 'suggestions' input field cause
+   * API calls since search is designed to be dynamic
    */
   const handleChange = (event) => {
     if (props.type === 'suggestions') {

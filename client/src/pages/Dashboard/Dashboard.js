@@ -7,7 +7,7 @@ import Friends from './Friends';
 import Polls from './Polls';
 import FriendsLists from './FriendsLists';
 
-const useStyles = makeStyles((theme) => ({
+export const useDashboardStyles = makeStyles((theme) => ({
   root: {
     paddingTop: theme.spacing(10),
     minHeight: '100vh',
@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Dashboard(props) {
-  const classes = useStyles();
+  const classes = useDashboardStyles();
   return (
     <Container className={classes.root}>
       <Grid container>

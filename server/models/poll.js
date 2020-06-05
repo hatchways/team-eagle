@@ -31,13 +31,11 @@ const PollSchema = new Schema({
         type: String,
         required: true,
       },
-      voteIds: [
-        {
-          type: Schema.Types.ObjectId,
-          required: true,
-          ref: 'votes',
-        },
-      ],
+      numVotes: {
+        type: Number,
+        required: true,
+        default: 0,
+      },
     },
   ],
 });
