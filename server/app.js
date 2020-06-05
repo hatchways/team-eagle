@@ -14,6 +14,8 @@ const authRouter = require('./routes/auth/auth.route');
 const pollsRouter = require('./routes/polls/polls.route');
 // Friends routes
 const friendsRouter = require('./routes/users/friends/friends.route');
+// Friend List routes
+const friendListsRouter = require('./routes/friendLists/friendLists.route');
 
 const { json, urlencoded } = express;
 
@@ -51,6 +53,8 @@ app.use('/auth', authRouter);
 app.use('/polls', pollsRouter);
 // Friends Routes
 app.use('/users/:userId/friends', friendsRouter);
+// Friend List Routes
+app.use('/friendLists', friendListsRouter);
 
 // Catch 404 and forward to error handler
 app.use(function (req, res, next) {
