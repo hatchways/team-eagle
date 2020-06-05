@@ -150,7 +150,7 @@ router.get(
   passport.authenticate('jwt', { session: true }),
   async (req, res) => {
     const poll = await Poll.find({
-      $and: [{ _id: req.params.pollId }, { friendIds: req.params.userId }],
+      $and: [{ _id: req.params.pollId }, { friendIds: req.user._id }],
     });
 
     if (!poll) {
@@ -169,7 +169,9 @@ router.post(
   '/:pollId/:imageIdx/vote',
   passport.authenticate('jwt', { session: true }),
   async (req, res) => {
-    const { isValid, statusCode, message } = await validatePollVoteReq(req);
+    const { poll, isValid, statusCode, message } = await validatePollVoteReq(
+      req
+    );
 
     if (!isValid) {
       return res.status(statusCode).json({ message: message });
@@ -202,7 +204,9 @@ router.delete(
   '/:pollId/:imageIdx/vote',
   passport.authenticate('jwt', { session: true }),
   async (req, res) => {
-    const { isValid, statusCode, message } = await validatePollVoteReq(req);
+    const { poll, isValid, statusCode, message } = await validatePollVoteReq(
+      req
+    );
 
     if (!isValid) {
       return res.status(statusCode).json({ message: message });

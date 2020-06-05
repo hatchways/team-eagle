@@ -16,7 +16,10 @@ module.exports = async function validatePollVoteReq(req) {
   }
 
   // Find poll using :pollId req param
-  const poll = await Poll.findById(req.params.pollId);
+  const poll = await Poll.find({
+    $and: [{ _id: req.params.pollId }, { friendIds: req.user._id }],
+  });
+
   if (!poll) {
     isValid = false;
     statusCode = 404;
@@ -26,5 +29,5 @@ module.exports = async function validatePollVoteReq(req) {
   }
 
   isValid = true;
-  return { isValid, statusCode, message };
+  return { poll, isValid, statusCode, message };
 };
