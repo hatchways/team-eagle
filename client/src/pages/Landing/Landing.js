@@ -1,21 +1,40 @@
 import React from 'react';
+
+import { Link as RouterLink } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Card, Container, Button } from '@material-ui/core';
 import ForumRoundedIcon from '@material-ui/icons/ForumRounded';
-import image from '../../images/woman-laptop.png';
-import AuthNav from './AuthNav';
-import LoginForm from './components/LoginForm';
 
-export default function Login(props) {
+import image from 'images/woman-laptop.png';
+
+import SignupForm from './SignupForm';
+import LoginForm from './LoginForm';
+
+export default function Landing(props) {
   const classes = useStyles();
 
   return (
     <Box className={classes.root}>
-      <AuthNav button="signup" />
+      <Container className={classes.nav} component="nav">
+        <ForumRoundedIcon className={classes.forumIcon} />
+        <Button
+          component={RouterLink}
+          variant="contained"
+          color="secondary"
+          className={classes.link}
+          to={props.form === 'signup' ? '/login' : '/signup'}
+        >
+          {props.form === 'signup' ? 'Log In' : 'Sign Up'}
+        </Button>
+      </Container>
       <Container className={classes.wrapper} component="main">
         <Box className={classes.leftSide}>
           <Card className={classes.card}>
-            <LoginForm classes={classes} />
+            {props.form === 'signup' ? (
+              <SignupForm classes={classes} />
+            ) : (
+              <LoginForm classes={classes} />
+            )}
           </Card>
         </Box>
       </Container>
@@ -38,8 +57,8 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     top: 0,
     right: 0,
-    color: theme.palette.common.white,
-    borderColor: theme.palette.common.white,
+    // color: theme.palette.common.white,
+    // borderColor: theme.palette.common.white,
   },
   forumIcon: {
     marginTop: theme.spacing(6),

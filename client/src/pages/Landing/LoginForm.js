@@ -10,9 +10,9 @@ import {
 } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import CheckIcon from '@material-ui/icons/Check';
-import { UserContext } from '../../../components/contexts/UserContext';
+import { UserContext } from 'components/contexts/UserContext';
 
-let passwordMinLength = 6;
+const passwordMinLength = 6;
 
 export default function LoginForm(props) {
   const classes = props.classes;
@@ -125,7 +125,7 @@ export default function LoginForm(props) {
       <Typography variant="h1" className={classes.heading}>
         Log In
       </Typography>
-      <form>
+      <form onSubmit={handleSubmit}>
         <TextField
           autoFocus
           className={classes.input}
@@ -133,11 +133,9 @@ export default function LoginForm(props) {
           variant="outlined"
           value={state.email}
           onChange={handleChange}
-          type="email"
           name="email"
           error={!!state.emailError}
           helperText={state.emailError}
-          required
         />
         <TextField
           className={classes.input}
@@ -160,10 +158,9 @@ export default function LoginForm(props) {
           name="password"
           error={!!state.passwordError}
           helperText={state.passwordError}
-          required
         />
         <Box className={classes.submitBox}>
-          <Button onClick={handleSubmit} variant="contained" color="primary">
+          <Button variant="contained" color="primary" type="submit">
             Log In
           </Button>
           {state.loading ? (
