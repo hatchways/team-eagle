@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import {
   Container,
-  Paper,
   Card,
-  CardActions,
   CardContent,
   Grid,
   makeStyles,
   Chip,
   CardMedia,
   CardHeader,
+  CircularProgress,
 } from '@material-ui/core';
 import Pagination from '@material-ui/lab/Pagination';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
+import axios from 'axios';
 
 const PollCard = (props) => {
   const { poll } = props;
@@ -22,20 +22,17 @@ const PollCard = (props) => {
     <Card>
       <CardHeader title={poll.title} />
       <CardContent>
-        {/* <h3>{poll.title}</h3>         */}
         <Grid container spacing={1} alignContent="stretch" alignItems="center">
           {poll.images.map((image) => {
             return (
               <Grid xs={6} item alignContent="center" alignItems="center">
-                <CardMedia
-                  component="img"
-                  image={image.url}
-                  classes={classes.cardImg}
-                />
-                {/* <a href="#" onClick={(e) => props.handleVote(e, 'xyz123')}>
-                  <img src={image.url} style={{ maxWidth: 250 }} />
-                </a> */}
-                <br />
+                <a href="#" onClick={(e) => props.handleVote(e, 'xyz123')}>
+                  <CardMedia
+                    component="img"
+                    image={image.url}
+                    classes={classes.cardImg}
+                  />
+                </a>
                 <ThumbUpIcon className={[classes.center, classes.thumb]} /> 500
               </Grid>
             );
@@ -49,71 +46,18 @@ const PollCard = (props) => {
 export default function PollHome(props) {
   const classes = useStyles();
   const [state, setState] = useState({
+    loading: true,
     perPage: 4,
     currentPage: 1,
-    polls: [
-      {
-        title: 'What is your favorite type car?',
-        userId: 'abcd2505342',
-        date: Date.now,
-        images: [
-          {
-            url:
-              'https://images.summitmedia-digital.com/topgear/images/2019/05/17/honda-brv-main-1558085308.jpg',
-          },
-          {
-            url:
-              'https://images.summitmedia-digital.com/topgear/images/2019/05/17/honda-brv-main-1558085308.jpg',
-          },
-        ],
-      },
-      {
-        title: 'What is your favorite type car eh?',
-        userId: 'abcd2505342',
-        date: Date.now,
-        images: [
-          {
-            url:
-              'https://images.summitmedia-digital.com/topgear/images/2019/05/17/honda-brv-main-1558085308.jpg',
-          },
-          {
-            url:
-              'https://images.summitmedia-digital.com/topgear/images/2019/05/17/honda-brv-main-1558085308.jpg',
-          },
-        ],
-      },
-      {
-        title: 'What is your favorite type car?',
-        userId: 'abcd2505342',
-        date: Date.now,
-        images: [
-          {
-            url:
-              'https://images.summitmedia-digital.com/topgear/images/2019/05/17/honda-brv-main-1558085308.jpg',
-          },
-          {
-            url:
-              'https://images.summitmedia-digital.com/topgear/images/2019/05/17/honda-brv-main-1558085308.jpg',
-          },
-        ],
-      },
-      {
-        title: 'What is your favorite type car?',
-        userId: 'abcd2505342',
-        date: Date.now,
-        images: [
-          {
-            url:
-              'https://images.summitmedia-digital.com/topgear/images/2019/05/17/honda-brv-main-1558085308.jpg',
-          },
-          {
-            url:
-              'https://images.summitmedia-digital.com/topgear/images/2019/05/17/honda-brv-main-1558085308.jpg',
-          },
-        ],
-      },
-    ],
+    polls: [],
   });
+
+  useEffect(async () => {
+    document.title = 'Polls | Polls App';
+    await axios.get('/polls/votable').then((response) => {
+      setState({ ...state, polls: response.data.polls, loading: false });
+    });
+  }, []);
 
   const indexOfLastPoll = state.currentPage * state.perPage;
   const indexOfFirstPoll = indexOfLastPoll - state.perPage;
@@ -124,10 +68,6 @@ export default function PollHome(props) {
     pageNumbers.push(i);
   }
 
-  useEffect(async () => {
-    document.title = 'Polls | Polls App';
-  });
-
   const handleVote = (e, imageId) => {
     e.preventDefault();
     alert('You just voted');
@@ -135,49 +75,83 @@ export default function PollHome(props) {
 
   const changePage = (e, value) => {
     e.preventDefault();
-    setState({ currentPage: value, ...state });
+    setState({ ...state, currentPage: value });
   };
 
-  return (
-    <Container alignContent="center">
-      <h1 className={classes.h1}>
-        Polls{' '}
-        <span className={classes.subh1}>
-          That require your attention ({state.polls.length})
-        </span>
-      </h1>
-      <div className={classes.sorters}>
-        <a href="#">
-          <Chip label="Sort by newest to oldest" className={classes.chip} />
-        </a>
-        <a href="#">
-          <Chip label="Sort by oldest to lowest" className={classes.chip} />
-        </a>
-        <a href="#">
-          <Chip label="Sort by most voted" className={classes.chip} />
-        </a>
-        <a href="#">
-          <Chip label="Sort by least voted" className={classes.chip} />
-        </a>
-      </div>
-      <Grid container spacing={2}>
-        {currentPolls.map((poll) => {
-          return (
-            <Grid item xs={6}>
-              <PollCard handleVote={handleVote} poll={poll} />
-            </Grid>
-          );
-        })}
+  const sortPolls = (sortBy) => {
+    switch (sortBy) {
+      case 'votesAsc':
+        currentPolls.sort(function (a, b) {
+          return a.votes - b.votes;
+        });
+        break;
+      default:
+        console.log('wrong options in sorter');
+        break;
+    }
+  };
+
+  if (state.loading) {
+    return (
+      <Grid
+        container
+        spacing={0}
+        direction="column"
+        alignItems="center"
+        justify="center"
+        style={{ minHeight: '100vh' }}
+      >
+        <Grid item xs={3}>
+          <CircularProgress color="inherit" className={classes.loading} />
+        </Grid>
       </Grid>
-      <Pagination
-        count={pageNumbers.length}
-        variant="outlined"
-        className={classes.pagination}
-        page={state.currentPage}
-        onChange={changePage}
-      />
-    </Container>
-  );
+    );
+  } else
+    return (
+      <Container alignContent="center">
+        <h1 className={classes.h1}>
+          Polls{' '}
+          <span className={classes.subh1}>
+            That require your attention ({state.polls.length})
+          </span>
+        </h1>
+        <div className={classes.sorters}>
+          Sorty By:
+          <a href="#">
+            <Chip label="Latest First" className={classes.chip} />
+          </a>
+          <a href="#">
+            <Chip label="Oldest First" className={classes.chip} />
+          </a>
+          <a href="#">
+            <Chip
+              label="Most Voted"
+              className={classes.chip}
+              onClick={sortPolls('votesAsc')}
+            />
+          </a>
+          <a href="#">
+            <Chip label="Least Voted" className={classes.chip} />
+          </a>
+        </div>
+        <Grid container spacing={2}>
+          {currentPolls.map((poll) => {
+            return (
+              <Grid item xs={6}>
+                <PollCard handleVote={handleVote} poll={poll} />
+              </Grid>
+            );
+          })}
+        </Grid>
+        <Pagination
+          count={pageNumbers.length}
+          variant="outlined"
+          className={classes.pagination}
+          page={state.currentPage}
+          onChange={changePage}
+        />
+      </Container>
+    );
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -185,6 +159,7 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 'auto',
     marginRight: 'auto',
     marginTop: 20,
+    marginBottom: 20,
   },
   cardImg: {
     height: 0,
@@ -194,7 +169,8 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: 20,
   },
   chip: {
-    marginRight: 20,
+    marginLeft: 5,
+    marginRight: 5,
   },
   subh1: {
     fontSize: 20,
