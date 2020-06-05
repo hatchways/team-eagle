@@ -157,7 +157,13 @@ router.get(
       return res.status(404).json({ message: 'Poll not found' });
     }
 
-    return res.status(200).json(poll);
+    const votes = await Vote.find({
+      $and: [{ userId: req.user._id }, { pollId: req.params.pollId }],
+    })
+      .populate('userId', '_id name')
+      .exec();
+
+    return res.status(200).json({ poll: poll, votes: votes });
   }
 );
 
@@ -212,8 +218,12 @@ router.delete(
       return res.status(statusCode).json({ message: message });
     }
 
-    const vote = await Vote.find({
-      $and: [{ userId: req.user._id }, { pollId: req.params.pollId }],
+    const vote = await Vote.findOne({
+      $and: [
+        { userId: req.user._id },
+        { pollId: req.params.pollId },
+        { imageIdx: req.params.imageIdx },
+      ],
     });
 
     if (!vote) {
