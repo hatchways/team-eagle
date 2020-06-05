@@ -134,7 +134,7 @@ router.get(
     // Logic to find polls with empty friendLists
     Poll.find(
       {
-        $or: [{ friendsLists: [] }, { friendsLists: { $exists: false } }],
+        $or: [{ friendsLists: '' }, { friendsLists: { $exists: false } }],
       },
       (err, docs) => {
         if (err) return res.status(400).json({ error: err });
