@@ -3,7 +3,7 @@ const passport = require('passport');
 const mongoose = require('mongoose');
 const router = express.Router();
 const FriendList = require('../../models/friendList');
-const { getUserLists } = require('./util');
+const { getUserLists } = require('./utils');
 
 // @route:  GET /friendLists
 // @desc:   Get all user's friends lists
