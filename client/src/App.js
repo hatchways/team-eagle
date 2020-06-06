@@ -6,18 +6,19 @@ import { theme } from 'themes/theme';
 import { UserContext } from 'components/contexts/UserContext';
 import { FriendsContext } from 'components/contexts/FriendsContext';
 
-import Loading from 'components/Loading';
-import NavBar from 'components/NavBar';
-import LandingPage from 'pages/Landing/Landing';
-import FriendsLayout from 'pages/Friends/Friends';
-import Dashboard from 'pages/Dashboard/Dashboard';
+import NavBar from './components/NavBar';
+import Loading from './components/Loading';
+import LandingPage from './pages/Landing/Landing';
+import FriendsLayout from './pages/Friends/Friends';
+import Dashboard from './pages/Dashboard/Dashboard';
+import Poll from './pages/Poll/Poll';
 
 import './App.css';
 
 function App() {
   const user = React.useContext(UserContext);
   const friends = React.useContext(FriendsContext);
-  const [userLoading, setUserLoading] = useState(false);
+  const [userLoading, setUserLoading] = useState(true);
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -57,6 +58,7 @@ function App() {
           <>
             <NavBar />
             <Switch>
+              <Route exact path="/polls/:pollId" component={Poll} />
               <Route exact path="/friends" component={FriendsLayout} />
               <Route exact path="/" component={Dashboard} />
               <Route path="*">
