@@ -2,6 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Typography, Grid, Button, Paper } from '@material-ui/core';
 import FavoriteIcon from '@material-ui/icons/Favorite';
+import PollModal from 'components/polls/PollModal';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,9 +26,11 @@ const useStyles = makeStyles((theme) => ({
 export default function Polls(props) {
   // const user = React.useContext(UserContext);
   const classes = useStyles();
+  const [modalOpen, setModalOpen] = React.useState(false);
 
-  function handleClick(e) {
-    alert('open');
+  function toggleModal() {
+    setModalOpen(!modalOpen);
+    console.log(props);
   }
 
   function getVotes(imageIndex) {
@@ -35,37 +38,48 @@ export default function Polls(props) {
   }
 
   return (
-    <Button
-      className={classes.root}
-      square={true}
-      component={Paper}
-      onClick={handleClick}
-    >
-      <Box>
-        <Typography variant="h3">{props.title}</Typography>
-        <Typography
-          variant="subtitle1"
-          component="div"
-          className={classes.subtitle}
-        >
-          {getVotes(0) + getVotes(1) + ' answers'}
-        </Typography>
-        <Grid container justify="center" spacing={2}>
-          {props.images.map((image, i) => {
-            return (
-              <Grid item key={i}>
-                <img src={image.url} alt="Poll image" />
-                <Grid container justify="center">
-                  <Grid item>
-                    <FavoriteIcon color="secondary" />
+    <>
+      <Button
+        className={classes.root}
+        square={true}
+        component={Paper}
+        onClick={toggleModal}
+      >
+        <Box>
+          <Typography variant="h3">{props.title}</Typography>
+          <Typography
+            variant="subtitle1"
+            component="div"
+            className={classes.subtitle}
+          >
+            {getVotes(0) + getVotes(1) + ' answers'}
+          </Typography>
+          <Grid container justify="center" spacing={2}>
+            {props.images.map((image, i) => {
+              return (
+                <Grid item key={i}>
+                  <img src={image.url} alt="Poll image" />
+                  <Grid container justify="center">
+                    <Grid item>
+                      <FavoriteIcon color="secondary" />
+                    </Grid>
+                    <Grid item>{getVotes(i)}</Grid>
                   </Grid>
-                  <Grid item>{getVotes(i)}</Grid>
                 </Grid>
-              </Grid>
-            );
-          })}
-        </Grid>
-      </Box>
-    </Button>
+              );
+            })}
+          </Grid>
+        </Box>
+      </Button>
+      {modalOpen ? (
+        <PollModal
+          toggle={toggleModal}
+          _id={props._id}
+          title={props.title}
+          friendList={props.friendList}
+          images={props.images}
+        />
+      ) : null}
+    </>
   );
 }

@@ -13,15 +13,15 @@ import {
   ListItem,
   ListItemIcon,
 } from '@material-ui/core';
-import ImageIcon from '@material-ui/icons/Image';
-import { useDropzone } from 'react-dropzone';
 import { UserContext } from '../contexts/UserContext';
+import PollImages from './PollImages';
 
 export default function PollModal(props) {
   const classes = useStyles();
   const [state, setState] = React.useState({
-    title: '',
-    images: [],
+    title: props.title || '',
+    images: props.images || [],
+    friendList: props.friendList || '',
     loading: false,
 
     titleError: '',
@@ -30,28 +30,16 @@ export default function PollModal(props) {
 
   const user = React.useContext(UserContext);
 
-  const onDrop = useCallback((acceptedFiles) => {
-    if (acceptedFiles.length != 2) {
-      alert('You can only upload only two files per poll. No less, no more.');
-    } else {
-      setState({
-        ...state,
-        images: acceptedFiles,
-      });
-    }
-  }, []);
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
-
-  const handleChange = (e) => {
+  const handleChange = (key, value) => {
     setState({
       ...state,
-      [e.target.name]: e.target.value || e.target.files,
+      [key]: value,
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    console.log(state);
     let titleError = '';
     let imagesError = '';
 
@@ -125,11 +113,11 @@ export default function PollModal(props) {
         ) : (
           <>
             <Typography id="poll-modal-title" variant="h2">
-              {props.edit ? 'Edit Poll' : 'Create Poll'}
+              {props._id ? 'Edit Poll' : 'Create Poll'}
             </Typography>
             <form className="poll-form" noValidate autoComplete="off">
               <TextField
-                onChange={handleChange}
+                onChange={(e) => handleChange('title', e.target.value)}
                 name="title"
                 fullWidth
                 id="standard-basic"
@@ -137,40 +125,19 @@ export default function PollModal(props) {
                 helperText={state.titleError}
                 error={!!state.titleError}
               />
-              <div
-                {...getRootProps()}
-                className={classes.dropzone}
-                style={{
-                  border: state.imagesError ? '1px solid red' : 'none',
-                }}
-              >
-                <input {...getInputProps()} />
-                {state.images.length ? (
-                  <List className={classes.list}>
-                    {state.images.map((image, i) => {
-                      return (
-                        <ListItem key={i} dense={true}>
-                          <ListItemIcon>
-                            <ImageIcon />
-                          </ListItemIcon>
-                          {image.name}
-                        </ListItem>
-                      );
-                    })}
-                  </List>
-                ) : isDragActive ? (
-                  <p>Drop the files here</p>
-                ) : (
-                  <p>Drag 'n' drop some files here, or click to select</p>
-                )}
-              </div>
+              <PollImages
+                handleChange={handleChange}
+                _id={props._id}
+                images={state.images}
+                imagesError={state.imagesError}
+              />
               <Button
                 mt={3}
                 variant="contained"
                 color="secondary"
                 onClick={handleSubmit}
               >
-                {props.edit ? 'Edit Poll' : 'Create poll'}
+                {props._id ? 'Edit Poll' : 'Create poll'}
               </Button>
             </form>
           </>
@@ -185,21 +152,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  list: {
-    height: theme.spacing(6),
-  },
-  dropzone: {
-    height: 300,
-    maxHeight: '25vh',
-    backgroundColor: theme.palette.grey[200],
-    padding: theme.spacing(4),
-    marginBottom: theme.spacing(4),
-    textAlign: 'center',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    cursor: 'pointer',
   },
   paper: {
     maxHeight: '75vh',
