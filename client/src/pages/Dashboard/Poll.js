@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, Typography, Grid, Button, Paper } from '@material-ui/core';
-import FavoriteIcon from '@material-ui/icons/Favorite';
+import { Box, Typography, Button, Paper } from '@material-ui/core';
+import PollImages from './PollImages';
 import PollModal from 'components/polls/PollModal';
 
 const useStyles = makeStyles((theme) => ({
@@ -32,10 +32,6 @@ export default function Polls(props) {
     setModalOpen(!modalOpen);
   }
 
-  function getVotes(imageIndex) {
-    return props.images[imageIndex].voteIds.length;
-  }
-
   return (
     <>
       <Button
@@ -51,23 +47,11 @@ export default function Polls(props) {
             component="div"
             className={classes.subtitle}
           >
-            {getVotes(0) + getVotes(1) + ' answers'}
+            {props.images.reduce((acc, image) => {
+              return acc + image.numVotes;
+            }, 0) + ' answers'}
           </Typography>
-          <Grid container justify="center" spacing={2}>
-            {props.images.map((image, i) => {
-              return (
-                <Grid item key={i}>
-                  <img src={image.url} alt="Poll image" />
-                  <Grid container justify="center">
-                    <Grid item>
-                      <FavoriteIcon color="secondary" />
-                    </Grid>
-                    <Grid item>{getVotes(i)}</Grid>
-                  </Grid>
-                </Grid>
-              );
-            })}
-          </Grid>
+          <PollImages images={props.images} />
         </Box>
       </Button>
       {modalOpen ? (

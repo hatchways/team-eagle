@@ -17,12 +17,12 @@ const polls = [
       {
         url:
           'https://images-na.ssl-images-amazon.com/images/I/61mSyjeYXWL._AC_UX679_.jpg',
-        votes: 12,
+        numVotes: 12,
       },
       {
         url:
           'https://lp2.hm.com/hmgoepprod?set=quality[79],source[/94/36/9436b50129c000035f451e0524d74e0f08006338.jpg],origin[dam],category[kids_babyboy_topstshirts],type[DESCRIPTIVESTILLLIFE],res[s],hmver[1]&call=url[file:/product/main]',
-        votes: 20,
+        numVotes: 20,
       },
     ],
   },
@@ -33,12 +33,12 @@ const polls = [
       {
         url:
           'https://upload.wikimedia.org/wikipedia/commons/e/ee/Flag_Admirals_of_the_Blue_Squadron_Royal_Navy.png',
-        votes: 2,
+        numVotes: 2,
       },
       {
         url:
           'https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Red.svg/512px-Red.svg.png',
-        votes: 5,
+        numVotes: 5,
       },
     ],
   },
@@ -49,12 +49,12 @@ const polls = [
       {
         url:
           'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80',
-        votes: 13,
+        numVotes: 13,
       },
       {
         url:
           'https://images.unsplash.com/photo-1491553895911-0055eca6402d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1400&q=80',
-        votes: 7,
+        numVotes: 7,
       },
     ],
   },
