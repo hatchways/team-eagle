@@ -3,7 +3,6 @@ export function getFriendsPolls(callback) {
     method: 'GET',
   }).then((res) => {
     res.json().then((data) => {
-      console.log(data);
       if (callback) {
         if (res.status === 200) {
           callback(null, data.polls);
@@ -13,4 +12,10 @@ export function getFriendsPolls(callback) {
       }
     });
   });
+}
+
+export function getFriendLists() {
+  return fetch('/friendLists', {
+    method: 'GET',
+  }).then((res) => res.json());
 }

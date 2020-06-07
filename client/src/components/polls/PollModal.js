@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useContext } from 'react';
+import React from 'react';
 import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
 import {
@@ -9,26 +9,35 @@ import {
   CircularProgress,
   Paper,
   Typography,
-  List,
-  ListItem,
-  ListItemIcon,
+  Grid,
+  Select,
+  InputLabel,
+  MenuItem,
 } from '@material-ui/core';
-import { UserContext } from '../contexts/UserContext';
+import PublicIcon from '@material-ui/icons/Public';
 import PollImages from './PollImages';
+import { getFriendLists } from 'util/api_util';
 
 export default function PollModal(props) {
   const classes = useStyles();
   const [state, setState] = React.useState({
     title: props.title || '',
     images: props.images || [],
-    friendList: props.friendList || '',
-    loading: false,
+    friendList: props.friendList || 'public',
 
+    loading: false,
+    friendLists: [],
     titleError: '',
     imagesError: '',
   });
 
-  const user = React.useContext(UserContext);
+  React.useEffect(() => {
+    getFriendLists()
+      .then((friendLists) => setState({ ...state, friendLists }))
+      .catch((err) => {
+        throw err;
+      });
+  }, []);
 
   const handleChange = (key, value) => {
     setState({
@@ -39,7 +48,6 @@ export default function PollModal(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(state);
     let titleError = '';
     let imagesError = '';
 
@@ -66,11 +74,13 @@ export default function PollModal(props) {
 
     setState({ ...state, loading: true });
 
+    const friendList = state.friendList === 'public' ? '' : state.friendList;
+
     const formData = new FormData();
     formData.set('title', state.title);
-    formData.set('userId', user._id);
     formData.append('image1', state.images[0]);
     formData.append('image2', state.images[1]);
+    formData.append('friendList', friendList);
     const config = {
       headers: {
         'content-type': 'multipart/form-data',
@@ -131,14 +141,38 @@ export default function PollModal(props) {
                 images={state.images}
                 imagesError={state.imagesError}
               />
-              <Button
-                mt={3}
-                variant="contained"
-                color="secondary"
-                onClick={handleSubmit}
-              >
-                {props._id ? 'Edit Poll' : 'Create poll'}
-              </Button>
+              <Grid container justify="space-between" alignItems="flex-end">
+                <Grid item>
+                  <Button
+                    mt={3}
+                    variant="contained"
+                    color="secondary"
+                    onClick={handleSubmit}
+                  >
+                    {props._id ? 'Edit Poll' : 'Create poll'}
+                  </Button>
+                </Grid>
+                <Grid item>
+                  <InputLabel id="friend-list-label">Friend List</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    fullWidth
+                    value={state.friendList}
+                    onChange={(e) => handleChange('friendList', e.target.value)}
+                  >
+                    <MenuItem value="public">
+                      <PublicIcon /> Public
+                    </MenuItem>
+                    {state.friendLists.map((list, i) => {
+                      return (
+                        <MenuItem key={i} value={list._id}>
+                          {list.title}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </Grid>
+              </Grid>
             </form>
           </>
         )}

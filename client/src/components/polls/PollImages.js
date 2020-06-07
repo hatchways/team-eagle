@@ -1,33 +1,20 @@
-import React, { useCallback, useEffect, useContext } from 'react';
-import axios from 'axios';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import {
-  Button,
-  Modal,
-  TextField,
-  Container,
-  CircularProgress,
-  Paper,
-  Grid,
-  List,
-  ListItem,
-  ListItemIcon,
-} from '@material-ui/core';
+import { Grid, List, ListItem, ListItemIcon } from '@material-ui/core';
 import ImageIcon from '@material-ui/icons/Image';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import { useDropzone } from 'react-dropzone';
-import { UserContext } from '../contexts/UserContext';
 
 export default function PollImages(props) {
   const classes = useStyles();
 
-  const onDrop = useCallback((acceptedFiles) => {
-    if (acceptedFiles.length != 2) {
+  function onDrop(files) {
+    if (files.length !== 2) {
       alert('You can only upload only two files per poll.');
     } else {
-      props.handleChange('images', acceptedFiles);
+      props.handleChange('images', files);
     }
-  }, []);
+  }
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
@@ -37,7 +24,7 @@ export default function PollImages(props) {
       <Grid container className={classes.root}>
         {props.images.map((image, i) => {
           return (
-            <Grid item>
+            <Grid item key={i}>
               <img src={props.images[i].url} alt="Poll image" />
               <Grid container className={classes.votes}>
                 <Grid item>

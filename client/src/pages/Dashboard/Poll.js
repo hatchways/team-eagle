@@ -30,7 +30,6 @@ export default function Polls(props) {
 
   function toggleModal() {
     setModalOpen(!modalOpen);
-    console.log(props);
   }
 
   function getVotes(imageIndex) {
