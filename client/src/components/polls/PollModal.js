@@ -125,7 +125,7 @@ export default function PollModal(props) {
         ) : state.submitError ? (
           <>
             <Typography id="poll-modal-title" variant="h2">
-              {props.edit ? 'Edit Poll' : 'Create Poll'}
+              There was an error in creating your poll. Please try again later.
             </Typography>
           </>
         ) : (
