@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Hidden, Container } from '@material-ui/core';
@@ -8,6 +8,7 @@ import Friends from '../Dashboard/Friends';
 import PollImages from '../Dashboard/PollImages';
 import PollPageHeader from './PollPageHeader';
 import VoteList from './VoteList';
+import { PollContext } from '../../components/contexts/PollContext';
 
 const useStyles = makeStyles((theme) => ({
   uColorGrey: {
@@ -31,8 +32,18 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Poll() {
+  const [hasError, setHasError] = useState(false);
+
   const dashboardClasses = useDashboardStyles();
   const classes = useStyles();
+  const poll = useContext(PollContext);
+
+  React.useEffect(() => {
+    const pollId = window.location.href.substring(
+      window.location.href.lastIndexOf('/') + 1
+    );
+    poll.getPoll(pollId, (err) => setHasError(true));
+  }, []);
 
   const mockPoll = {
     _id: '180938128',
@@ -89,6 +100,10 @@ export default function Poll() {
       updatedAt: '2020-05-20T23:50:56.289Z',
     },
   ];
+
+  if (hasError) {
+    return <div>Poll not found</div>;
+  }
 
   return (
     <Container className={dashboardClasses.root}>

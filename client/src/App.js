@@ -12,6 +12,7 @@ import LandingPage from './pages/Landing/Landing';
 import FriendsLayout from './pages/Friends/Friends';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Poll from './pages/Poll/Poll';
+import { PollContextProvider } from './components/contexts/PollContext';
 
 import './App.css';
 
@@ -58,7 +59,11 @@ function App() {
           <>
             <NavBar />
             <Switch>
-              <Route exact path="/polls/:pollId" component={Poll} />
+              <Route exact path="/polls/:pollId">
+                <PollContextProvider>
+                  <Poll />
+                </PollContextProvider>
+              </Route>
               <Route exact path="/friends" component={FriendsLayout} />
               <Route exact path="/" component={Dashboard} />
               <Route path="*">
