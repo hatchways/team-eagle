@@ -126,7 +126,7 @@ router.get(
 // @access private
 router.get(
   '/friends',
-  passport.authenticate('jwt', { session: true }),
+  passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     const user = req.user;
     const friends = user.friendIds;
@@ -147,11 +147,9 @@ router.get(
 // @access private
 router.get(
   '/:pollId',
-  passport.authenticate('jwt', { session: true }),
+  passport.authenticate('jwt', { session: false }),
   async (req, res) => {
-    const poll = await Poll.find({
-      $and: [{ _id: req.params.pollId }, { friendIds: req.user._id }],
-    });
+    const poll = await Poll.find({ _id: req.params.pollId });
 
     if (!poll) {
       return res.status(404).json({ message: 'Poll not found' });
@@ -173,7 +171,7 @@ router.get(
 // @access private
 router.post(
   '/:pollId/:imageIdx/vote',
-  passport.authenticate('jwt', { session: true }),
+  passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     const { poll, isValid, statusCode, message } = await validatePollVoteReq(
       req
@@ -213,7 +211,7 @@ router.post(
 // @access private
 router.delete(
   '/:pollId/:imageIdx/vote',
-  passport.authenticate('jwt', { session: true }),
+  passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     const { poll, isValid, statusCode, message } = await validatePollVoteReq(
       req
