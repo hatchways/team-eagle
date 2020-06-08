@@ -197,7 +197,13 @@ router.post(
     poll.images[imageIdx].numVotes += 1;
     await poll.save();
 
-    return res.status(200).json(poll);
+    const votes = await Vote.find({
+      $and: [{ userId: req.user._id }, { pollId: req.params.pollId }],
+    })
+      .populate('userId', '_id name')
+      .exec();
+
+    return res.status(200).json({ poll: poll, votes: votes });
   }
 );
 
@@ -234,7 +240,13 @@ router.delete(
     if (poll.images[imageIdx].numVotes > 0) poll.images[imageIdx].numVotes -= 1;
     await poll.save();
 
-    return res.status(200).json(poll);
+    const votes = await Vote.find({
+      $and: [{ userId: req.user._id }, { pollId: req.params.pollId }],
+    })
+      .populate('userId', '_id name')
+      .exec();
+
+    return res.status(200).json({ poll: poll, votes: votes });
   }
 );
 
