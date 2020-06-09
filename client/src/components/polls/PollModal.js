@@ -23,7 +23,7 @@ export default function PollModal(props) {
     title: '',
     images: [],
     loading: false,
-
+    submitError: false,
     titleError: '',
     imagesError: '',
   });
@@ -95,7 +95,7 @@ export default function PollModal(props) {
         props.toggle();
       })
       .catch((error) => {
-        console.log(error);
+        setState({ ...state, submitError: true });
       });
   };
 
@@ -121,6 +121,12 @@ export default function PollModal(props) {
             <Container className={classes.progressContainer}>
               <CircularProgress />
             </Container>
+          </>
+        ) : state.submitError ? (
+          <>
+            <Typography id="poll-modal-title" variant="h2">
+              There was an error in creating your poll. Please try again later.
+            </Typography>
           </>
         ) : (
           <>
