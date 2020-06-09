@@ -26,7 +26,7 @@ export default function VoteListItem(props) {
   const classes = useStyles();
   const poll = props.poll;
   const vote = props.vote;
-  const author = vote.author;
+  const author = vote.userId;
   const timeElapsed = moment(new Date(vote.updatedAt)).fromNow();
 
   return (
@@ -41,7 +41,7 @@ export default function VoteListItem(props) {
         primary={`${author.name} voted`}
         secondary={timeElapsed}
       />
-      <img className={classes.image} src={poll.images[vote.imageIdx].url} />
+      <img className={classes.image} src={poll.images[vote.pollImageIdx].url} />
     </ListItem>
   );
 }
