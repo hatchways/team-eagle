@@ -13,3 +13,23 @@ export function getFriendsPolls(callback) {
     });
   });
 }
+
+export function postFriendList(body) {
+  return fetch('/friendLists', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  }).then((res) => res.json());
+}
+
+export function putFriendList(body) {
+  return fetch('/friendLists', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  }).then((res) => res.json());
+}

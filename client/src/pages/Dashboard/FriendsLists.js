@@ -5,7 +5,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Button, Grid, Container } from '@material-ui/core';
 
 import HorizontalFeed from 'components/HorizontalFeed';
-import FriendsListsItem from './FriendsListsItem';
+import FriendsListsItem from 'components/friendList/FriendsList';
+import FriendListModal from 'components/friendList/FriendListModal';
 
 // Temporary
 const lists = [
@@ -22,18 +23,6 @@ const lists = [
       {
         _id: '1222',
         name: 'James Walker',
-      },
-      {
-        _id: '414142',
-        name: 'Anna Devine',
-        picture:
-          'https://images.unsplash.com/photo-1559637621-d766677659e8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=934&q=80',
-      },
-      {
-        _id: '142124',
-        name: 'Lucy Berger',
-        picture:
-          'https://images.unsplash.com/photo-1558482240-4e3c42448028?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80',
       },
     ],
   },
@@ -76,6 +65,7 @@ const lists = [
 export default function FriendsLists(props) {
   const [state, setState] = React.useState({
     lists: null,
+    listToEdit: false,
   });
   React.useEffect(() => {
     // Placeholder to simulate fetch
@@ -86,25 +76,38 @@ export default function FriendsLists(props) {
       });
     }, 1500);
   }, []);
+
+  function toggleModal(list) {
+    let value = state.listToEdit ? false : list;
+    setState({ ...state, listToEdit: value });
+  }
+
   return (
-    <HorizontalFeed
-      title={'Friends Lists'}
-      subtitle=""
-      button={
-        <Button
-          variant="outlined"
-          component={RouterLink}
-          to="/create-friends-list"
-        >
-          Create List
-        </Button>
-      }
-    >
-      {state.lists
-        ? state.lists.map((list, i) => {
-            return <FriendsListsItem key={i} {...list} />;
-          })
-        : null}
-    </HorizontalFeed>
+    <>
+      <HorizontalFeed
+        title={'Followers Lists'}
+        subtitle=""
+        button={
+          <Button variant="outlined" onClick={() => toggleModal({})}>
+            Create List
+          </Button>
+        }
+      >
+        {state.lists
+          ? state.lists.map((list, i) => {
+              return (
+                <FriendsListsItem
+                  key={i}
+                  toggleModal={toggleModal}
+                  list={list}
+                />
+              );
+            })
+          : null}
+      </HorizontalFeed>
+      {state.listToEdit ? (
+        <FriendListModal toggleModal={toggleModal} list={state.listToEdit} />
+      ) : null}
+    </>
   );
 }

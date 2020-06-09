@@ -57,14 +57,14 @@ router.delete(
   }
 );
 
-// @route:  PUT /friendLists/:listId
+// @route:  PUT /friendLists
 // @desc:   Update friend list
 // @access: Private
 router.put(
-  '/:listId',
+  '/',
   passport.authenticate('jwt', { session: false }),
   async (req, res, next) => {
-    const listId = req.params.listId;
+    const listId = req.body._id;
     let list = await FriendList.findById(listId);
     if (!list) {
       res.status(404).send('List not found');
