@@ -120,6 +120,31 @@ router.get(
   }
 );
 
+// @route GET /votable
+// @desc To get polls that the a logged in user can vote on
+// @params None
+// @access private
+router.get(
+  '/votable',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    let polls = [];
+    // Have to implement logic for checking which friendLists the user is part of and then use that
+    // Because friendList not there
+    // Logic to find polls with empty friendLists
+    Poll.find(
+      {
+        $or: [{ friendsLists: '' }, { friendsLists: { $exists: false } }],
+      },
+      (err, docs) => {
+        if (err) return res.status(400).json({ error: err });
+        polls = polls.concat(docs);
+        return res.status(200).json({ polls });
+      }
+    );
+  }
+);
+
 // @route GET /polls/friends
 // @desc To fetch the polls of user's friends
 // @params none
@@ -137,7 +162,7 @@ router.get(
       polls = polls.concat(docs);
     });
 
-    return res.status(200).json();
+    return res.status(200).json({ polls: polls });
   }
 );
 
