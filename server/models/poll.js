@@ -15,6 +15,16 @@ const PollSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  friendsList: {
+    type: Schema.Types.ObjectId,
+    required: false,
+    ref: 'friendsList',
+  },
+  votes: {
+    type: Number,
+    required: false,
+    default: 0,
+  },
   images: [
     {
       url: {

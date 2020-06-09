@@ -94,8 +94,8 @@ export default function NavBar(props) {
               </Link>
             </Grid>
             <Grid item>
-              <Link component={RouterLink} to="/friends-polls">
-                Friends' Polls
+              <Link component={RouterLink} to="/polls">
+                Polls
               </Link>
             </Grid>
             <Grid item>
