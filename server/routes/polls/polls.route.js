@@ -1,5 +1,6 @@
 const express = require('express');
 const passport = require('passport');
+const mongoose = require('mongoose');
 const router = express.Router();
 
 const Poll = require('../../models/poll');
@@ -149,9 +150,13 @@ router.get(
   '/:pollId',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
-    try {
-      const poll = await Poll.findById(req.params.pollId);
-    } catch (err) {
+    const pollIdIsValid = await mongoose.isValidObjectId(req.params.pollId);
+    if (!pollIdIsValid) {
+      return res.status(404).json({ message: 'Poll id is not valid' });
+    }
+
+    const poll = await Poll.findById(req.params.pollId);
+    if (!poll) {
       return res.status(404).json({ message: 'Poll not found' });
     }
 
@@ -180,6 +185,8 @@ router.post(
     if (!isValid) {
       return res.status(statusCode).json({ message: message });
     }
+
+    const imageIdx = Number(req.params.imageIdx);
 
     const vote = new Vote({
       userId: req.user._id,

@@ -1,4 +1,5 @@
 const Poll = require('../../models/poll');
+const User = require('../../models/user');
 
 module.exports = async function validatePollVoteReq(req) {
   let isValid;
@@ -6,8 +7,8 @@ module.exports = async function validatePollVoteReq(req) {
   let message;
 
   // Check and validate :imageIdx req param
-  const imageIdx = req.params.imageIdx;
-  if (imageIdx !== 0 || imageIdx !== 1) {
+  const imageIdx = Number(req.params.imageIdx);
+  if (imageIdx !== 0 && imageIdx !== 1) {
     isValid = false;
     statusCode = 401;
     message = 'You must include imageIdx in API URL. And it must be 0 or 1.';
@@ -16,14 +17,31 @@ module.exports = async function validatePollVoteReq(req) {
   }
 
   // Find poll using :pollId req param
-  try {
-    const poll = await Poll.find({
-      $and: [{ _id: req.params.pollId }, { friendIds: req.user._id }],
-    });
-  } catch (err) {
+  const poll = await Poll.findById(req.params.pollId);
+  if (!poll) {
     isValid = false;
     statusCode = 404;
     message = 'Poll not found';
+
+    return { isValid, statusCode, message };
+  }
+
+  // Check that author still exists
+  const author = await User.findById(poll.userId);
+  if (!author) {
+    isValid = false;
+    statusCode = 404;
+    message = 'Poll author account not found';
+
+    return { isValid, statusCode, message };
+  }
+
+  // Check that users are friends
+  const isFriendsWithPollAuthor = author.friendIds.includes(req.user._id);
+  if (!isFriendsWithPollAuthor) {
+    isValid = false;
+    statusCode = 401;
+    message = "Users must be friends to vote on each other's polls";
 
     return { isValid, statusCode, message };
   }

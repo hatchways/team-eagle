@@ -33,16 +33,15 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Poll() {
   const [hasError, setHasError] = useState(false);
-
   const dashboardClasses = useDashboardStyles();
   const classes = useStyles();
-  const poll = useContext(PollContext);
+  const pollCtx = useContext(PollContext);
+  const pollId = window.location.href.substring(
+    window.location.href.lastIndexOf('/') + 1
+  );
 
   React.useEffect(() => {
-    const pollId = window.location.href.substring(
-      window.location.href.lastIndexOf('/') + 1
-    );
-    poll.getPoll(pollId, (err) => {
+    pollCtx.getPoll(pollId, (err) => {
       setHasError(true);
     });
   }, []);
@@ -112,7 +111,7 @@ export default function Poll() {
         alignItems="center"
         style={{ marginTop: '90px' }}
       >
-        <Grid item xs={3}>
+        <Grid item>
           <Typography variant="h3"> Poll not found </Typography>
         </Grid>
       </Grid>

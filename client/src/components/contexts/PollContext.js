@@ -17,7 +17,7 @@ export const PollContextProvider = ({ children }) => {
       res.json().then((data) => {
         if (res.status === 200) {
           setState((prevState) => {
-            return { ...prevState };
+            return { ...prevState, ...data };
           });
         } else {
           callback({ ...data, status: res.status });
