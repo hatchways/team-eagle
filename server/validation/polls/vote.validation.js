@@ -16,11 +16,11 @@ module.exports = async function validatePollVoteReq(req) {
   }
 
   // Find poll using :pollId req param
-  const poll = await Poll.find({
-    $and: [{ _id: req.params.pollId }, { friendIds: req.user._id }],
-  });
-
-  if (!poll) {
+  try {
+    const poll = await Poll.find({
+      $and: [{ _id: req.params.pollId }, { friendIds: req.user._id }],
+    });
+  } catch (err) {
     isValid = false;
     statusCode = 404;
     message = 'Poll not found';

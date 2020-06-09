@@ -149,9 +149,9 @@ router.get(
   '/:pollId',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
-    const poll = await Poll.findOne({ _id: req.params.pollId });
-
-    if (!poll) {
+    try {
+      const poll = await Poll.findById(req.params.pollId);
+    } catch (err) {
       return res.status(404).json({ message: 'Poll not found' });
     }
 

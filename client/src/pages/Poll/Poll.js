@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-import { Grid, Hidden, Container } from '@material-ui/core';
+import { Grid, Hidden, Container, Typography } from '@material-ui/core';
 
 import { useDashboardStyles } from '../Dashboard/Dashboard';
 import Friends from '../Dashboard/Friends';
@@ -42,7 +42,9 @@ export default function Poll() {
     const pollId = window.location.href.substring(
       window.location.href.lastIndexOf('/') + 1
     );
-    poll.getPoll(pollId, (err) => setHasError(true));
+    poll.getPoll(pollId, (err) => {
+      setHasError(true);
+    });
   }, []);
 
   const mockPoll = {
@@ -102,7 +104,19 @@ export default function Poll() {
   ];
 
   if (hasError) {
-    return <div>Poll not found</div>;
+    return (
+      <Grid
+        container
+        spacing={0}
+        direction="column"
+        alignItems="center"
+        style={{ marginTop: '90px' }}
+      >
+        <Grid item xs={3}>
+          <Typography variant="h3"> Poll not found </Typography>
+        </Grid>
+      </Grid>
+    );
   }
 
   return (
