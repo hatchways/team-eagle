@@ -6,9 +6,11 @@ import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 
 import { vote, unvote } from '../../util/api_util';
 import { UserContext } from 'components/contexts/UserContext';
+import { PollContext } from 'components/contexts/PollContext';
 
 export default function PollImages(props) {
   const user = useContext(UserContext);
+  const pollCtx = useContext(PollContext);
   const imageSize = props.imageSize ? props.imageSize : '65px';
   const favIconSize = props.favIconSize ? props.favIconSize : 'default';
   const justifyContainer = props.justifyContainer
@@ -22,11 +24,23 @@ export default function PollImages(props) {
   });
 
   const handleVote = (imageIdx) => {
-    // make API request to vote
+    vote(props.pollId, imageIdx, (err, data) => {
+      if (err) {
+        alert(err);
+      } else {
+        pollCtx.setPollState(data);
+      }
+    });
   };
 
   const handleUnvote = (imageIdx) => {
-    // make API request to unvote
+    unvote(props.pollId, imageIdx, (err, data) => {
+      if (err) {
+        alert(err);
+      } else {
+        pollCtx.setPollState(data);
+      }
+    });
   };
 
   return (
@@ -42,13 +56,13 @@ export default function PollImages(props) {
               <Grid item>
                 {currUserVotesImageIdxs.includes(idx) ? (
                   <FavoriteIcon
-                    onClick={() => handleVote(idx)}
+                    onClick={() => handleUnvote(idx)}
                     ontSize={favIconSize}
                     color="secondary"
                   />
                 ) : (
                   <FavoriteBorderIcon
-                    onClick={() => handleUnvote(idx)}
+                    onClick={() => handleVote(idx)}
                     fontSize={favIconSize}
                     htmlColor="lightgrey"
                   />

@@ -253,11 +253,13 @@ router.delete(
       return res.status(statusCode).json({ message: message });
     }
 
+    const imageIdx = Number(req.params.imageIdx);
+
     const vote = await Vote.findOne({
       $and: [
         { userId: req.user._id },
         { pollId: req.params.pollId },
-        { imageIdx: req.params.imageIdx },
+        { pollImageIdx: imageIdx },
       ],
     });
 
