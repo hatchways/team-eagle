@@ -7,6 +7,7 @@ import { getFriendsPolls } from 'util/api_util';
 import HorizontalFeed from 'components/HorizontalFeed';
 import AddPollButton from 'components/polls/AddPollButton';
 import Poll from './Poll';
+import { PollContextProvider } from '../../components/contexts/PollContext';
 
 // Temporary
 const polls = [
@@ -88,7 +89,11 @@ export default function Polls(props) {
     <HorizontalFeed title={'Polls'} subtitle="(32)" button={<AddPollButton />}>
       {state.polls
         ? state.polls.map((poll, i) => {
-            return <Poll key={i} {...poll} />;
+            return (
+              <PollContextProvider>
+                <Poll key={i} {...poll} />
+              </PollContextProvider>
+            );
           })
         : null}
     </HorizontalFeed>
