@@ -7,6 +7,7 @@ exports.validateGetPollReq = async function validateGetPollReq(req) {
   let statusCode;
   let message;
 
+  // Check that poll has a valid id
   const pollIdIsValid = await mongoose.isValidObjectId(req.params.pollId);
   if (!pollIdIsValid) {
     isValid = false;
@@ -16,6 +17,7 @@ exports.validateGetPollReq = async function validateGetPollReq(req) {
     return { isValid, statusCode, message };
   }
 
+  // Check that poll exists
   const poll = await Poll.findById(req.params.pollId).populate('userId').exec();
   if (!poll) {
     isValid = false;
@@ -25,6 +27,7 @@ exports.validateGetPollReq = async function validateGetPollReq(req) {
     return { isValid, statusCode, message };
   }
 
+  // Check that req author is friends with poll author
   const author = poll.userId;
   if (!author.friendIds.includes(req.user._id)) {
     isValid = false;
@@ -32,6 +35,20 @@ exports.validateGetPollReq = async function validateGetPollReq(req) {
     message = `You must be ${author.name}'s friend/follower to see their poll`;
 
     return { isValid, statusCode, message };
+  }
+
+  // Check that req author is on poll's author friend list
+  // (if poll is associated with friend list)
+  if (poll.friendsList) {
+    await poll.populate('friendsList').execPopulate();
+    const friendsList = poll.friendsList;
+    if (!friendsList.friends.includes(req.user._id)) {
+      isValid = false;
+      statusCode = 401;
+      message = `You must be in ${author.name}'s friend list ("${friendsList.title}") to see their poll`;
+
+      return { isValid, statusCode, message };
+    }
   }
 
   const votes = await Vote.find({
