@@ -6,7 +6,10 @@ const router = express.Router();
 const Poll = require('../../models/poll');
 const Vote = require('../../models/vote');
 const upload = require('./utils');
-const validatePollVoteReq = require('../../validation/polls/vote.validation');
+const {
+  validatePollVoteReq,
+  validateGetPollReq,
+} = require('../../validation/polls/poll.validation');
 
 // @route POST /polls
 // @desc To add a new poll
@@ -175,23 +178,20 @@ router.get(
   '/:pollId',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
-    const pollIdIsValid = await mongoose.isValidObjectId(req.params.pollId);
-    if (!pollIdIsValid) {
-      return res.status(404).json({ message: 'Poll not found' });
+    const {
+      poll,
+      author,
+      votes,
+      isValid,
+      statusCode,
+      message,
+    } = await validateGetPollReq(req);
+
+    if (!isValid) {
+      return res.status(statusCode).json({ message: message });
     }
 
-    const poll = await Poll.findById(req.params.pollId);
-    if (!poll) {
-      return res.status(404).json({ message: 'Poll not found' });
-    }
-
-    const votes = await Vote.find({
-      $and: [{ userId: req.user._id }, { pollId: req.params.pollId }],
-    })
-      .populate('userId', '_id name')
-      .exec();
-
-    return res.status(200).json({ poll: poll, votes: votes });
+    return res.status(200).json({ poll: poll, author: author, votes: votes });
   }
 );
 
@@ -203,9 +203,13 @@ router.post(
   '/:pollId/:imageIdx/vote',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
-    const { poll, isValid, statusCode, message } = await validatePollVoteReq(
-      req
-    );
+    const {
+      poll,
+      author,
+      isValid,
+      statusCode,
+      message,
+    } = await validatePollVoteReq(req);
 
     if (!isValid) {
       return res.status(statusCode).json({ message: message });
@@ -233,7 +237,7 @@ router.post(
       .populate('userId', '_id name')
       .exec();
 
-    return res.status(200).json({ poll: poll, votes: votes });
+    return res.status(200).json({ poll: poll, author: author, votes: votes });
   }
 );
 
@@ -245,9 +249,13 @@ router.delete(
   '/:pollId/:imageIdx/vote',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
-    const { poll, isValid, statusCode, message } = await validatePollVoteReq(
-      req
-    );
+    const {
+      poll,
+      author,
+      isValid,
+      statusCode,
+      message,
+    } = await validatePollVoteReq(req);
 
     if (!isValid) {
       return res.status(statusCode).json({ message: message });
@@ -278,7 +286,7 @@ router.delete(
       .populate('userId', '_id name')
       .exec();
 
-    return res.status(200).json({ poll: poll, votes: votes });
+    return res.status(200).json({ poll: poll, author: author, votes: votes });
   }
 );
 
