@@ -58,7 +58,7 @@ exports.validateGetPollReq = async function validateGetPollReq(req) {
     .exec();
 
   isValid = true;
-  return { poll, author, votes, isValid };
+  return { poll, votes, isValid };
 };
 
 exports.validatePollVoteReq = async function validatePollVoteReq(req) {
@@ -107,5 +107,5 @@ exports.validatePollVoteReq = async function validatePollVoteReq(req) {
   }
 
   isValid = true;
-  return { poll, author, isValid };
+  return { poll, isValid };
 };

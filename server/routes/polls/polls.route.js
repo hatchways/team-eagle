@@ -180,7 +180,6 @@ router.get(
   async (req, res) => {
     const {
       poll,
-      author,
       votes,
       isValid,
       statusCode,
@@ -191,7 +190,7 @@ router.get(
       return res.status(statusCode).json({ message: message });
     }
 
-    return res.status(200).json({ poll: poll, author: author, votes: votes });
+    return res.status(200).json({ poll: poll, votes: votes });
   }
 );
 
@@ -203,13 +202,9 @@ router.post(
   '/:pollId/:imageIdx/vote',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
-    const {
-      poll,
-      author,
-      isValid,
-      statusCode,
-      message,
-    } = await validatePollVoteReq(req);
+    const { poll, isValid, statusCode, message } = await validatePollVoteReq(
+      req
+    );
 
     if (!isValid) {
       return res.status(statusCode).json({ message: message });
@@ -237,7 +232,7 @@ router.post(
       .populate('userId', '_id name')
       .exec();
 
-    return res.status(200).json({ poll: poll, author: author, votes: votes });
+    return res.status(200).json({ poll: poll, votes: votes });
   }
 );
 
@@ -249,13 +244,9 @@ router.delete(
   '/:pollId/:imageIdx/vote',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
-    const {
-      poll,
-      author,
-      isValid,
-      statusCode,
-      message,
-    } = await validatePollVoteReq(req);
+    const { poll, isValid, statusCode, message } = await validatePollVoteReq(
+      req
+    );
 
     if (!isValid) {
       return res.status(statusCode).json({ message: message });
@@ -286,7 +277,7 @@ router.delete(
       .populate('userId', '_id name')
       .exec();
 
-    return res.status(200).json({ poll: poll, author: author, votes: votes });
+    return res.status(200).json({ poll: poll, votes: votes });
   }
 );
 
