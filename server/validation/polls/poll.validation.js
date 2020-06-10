@@ -29,7 +29,7 @@ exports.validateGetPollReq = async function validateGetPollReq(req) {
   if (!author.friendIds.includes(req.user._id)) {
     isValid = false;
     statusCode = 401;
-    message = `You must be ${author.name}'s friend to see their poll`;
+    message = `You must be ${author.name}'s friend/follower to see their poll`;
 
     return { isValid, statusCode, message };
   }
