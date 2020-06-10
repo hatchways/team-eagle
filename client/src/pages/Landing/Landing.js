@@ -1,17 +1,30 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 
 import { Link as RouterLink } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Card, Container, Button } from '@material-ui/core';
 import ForumRoundedIcon from '@material-ui/icons/ForumRounded';
-
+import { UserContext } from 'components/contexts/UserContext';
 import image from 'images/woman-laptop.png';
-
+import socketIOClient from 'socket.io-client';
 import SignupForm from './SignupForm';
 import LoginForm from './LoginForm';
 
 export default function Landing(props) {
   const classes = useStyles();
+  const user = useContext(UserContext);
+
+  useEffect(() => {
+    const socket = socketIOClient('http://localhost:3001');
+    socket.emit('logged', { userId: user._id });
+    socket.on('makeactive', (data) => {
+      fetch('/users/active').then((response) => {});
+    });
+    socket.on('makedisactive', (data) => {
+      console.log('disactivating the user');
+      fetch('/users/disactive').then((response) => {});
+    });
+  });
 
   return (
     <Box className={classes.root}>

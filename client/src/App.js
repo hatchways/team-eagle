@@ -13,6 +13,7 @@ import { UserContext } from 'components/contexts/UserContext';
 import { FriendsContext } from 'components/contexts/FriendsContext';
 
 import NavBar from './components/NavBar';
+import NavDrawer from './components/NavDrawer';
 import Loading from './components/Loading';
 import LandingPage from './pages/Landing/Landing';
 import FriendsLayout from './pages/Friends/Friends';
