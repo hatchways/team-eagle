@@ -113,9 +113,9 @@ router.get(
     const user = req.user;
     let polls = [];
     Poll.find({ userId: user._id }, (err, docs) => {
-      if (err) return res.status(400).json({ error: err });
+      if (err) return res.status(400).send(err);
       polls = polls.concat(docs);
-      return res.status(200).json({ polls });
+      return res.status(200).json(polls);
     });
   }
 );

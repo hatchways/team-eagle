@@ -19,3 +19,9 @@ export function getFriendLists() {
     method: 'GET',
   }).then((res) => res.json());
 }
+
+export function getUserPolls() {
+  return fetch('/polls', {
+    method: 'GET',
+  }).then((res) => res.json());
+}
