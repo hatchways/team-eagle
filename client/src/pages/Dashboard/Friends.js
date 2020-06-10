@@ -4,7 +4,7 @@ import { FriendsContext } from '../../components/contexts/FriendsContext';
 import { Link as RouterLink } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Typography, List, ListItem, Grid } from '@material-ui/core';
-
+import Friend from 'components/friendList/Friend';
 import Thumbnail from 'components/Thumbnail';
 
 const useStyles = makeStyles((theme) => ({
@@ -30,6 +30,7 @@ export default function Friends() {
       <Typography variant="h2">Friends</Typography>
       <List>
         {friends.followers.map((friend, i) => {
+          return <Friend key={i} friend={friend} />;
           return (
             <ListItem key={i} className={classes.listItem}>
               <Grid
