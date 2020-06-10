@@ -21,6 +21,14 @@ export default function PollImages(props) {
     }
   });
 
+  const handleVote = (imageIdx) => {
+    // make API request to vote
+  };
+
+  const handleUnvote = (imageIdx) => {
+    // make API request to unvote
+  };
+
   return (
     <Grid justify={justifyContainer} container spacing={2}>
       {props.images.map((image, idx) => {
@@ -33,9 +41,14 @@ export default function PollImages(props) {
             <Grid container justify="center">
               <Grid item>
                 {currUserVotesImageIdxs.includes(idx) ? (
-                  <FavoriteIcon fontSize={favIconSize} color="secondary" />
+                  <FavoriteIcon
+                    onClick={() => handleVote(idx)}
+                    ontSize={favIconSize}
+                    color="secondary"
+                  />
                 ) : (
                   <FavoriteBorderIcon
+                    onClick={() => handleUnvote(idx)}
                     fontSize={favIconSize}
                     htmlColor="lightgrey"
                   />
