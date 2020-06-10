@@ -52,9 +52,6 @@ export default function Poll() {
     });
   }, []);
 
-  const poll = state.poll;
-  const votes = state.votes;
-
   if (error) {
     return (
       <Grid
@@ -88,15 +85,15 @@ export default function Poll() {
           item
           className={`${dashboardClasses.rightSide} ${classes.uPadding}`}
         >
-          <PollPageHeader poll={poll} />
+          <PollPageHeader poll={state.poll} />
 
           <PollImages
             justifyContainer="flex-start"
-            images={poll.images}
+            images={state.poll.images}
             imageSize="15vh"
             favIconSize="5px"
           />
-          <VoteList poll={poll} votes={votes} />
+          <VoteList poll={state.poll} votes={state.votes} />
         </Grid>
       </Grid>
     </Container>
