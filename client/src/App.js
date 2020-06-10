@@ -61,7 +61,7 @@ function App() {
 
   return (
     <MuiThemeProvider theme={theme}>
-      <HashRouter>
+      <BrowserRouter>
         {user._id ? (
           <>
             <NavBar />
@@ -96,7 +96,7 @@ function App() {
             </Route>
           </Switch>
         )}
-      </HashRouter>
+      </BrowserRouter>
     </MuiThemeProvider>
   );
 }
