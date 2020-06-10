@@ -12,7 +12,7 @@ const FriendListSchema = new Schema({
     ref: 'users',
     index: true,
   },
-  friendIds: [
+  friends: [
     {
       type: Schema.Types.ObjectId,
       required: true,

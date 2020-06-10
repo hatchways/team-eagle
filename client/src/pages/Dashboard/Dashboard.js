@@ -25,6 +25,9 @@ export const useDashboardStyles = makeStyles((theme) => ({
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
     flexGrow: 1,
+    [theme.breakpoints.down('sm')]: {
+      padding: 0,
+    },
   },
 }));
 

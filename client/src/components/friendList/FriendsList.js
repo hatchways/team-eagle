@@ -14,6 +14,7 @@ import {
 import SettingsIcon from '@material-ui/icons/Settings';
 import CloseIcon from '@material-ui/icons/Close';
 import Thumbnail from 'components/Thumbnail';
+import Friend from 'components/friendList/Friend';
 
 const headerHeight = 60;
 
@@ -31,64 +32,52 @@ const useStyles = makeStyles((theme) => ({
   },
   heading: {
     border: 'none',
+    width: '60%',
     background: 'transparent',
     textAlign: 'left',
     flexGrow: 1,
     padding: theme.spacing(1),
   },
+  title: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
   list: {
     overflowY: 'auto',
     height: `calc(100% - ${headerHeight + theme.spacing(2)}px)`,
   },
-  listItemIcon: {
-    minWidth: '25px',
-  },
 }));
 
-export default function FriendsListsItem(props) {
+export default function FriendsList(props) {
   // const user = React.useContext(UserContext);
   const classes = useStyles();
 
   function subtitle() {
-    let friendsLength = props.friends.length;
+    let friendsLength = props.list.friends.length;
     let output = `${friendsLength} friend`;
     if (friendsLength > 1 || !friendsLength) output += 's';
     return output;
   }
 
-  function handleClick(e) {
-    alert('open');
-  }
-
   return (
-    <Paper className={classes.root} square={true} onClick={handleClick}>
+    <Paper className={classes.root} square={true}>
       <Grid container alignItems="center" className={classes.header}>
-        <Grid item className={classes.heading} component="button">
-          <Typography variant="h3">{props.title}</Typography>
+        <Grid item className={classes.heading}>
+          <Typography variant="h3" className={classes.title}>
+            {props.list.title}
+          </Typography>
           <Typography variant="subtitle1">{subtitle()}</Typography>
         </Grid>
         <Grid item>
-          <IconButton>
+          <IconButton onClick={() => props.toggleModal(props.list)}>
             <SettingsIcon />
           </IconButton>
         </Grid>
       </Grid>
       <Divider />
       <List className={classes.list}>
-        {props.friends.map((friend, i) => {
-          return (
-            <ListItem key={i} component={RouterLink} to={'/' + friend._id}>
-              <ListItemIcon
-                className={classes.listItemIcon}
-                component={RouterLink}
-                to={'/'}
-              >
-                <CloseIcon />
-              </ListItemIcon>
-              <Thumbnail picture={friend.picture} marginRight={true} />
-              {friend.name}
-            </ListItem>
-          );
+        {props.list.friends.map((friend, i) => {
+          return <Friend key={i} friend={friend} />;
         })}
       </List>
     </Paper>
