@@ -30,7 +30,7 @@ router.post(
     const list = new FriendList({
       title: req.body.title,
       userId: mongoose.Types.ObjectId(req.user._id),
-      friendIds: req.body.friendIds.map((id) => mongoose.Types.ObjectId(id)),
+      friends: req.body.friends.map((id) => mongoose.Types.ObjectId(id)),
     });
     list
       .save()
@@ -57,14 +57,14 @@ router.delete(
   }
 );
 
-// @route:  PUT /friendLists/:listId
+// @route:  PUT /friendLists
 // @desc:   Update friend list
 // @access: Private
 router.put(
-  '/:listId',
+  '/',
   passport.authenticate('jwt', { session: false }),
   async (req, res, next) => {
-    const listId = req.params.listId;
+    const listId = req.body._id;
     let list = await FriendList.findById(listId);
     if (!list) {
       res.status(404).send('List not found');
@@ -72,9 +72,7 @@ router.put(
     }
 
     list.title = req.body.title;
-    list.friendIds = req.body.friendIds.map((id) =>
-      mongoose.Types.ObjectId(id)
-    );
+    list.friends = req.body.friends.map((id) => mongoose.Types.ObjectId(id));
 
     list
       .save()

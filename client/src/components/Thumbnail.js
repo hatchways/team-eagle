@@ -1,29 +1,24 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Avatar, Badge } from '@material-ui/core';
+import { Avatar, Badge, IconButton } from '@material-ui/core';
 import PersonIcon from '@material-ui/icons/Person';
+import { Link as RouterLink } from 'react-router-dom';
 
 const useStyles = (props) =>
   makeStyles((theme) => ({
-    root: {
-      marginRight: props.marginRight ? theme.spacing(1) : 0,
-    },
     badge: {
       paddingRight: '7px',
     },
+    icon: {
+      color: theme.palette.common.white,
+    },
   }));
-
-// Custom props:
-// props.picture (string) => image src, if falsy, renders PersonIcon
-// props.marginRight (bool) => sets default marginRight
 
 export default function Thumbnail(props) {
   const classes = useStyles(props)();
-  const picture = props.picture;
-  if (props.user) {
-    if (props.user.picture) {
-      picture = props.user.picture;
-    }
+
+  function renderPictureOrIcon() {
+    return !props.picture && <PersonIcon className={classes.icon} />;
   }
 
   return (
@@ -31,10 +26,16 @@ export default function Thumbnail(props) {
       className={classes.badge}
       color="secondary"
       variant="dot"
-      invisible={props.invisible ? props.invisible : 'yes'}
+      invisible={props.invisible !== false}
     >
-      <Avatar src={picture ? picture : ''} {...props}>
-        {!picture && <PersonIcon />}
+      <Avatar src={props.picture ? props.picture : ''} {...props}>
+        {props.url ? (
+          <IconButton component={RouterLink} to={props.url}>
+            {renderPictureOrIcon()}
+          </IconButton>
+        ) : (
+          renderPictureOrIcon()
+        )}
       </Avatar>
     </Badge>
   );
