@@ -1,12 +1,6 @@
 import React, { useState } from 'react';
 import { MuiThemeProvider } from '@material-ui/core';
-import {
-  BrowserRouter,
-  HashRouter,
-  Route,
-  Switch,
-  Redirect,
-} from 'react-router-dom';
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 
 import { theme } from 'themes/theme';
 import { UserContext } from 'components/contexts/UserContext';
@@ -19,7 +13,6 @@ import FriendsLayout from './pages/Friends/Friends';
 import Dashboard from './pages/Dashboard/Dashboard';
 import PollHome from './pages/Polls/PollHome';
 import Poll from './pages/Poll/Poll';
-import { PollContextProvider } from './components/contexts/PollContext';
 
 import './App.css';
 
@@ -66,11 +59,7 @@ function App() {
           <>
             <NavBar />
             <Switch>
-              <Route exact path="/polls/:pollId">
-                <PollContextProvider>
-                  <Poll />
-                </PollContextProvider>
-              </Route>
+              <Route exact path="/polls/:pollId" component={Poll} />
               <Route exact path="/friends" component={FriendsLayout} />
               <Route exact path="/polls" component={PollHome} />
               <Route exact path="/" component={Dashboard} />

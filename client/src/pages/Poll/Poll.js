@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Hidden, Container, Typography } from '@material-ui/core';
@@ -8,7 +8,7 @@ import Friends from '../Dashboard/Friends';
 import PollImages from '../Dashboard/PollImages';
 import PollPageHeader from './PollPageHeader';
 import VoteList from './VoteList';
-import { PollContext } from '../../components/contexts/PollContext';
+import { getPoll } from '../../util/api_util';
 
 const useStyles = makeStyles((theme) => ({
   uColorGrey: {
@@ -32,24 +32,30 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Poll() {
-  const [hasError, setHasError] = useState(false);
+  const [error, setError] = useState(null);
+  const [state, setState] = useState({ poll: {}, votes: [] });
   const dashboardClasses = useDashboardStyles();
   const classes = useStyles();
-  const pollCtx = useContext(PollContext);
   const pollId = window.location.href.substring(
     window.location.href.lastIndexOf('/') + 1
   );
 
   React.useEffect(() => {
-    pollCtx.getPoll(pollId, (err) => {
-      setHasError(true);
+    getPoll(pollId, (err, data) => {
+      if (err) {
+        setError(err);
+      } else {
+        setState((prevState) => {
+          return { ...prevState, ...data };
+        });
+      }
     });
   }, []);
 
-  const poll = pollCtx.poll;
-  const votes = pollCtx.votes;
+  const poll = state.poll;
+  const votes = state.votes;
 
-  if (hasError) {
+  if (error) {
     return (
       <Grid
         container
@@ -59,13 +65,13 @@ export default function Poll() {
         style={{ marginTop: '90px' }}
       >
         <Grid item>
-          <Typography variant="h3"> Poll not found </Typography>
+          <Typography variant="h3"> {error} </Typography>
         </Grid>
       </Grid>
     );
   }
 
-  if (!pollCtx.poll._id) {
+  if (!state.poll._id) {
     // poll is still loading
     return null;
   }

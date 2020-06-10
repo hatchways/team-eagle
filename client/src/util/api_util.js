@@ -21,6 +21,22 @@ export function getUserPolls() {
   }).then((res) => res.json());
 }
 
+export function getPoll(pollId, callback) {
+  fetch(`/polls/${pollId}`, {
+    method: 'GET',
+  }).then((res) => {
+    res.json().then((data) => {
+      if (callback) {
+        if (res.status === 200) {
+          callback(null, data);
+        } else {
+          callback(data.message);
+        }
+      }
+    });
+  });
+}
+
 // Friends Lists
 
 export function getFriendLists() {
