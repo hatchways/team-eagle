@@ -49,7 +49,11 @@ export default function PollImages(props) {
         return (
           <Grid item key={idx}>
             <img
-              style={{ width: imageSize, height: imageSize }}
+              style={{
+                width: imageSize,
+                height: imageSize,
+                marginBottom: '10px',
+              }}
               src={image.url}
             />
             <Grid container justify="center">

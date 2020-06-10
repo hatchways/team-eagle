@@ -6,7 +6,9 @@ import AddIcon from '@material-ui/icons/Add';
 import Thumbnail from 'components/Thumbnail';
 
 const useStyles = makeStyles((theme) => ({
-  root: {},
+  root: {
+    paddingLeft: '0',
+  },
   listItemIcon: {},
   addButton: {
     minWidth: '25px',

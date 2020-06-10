@@ -31,25 +31,6 @@ export default function Friends() {
       <List>
         {friends.followers.map((friend, i) => {
           return <Friend key={i} friend={friend} />;
-          return (
-            <ListItem key={i} className={classes.listItem}>
-              <Grid
-                component={RouterLink}
-                to={`/user/${friend._id}`}
-                container
-                alignItems="center"
-                className={classes.friend}
-              >
-                <Thumbnail
-                  picture={friend.picture}
-                  marginRight={true}
-                  component="span"
-                  invisible="yes"
-                />
-                {friend.name}
-              </Grid>
-            </ListItem>
-          );
         })}
       </List>
     </Box>

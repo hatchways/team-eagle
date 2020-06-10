@@ -177,7 +177,7 @@ router.get(
   async (req, res) => {
     const pollIdIsValid = await mongoose.isValidObjectId(req.params.pollId);
     if (!pollIdIsValid) {
-      return res.status(404).json({ message: 'Poll id is not valid' });
+      return res.status(404).json({ message: 'Poll not found' });
     }
 
     const poll = await Poll.findById(req.params.pollId);
