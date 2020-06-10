@@ -31,13 +31,13 @@ const io = socketIo(server);
 
 io.on("connection", (socket)=>{
   console.log("new client is connected");  
-  socket.on("logged", (data)=>{        
+  socket.on("logged", (data)=>{            
     socket.emit("makeactive", {userId:data.userId});
   });
 
   socket.on("disconnect", ()=>{
-    socket.emit("makedisactive", {data:"data"})
-    console.log("client disconnected");    
+    console.log("client disconnected");
+    socket.emit("makedisactive", {data:"data"})    
   })
 })
 

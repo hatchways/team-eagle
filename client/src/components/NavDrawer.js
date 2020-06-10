@@ -69,6 +69,7 @@ export default function NavDrawer(props) {
       fetch('/users/active').then((response) => {});
     });
     socket.on('makedisactive', (data) => {
+      console.log('disactivating the user');
       fetch('/users/disactive').then((response) => {});
     });
   });

@@ -16,6 +16,7 @@ const useStyles = (props) =>
 // Custom props:
 // props.picture (string) => image src, if falsy, renders PersonIcon
 // props.marginRight (bool) => sets default marginRight
+// props.visible (bool) => sets the active or not bage
 
 export default function Thumbnail(props) {
   const classes = useStyles(props)();
@@ -31,7 +32,7 @@ export default function Thumbnail(props) {
       className={classes.badge}
       color="secondary"
       variant="dot"
-      invisible={props.invisible ? props.invisible : 'yes'}
+      invisible={!props.visible}
     >
       <Avatar src={picture ? picture : ''} {...props}>
         {!picture && <PersonIcon />}

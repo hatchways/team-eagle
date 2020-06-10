@@ -172,7 +172,7 @@ export default function PollHome(props) {
             />
           </a>
         </div>
-        <Grid container spacing={2}>
+        <Grid container xs={12} sm={12} md={12} lg={12} spacing={2}>
           {currentPolls.map((poll) => {
             return (
               <Grid item xs={6}>
