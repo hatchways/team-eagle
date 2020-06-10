@@ -30,7 +30,7 @@ export default function PollImages(props) {
                 <Grid item>
                   <FavoriteIcon color="secondary" />
                 </Grid>
-                <Grid item>{image.voteIds.length}</Grid>
+                <Grid item>{image.numVotes}</Grid>
               </Grid>
             </Grid>
           );

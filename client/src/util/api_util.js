@@ -15,10 +15,24 @@ export function getFriendsPolls(callback) {
   });
 }
 
-export function getUserPolls() {
-  return fetch('/polls', {
-    method: 'GET',
-  }).then((res) => res.json());
+export async function getUserPolls() {
+  const response = await fetch('/polls', { method: 'GET' });
+  const body = await response.json();
+
+  if (response.status !== 200) {
+    throw Error(body.error);
+  }
+  return body;
+}
+
+export async function deleteUserPoll(_id) {
+  const response = await fetch(`/polls/${_id}`, { method: 'DELETE' });
+  const body = await response.json();
+
+  if (response.status !== 200) {
+    throw Error(body.error);
+  }
+  return body;
 }
 
 // Friends Lists

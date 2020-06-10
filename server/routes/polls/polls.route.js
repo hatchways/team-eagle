@@ -51,14 +51,19 @@ router.post(
 router.delete(
   '/:pollId',
   passport.authenticate('jwt', { session: false }),
-  (req, res) => {
+  (req, res, next) => {
     const pollId = req.params['pollId'];
     Poll.findById(pollId, function (err, poll) {
-      if (err) return res.status(400).json({ error: 'poll not found' });
-      else if (poll._id != req.user._id)
-        return res.status(400).json({ error: 'unauthorised deletion' });
-      poll.remove();
-      return res.status(200).json({ status: 'ok' });
+      if (err) return next(err);
+
+      if (!poll.userId.equals(req.user._id)) {
+        return res.status(400).send({ error: 'Unauthorized deletion' });
+      }
+
+      poll
+        .remove()
+        .then(() => res.status(200).json({ status: 'Ok' }))
+        .catch(next);
     });
   }
 );
