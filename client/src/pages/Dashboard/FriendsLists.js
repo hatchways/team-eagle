@@ -5,8 +5,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Button, Grid, Container } from '@material-ui/core';
 
 import HorizontalFeed from 'components/HorizontalFeed';
-import FriendsListsItem from 'components/friendList/FriendsList';
+import FriendsList from 'components/friendList/FriendsList';
 import FriendListModal from 'components/friendList/FriendListModal';
+import { getFriendLists } from 'util/api_util';
 
 // Temporary
 const lists = [
@@ -68,18 +69,25 @@ export default function FriendsLists(props) {
     listToEdit: false,
   });
   React.useEffect(() => {
-    // Placeholder to simulate fetch
-    setTimeout(() => {
-      setState({
-        ...state,
-        lists,
-      });
-    }, 1500);
+    getFriendLists()
+      .then((lists) => {
+        console.log(lists);
+        setState({
+          ...state,
+          lists,
+        });
+      })
+      .catch((err) => console.log(err));
   }, []);
 
-  function toggleModal(list) {
+  function toggleModal(list, updatedLists) {
     let value = state.listToEdit ? false : list;
-    setState({ ...state, listToEdit: value });
+    console.log(updatedLists);
+    setState({
+      ...state,
+      lists: updatedLists || state.lists,
+      listToEdit: value,
+    });
   }
 
   return (
@@ -96,11 +104,7 @@ export default function FriendsLists(props) {
         {state.lists
           ? state.lists.map((list, i) => {
               return (
-                <FriendsListsItem
-                  key={i}
-                  toggleModal={toggleModal}
-                  list={list}
-                />
+                <FriendsList key={i} toggleModal={toggleModal} list={list} />
               );
             })
           : null}

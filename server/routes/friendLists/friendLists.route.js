@@ -3,7 +3,7 @@ const passport = require('passport');
 const mongoose = require('mongoose');
 const router = express.Router();
 const FriendList = require('../../models/friendList');
-const { getUserLists } = require('./utils');
+const getUserLists = require('./utils');
 
 // @route:  GET /friendLists
 // @desc:   Get all user's friends lists
@@ -30,7 +30,7 @@ router.post(
     const list = new FriendList({
       title: req.body.title,
       userId: mongoose.Types.ObjectId(req.user._id),
-      friendIds: req.body.friendIds.map((id) => mongoose.Types.ObjectId(id)),
+      friends: req.body.friends.map((id) => mongoose.Types.ObjectId(id)),
     });
     list
       .save()
@@ -72,9 +72,7 @@ router.put(
     }
 
     list.title = req.body.title;
-    list.friendIds = req.body.friendIds.map((id) =>
-      mongoose.Types.ObjectId(id)
-    );
+    list.friends = req.body.friends.map((id) => mongoose.Types.ObjectId(id));
 
     list
       .save()

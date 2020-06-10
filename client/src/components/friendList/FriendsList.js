@@ -32,10 +32,15 @@ const useStyles = makeStyles((theme) => ({
   },
   heading: {
     border: 'none',
+    width: '60%',
     background: 'transparent',
     textAlign: 'left',
     flexGrow: 1,
     padding: theme.spacing(1),
+  },
+  title: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
   },
   list: {
     overflowY: 'auto',
@@ -46,7 +51,6 @@ const useStyles = makeStyles((theme) => ({
 export default function FriendsList(props) {
   // const user = React.useContext(UserContext);
   const classes = useStyles();
-  const [modalOpen, setModalOpen] = React.useState(false);
 
   function subtitle() {
     let friendsLength = props.list.friends.length;
@@ -58,8 +62,10 @@ export default function FriendsList(props) {
   return (
     <Paper className={classes.root} square={true}>
       <Grid container alignItems="center" className={classes.header}>
-        <Grid item className={classes.heading} component="button">
-          <Typography variant="h3">{props.list.title}</Typography>
+        <Grid item className={classes.heading}>
+          <Typography variant="h3" className={classes.title}>
+            {props.list.title}
+          </Typography>
           <Typography variant="subtitle1">{subtitle()}</Typography>
         </Grid>
         <Grid item>
