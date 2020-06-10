@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Hidden, Container, Typography } from '@material-ui/core';
 
+import { PollContext } from '../../components/contexts/PollContext';
 import { useDashboardStyles } from '../Dashboard/Dashboard';
 import Friends from '../Dashboard/Friends';
 import PollImages from '../Dashboard/PollImages';
@@ -33,7 +34,9 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Poll() {
   const [error, setError] = useState(null);
-  const [state, setState] = useState({ poll: {}, votes: [] });
+  const pollCtx = useContext(PollContext);
+  const poll = pollCtx.poll;
+  const votes = pollCtx.votes;
   const dashboardClasses = useDashboardStyles();
   const classes = useStyles();
   const pollId = window.location.href.substring(
@@ -45,9 +48,7 @@ export default function Poll() {
       if (err) {
         setError(err);
       } else {
-        setState((prevState) => {
-          return { ...prevState, ...data };
-        });
+        pollCtx.setPollState(data);
       }
     });
   }, []);
@@ -68,7 +69,7 @@ export default function Poll() {
     );
   }
 
-  if (!state.poll._id) {
+  if (!poll._id) {
     // poll is still loading
     return null;
   }
@@ -85,17 +86,17 @@ export default function Poll() {
           item
           className={`${dashboardClasses.rightSide} ${classes.uPadding}`}
         >
-          <PollPageHeader poll={state.poll} />
+          <PollPageHeader poll={poll} />
 
           <PollImages
-            pollId={state.poll._id}
-            votes={state.votes}
+            pollId={poll._id}
+            votes={votes}
             justifyContainer="flex-start"
-            images={state.poll.images}
+            images={poll.images}
             imageSize="15vh"
             favIconSize="5px"
           />
-          <VoteList poll={state.poll} votes={state.votes} />
+          <VoteList poll={poll} votes={votes} />
         </Grid>
       </Grid>
     </Container>

@@ -5,6 +5,7 @@ import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import { theme } from 'themes/theme';
 import { UserContext } from 'components/contexts/UserContext';
 import { FriendsContext } from 'components/contexts/FriendsContext';
+import { PollContextProvider } from './components/contexts/PollContext';
 
 import NavBar from './components/NavBar';
 import Loading from './components/Loading';
@@ -59,7 +60,11 @@ function App() {
           <>
             <NavBar />
             <Switch>
-              <Route exact path="/polls/:pollId" component={Poll} />
+              <Route exact path="/polls/:pollId">
+                <PollContextProvider>
+                  <Poll />
+                </PollContextProvider>
+              </Route>
               <Route exact path="/friends" component={FriendsLayout} />
               <Route exact path="/polls" component={PollHome} />
               <Route exact path="/" component={Dashboard} />
