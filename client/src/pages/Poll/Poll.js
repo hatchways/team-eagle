@@ -88,6 +88,8 @@ export default function Poll() {
           <PollPageHeader poll={state.poll} />
 
           <PollImages
+            pollId={state.poll._id}
+            votes={state.votes}
             justifyContainer="flex-start"
             images={state.poll.images}
             imageSize="15vh"
