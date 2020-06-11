@@ -29,15 +29,21 @@ const io = socketIo(server);
  * Listen on provided port, on all network interfaces.
  */
 
-io.on("connection", (socket)=>{
-  console.log("new client is connected");  
-  socket.on("logged", (data)=>{            
-    socket.emit("makeactive", {userId:data.userId});
-  });
+io.on("connection", (socket)=>{    
+  console.log("connection");  
+
+  socket.on("userActive", (data)=>{    
+    socket.emit("makeActive");
+    io.emit("friendsUpdate");
+  })
+
+  socket.on("userLogout", ()=>{
+    io.emit("friendsUpdate");
+  })
 
   socket.on("disconnect", ()=>{
-    console.log("client disconnected");
-    socket.emit("makedisactive", {data:"data"})    
+    console.log("user disconnected");
+    io.emit("friendsUpdate");
   })
 })
 

@@ -7,7 +7,6 @@ export const UserContext = React.createContext();
 // This should be imported only by index.js
 export const UserContextProvider = ({ children }) => {
   const [state, setState] = React.useState({});
-  const socket = socketIOClient('http://localhost:3001');
 
   function getCurrent(callback) {
     return fetch('/users/current', {
@@ -77,7 +76,6 @@ export const UserContextProvider = ({ children }) => {
   }
 
   function logout(callback) {
-    socket.emit('disconnect');
     return fetch('/auth/logout', {
       method: 'DELETE',
     }).then((res) => {

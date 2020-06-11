@@ -12,19 +12,6 @@ import LoginForm from './LoginForm';
 
 export default function Landing(props) {
   const classes = useStyles();
-  const user = useContext(UserContext);
-
-  useEffect(() => {
-    const socket = socketIOClient('http://localhost:3001');
-    socket.emit('logged', { userId: user._id });
-    socket.on('makeactive', (data) => {
-      fetch('/users/active').then((response) => {});
-    });
-    socket.on('makedisactive', (data) => {
-      console.log('disactivating the user');
-      fetch('/users/disactive').then((response) => {});
-    });
-  });
 
   return (
     <Box className={classes.root}>

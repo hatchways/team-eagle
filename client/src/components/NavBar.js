@@ -18,6 +18,7 @@ import Thumbnail from './Thumbnail';
 import NavDrawer from './NavDrawer';
 import AddPollButton from 'components/polls/AddPollButton';
 import logoImg from '../images/logo.png';
+import socketIOClient from 'socket.io-client';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -54,6 +55,11 @@ export default function NavBar(props) {
     anchorEl: null, // This is required for Menu Component
   });
 
+  React.useEffect(() => {
+    const socket = socketIOClient('http://localhost:3001');
+    // socket.emit("loggedin");
+  });
+
   function toggleDrawer() {
     setState({
       ...state,
@@ -74,6 +80,14 @@ export default function NavBar(props) {
       ...state,
       isDrawerOpen: false,
       anchorEl: null,
+    });
+  }
+
+  function logout(e) {
+    const socket = socketIOClient('http://localhost:3001');
+    socket.emit('userLogout');
+    fetch('/users/disactive').then((response) => {
+      user.logout();
     });
   }
 
@@ -138,7 +152,7 @@ export default function NavBar(props) {
               <MenuItem component={RouterLink} to="/dashboard">
                 Profile
               </MenuItem>
-              <MenuItem component="a" onClick={user.logout}>
+              <MenuItem component="a" onClick={(e) => logout(e)}>
                 Logout
               </MenuItem>
             </Menu>
