@@ -1,13 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import {
-  Box,
-  Typography,
-  Button,
-  Paper,
-  IconButton,
-  Grid,
-} from '@material-ui/core';
+import { Box, Typography, Paper, IconButton, Grid } from '@material-ui/core';
 import SettingsIcon from '@material-ui/icons/Settings';
 import PollImages from './PollImages';
 import { PollContextProvider } from 'components/contexts/PollContext';
