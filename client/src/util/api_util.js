@@ -51,6 +51,54 @@ export async function putUserPoll(data) {
   return body;
 }
 
+export function getPoll(pollId, callback) {
+  fetch(`/polls/${pollId}`, {
+    method: 'GET',
+  }).then((res) => {
+    res.json().then((data) => {
+      if (callback) {
+        if (res.status === 200) {
+          callback(null, data);
+        } else {
+          callback(data.message);
+        }
+      }
+    });
+  });
+}
+
+export function vote(pollId, imageIdx, callback) {
+  fetch(`/polls/${pollId}/${imageIdx}/vote`, {
+    method: 'POST',
+  }).then((res) => {
+    res.json().then((data) => {
+      if (callback) {
+        if (res.status === 200) {
+          callback(null, data);
+        } else {
+          callback(data.message);
+        }
+      }
+    });
+  });
+}
+
+export function unvote(pollId, imageIdx, callback) {
+  fetch(`/polls/${pollId}/${imageIdx}/vote`, {
+    method: 'DELETE',
+  }).then((res) => {
+    res.json().then((data) => {
+      if (callback) {
+        if (res.status === 200) {
+          callback(null, data);
+        } else {
+          callback(data.message);
+        }
+      }
+    });
+  });
+}
+
 // Friends Lists
 
 export function getFriendLists() {

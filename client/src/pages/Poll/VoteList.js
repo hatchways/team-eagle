@@ -21,7 +21,7 @@ export default function VoteList(props) {
 
   return (
     <List className={classes.root}>
-      {props.mockVotes.map((voteItem) => {
+      {props.votes.map((voteItem) => {
         return (
           <>
             <Divider key={`${voteItem._id}-divider`} light />
@@ -38,6 +38,6 @@ export default function VoteList(props) {
 }
 
 VoteList.propTypes = {
-  mockVotes: PropTypes.array.isRequired,
+  votes: PropTypes.array.isRequired,
   poll: PropTypes.object.isRequired,
 };

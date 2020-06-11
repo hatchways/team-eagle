@@ -54,7 +54,6 @@ export const FriendsContextProvider = ({ children }) => {
     });
   }
 
-  // [private]
   function getSuggestions(name = '', callback) {
     if (!user._id) throw new Error('user is not logged in');
 
@@ -77,7 +76,6 @@ export const FriendsContextProvider = ({ children }) => {
     });
   }
 
-  // [private]
   // updates followings when called
   function follow(targetId, callback) {
     if (!user._id) throw new Error('user is not logged in');
@@ -101,7 +99,6 @@ export const FriendsContextProvider = ({ children }) => {
     });
   }
 
-  // [private]
   // updates followings when called
   function unfollow(targetId, callback) {
     if (!user._id) throw new Error('user is not logged in');

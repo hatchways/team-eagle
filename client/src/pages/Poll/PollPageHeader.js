@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
 
 function PollPageHeader(props) {
   const classes = useStyles();
-  const voteTotal = props.mockPoll.images.reduce(
+  const voteTotal = props.poll.images.reduce(
     (accum, img) => accum + img.numVotes,
     0
   );
@@ -41,7 +41,7 @@ function PollPageHeader(props) {
       <br />
       <br />
       <Typography variant="h2" gutterBottom>
-        {props.mockPoll.title}
+        {props.poll.title}
       </Typography>
       <span className={classes.uColorGrey}> {voteTotal} answers </span>
     </div>
@@ -50,7 +50,7 @@ function PollPageHeader(props) {
 
 PollPageHeader.propTypes = {
   history: PropTypes.object.isRequired,
-  mockPoll: PropTypes.object.isRequired,
+  poll: PropTypes.object.isRequired,
 };
 
 export default withRouter(PollPageHeader);
