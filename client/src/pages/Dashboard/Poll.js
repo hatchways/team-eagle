@@ -1,6 +1,14 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, Typography, Button, Paper } from '@material-ui/core';
+import {
+  Box,
+  Typography,
+  Button,
+  Paper,
+  IconButton,
+  Grid,
+} from '@material-ui/core';
+import SettingsIcon from '@material-ui/icons/Settings';
 import PollImages from './PollImages';
 import { PollContextProvider } from 'components/contexts/PollContext';
 import PollModal from 'components/polls/PollModal';
@@ -12,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     height: '100%',
     textTransform: 'none',
+    cursor: 'pointer',
     boxShadow: theme.shadows[3],
     '& img': {
       width: 65,
@@ -24,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Polls(props) {
+export default function Poll(props) {
   // const user = React.useContext(UserContext);
   const classes = useStyles();
   const [modalOpen, setModalOpen] = React.useState(false);
@@ -35,12 +44,14 @@ export default function Polls(props) {
 
   return (
     <>
-      <Button
-        className={classes.root}
-        square={true}
-        component={Paper}
-        onClick={toggleModal}
-      >
+      <Paper className={classes.root} square={true}>
+        <Grid container direction="row-reverse">
+          <Grid item>
+            <IconButton onClick={toggleModal}>
+              <SettingsIcon />
+            </IconButton>
+          </Grid>
+        </Grid>
         <Box>
           <Typography variant="h3">{props.title}</Typography>
           <Typography
@@ -56,7 +67,7 @@ export default function Polls(props) {
             <PollImages pollId={props._id} images={props.images} />
           </PollContextProvider>
         </Box>
-      </Button>
+      </Paper>
       {modalOpen ? (
         <PollModal
           toggle={toggleModal}
