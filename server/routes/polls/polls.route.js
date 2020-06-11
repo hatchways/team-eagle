@@ -25,6 +25,7 @@ router.post(
     const poll = new Poll({
       title: req.body.title,
       userId: req.user._id,
+      friendList: req.body.friendList,
     });
     // Trying to save the poll
     try {
@@ -68,42 +69,29 @@ router.delete(
   }
 );
 
-// @route PUT /polls/update
-// @desc To update the image of a given poll
-// @params image [name attributes should equal to  id of the existing image], pollId
-// @access public [to be made private]
+// @route PUT /polls
+// @desc Updates the title and friend list
+// @params pollId
+// @access Private
 // @caution form trying to use this, will always have to be a enctype="multipart/form-data"
 router.put(
-  '/:pollId',
+  '/',
   passport.authenticate('jwt', { session: false }),
-  upload.any(),
   (req, res) => {
-    const pollId = req.params['pollId'];
-    const messages = [];
-
-    Poll.findById(pollId, (err, poll) => {
-      if (err) return console.log(err);
-      // Update the title if the title exists
-      else if (poll.userId != req.user._id)
-        return res.status(400).json({ error: 'unauthorised deletion' });
-      if (req.body.title) {
-        if (req.body.title != poll.title) {
-          poll.updateTitle(req.body.title);
-          messages.push('title updated');
-        }
+    const { _id, title, friendList } = req.body;
+    Poll.updateOne(
+      { _id },
+      {
+        $set: {
+          title,
+          friendList,
+        },
+      },
+      (err, result) => {
+        if (err) return res.status(400).send({ error: err });
+        return res.send({ message: 'Ok' });
       }
-      // Update the images subdoc if files exist in request
-      if (req.files.length > 0) {
-        req.files.map((image) => {
-          poll.updateImage(image.location, image.fieldname);
-        });
-        messages.push('images updated');
-      }
-      if (messages.length > 0)
-        return res.status(200).json({ status: messages });
-      if (messages.length == 0)
-        return res.status(200).json({ status: 'nothing to update' });
-    });
+    );
   }
 );
 

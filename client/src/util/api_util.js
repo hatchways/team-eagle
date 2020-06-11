@@ -35,6 +35,22 @@ export async function deleteUserPoll(_id) {
   return body;
 }
 
+export async function putUserPoll(data) {
+  const response = await fetch('/polls', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+  const body = await response.json();
+
+  if (response.status !== 200) {
+    throw Error(body.error);
+  }
+  return body;
+}
+
 // Friends Lists
 
 export function getFriendLists() {

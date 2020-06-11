@@ -17,7 +17,7 @@ import {
 import PublicIcon from '@material-ui/icons/Public';
 import PollImages from './PollImages';
 import ConfirmationWindow from 'components/ConfirmationWindow';
-import { getFriendLists, deleteUserPoll } from 'util/api_util';
+import { getFriendLists, putUserPoll, deleteUserPoll } from 'util/api_util';
 import { PollsContext } from 'components/contexts/PollsContext';
 
 export default function PollModal(props) {
@@ -89,32 +89,53 @@ export default function PollModal(props) {
 
     setState({ ...state, loading: true });
 
-    const friendList = state.friendList === 'public' ? '' : state.friendList;
+    const friendList = state.friendList === 'public' ? null : state.friendList;
 
-    const formData = new FormData();
-    formData.set('title', state.title);
-    formData.append('image1', state.images[0]);
-    formData.append('image2', state.images[1]);
-    formData.append('friendList', friendList);
-    const config = {
-      headers: {
-        'content-type': 'multipart/form-data',
-      },
-    };
-    await axios
-      .post('/polls', formData, config)
-      .then((response) => {
-        props.toggle();
-        updatePolls();
+    if (props._id) {
+      putUserPoll({
+        _id: props._id,
+        title: state.title,
+        friendList: friendList,
       })
-      .catch((err) => {
-        console.log(err);
-        setState({
-          ...state,
-          confirmationWindowOpen: false,
-          submitError: true,
+        .then(() => {
+          props.toggle();
+          updatePolls();
+        })
+        .catch((err) => {
+          console.log(err);
+          setState({
+            ...state,
+            confirmationWindowOpen: false,
+            submitError: true,
+          });
         });
-      });
+    } else {
+      const formData = new FormData();
+      formData.set('title', state.title);
+      formData.append('image1', state.images[0]);
+      formData.append('image2', state.images[1]);
+      formData.append('friendList', friendList);
+      const config = {
+        headers: {
+          'content-type': 'multipart/form-data',
+        },
+      };
+
+      await axios
+        .post('/polls', formData, config)
+        .then((response) => {
+          props.toggle();
+          updatePolls();
+        })
+        .catch((err) => {
+          console.log(err);
+          setState({
+            ...state,
+            confirmationWindowOpen: false,
+            submitError: true,
+          });
+        });
+    }
   };
 
   function handleDelete(e) {
@@ -243,7 +264,7 @@ export default function PollModal(props) {
         <ConfirmationWindow
           title="Warning"
           titleComponent="h3"
-          message="Are you sure you want to exclude this list?"
+          message="Are you sure you want to delete this poll?"
           close={toggleConfirmationWindow}
           confirm={handleDelete}
         />
