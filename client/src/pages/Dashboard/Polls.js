@@ -1,7 +1,4 @@
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
-import { Grid, Button, Typography } from '@material-ui/core';
 import { PollsContext } from 'components/contexts/PollsContext';
 
 import HorizontalFeed from 'components/HorizontalFeed';
@@ -14,7 +11,7 @@ export default function Polls(props) {
   return (
     <HorizontalFeed
       title={'Polls'}
-      subtitle="(32)"
+      subtitle={`(${polls ? polls.length : 0})`}
       button={<AddPollButton />}
       noContent={polls && !polls.length}
     >
