@@ -125,7 +125,7 @@ export default function NavBar(props) {
               className={classes.link}
               onClick={openProfileMenu}
             >
-              <Thumbnail marginRight={true} picture={user.picture} />
+              <Thumbnail picture={user.picture} />
               My Profile
             </Button>
             <Menu

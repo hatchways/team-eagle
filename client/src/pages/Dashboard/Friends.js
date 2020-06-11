@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { UserContext } from '../../components/contexts/UserContext';
 import { FriendsContext } from '../../components/contexts/FriendsContext';
-import { Link as RouterLink } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, Typography, List, ListItem, Grid } from '@material-ui/core';
+import { Box, Typography, List } from '@material-ui/core';
 import socketIOClient from 'socket.io-client';
-
-import Thumbnail from 'components/Thumbnail';
+import Friend from 'components/friendList/Friend';
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -45,25 +43,7 @@ export default function Friends() {
       <Typography variant="h2">Friends</Typography>
       <List>
         {followers.map((friend, i) => {
-          return (
-            <ListItem key={i} className={classes.listItem}>
-              <Grid
-                component={RouterLink}
-                to={`/user/${friend._id}`}
-                container
-                alignItems="center"
-                className={classes.friend}
-              >
-                <Thumbnail
-                  picture={friend.picture}
-                  marginRight={true}
-                  component="span"
-                  visible={friend.active}
-                />
-                {friend.name}
-              </Grid>
-            </ListItem>
-          );
+          return <Friend key={i} friend={friend} />;
         })}
       </List>
     </Box>

@@ -11,6 +11,7 @@ import {
 import { theme } from 'themes/theme';
 import { UserContext } from 'components/contexts/UserContext';
 import { FriendsContext } from 'components/contexts/FriendsContext';
+import { PollsContextProvider } from './components/contexts/PollsContext';
 
 import NavBar from './components/NavBar';
 import NavDrawer from './components/NavDrawer';
@@ -69,7 +70,7 @@ function App() {
     <MuiThemeProvider theme={theme}>
       <HashRouter>
         {user._id ? (
-          <>
+          <PollsContextProvider>
             <NavBar />
             <Switch>
               <Route exact path="/polls/:pollId" component={Poll} />
@@ -80,7 +81,7 @@ function App() {
                 <Redirect to="/" />
               </Route>
             </Switch>
-          </>
+          </PollsContextProvider>
         ) : (
           <Switch>
             <Route
