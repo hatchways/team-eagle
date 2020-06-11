@@ -1,5 +1,4 @@
 import React from 'react';
-import socketIOClient from 'socket.io-client';
 
 // This is what each component should import
 export const UserContext = React.createContext();

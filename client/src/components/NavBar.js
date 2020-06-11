@@ -55,11 +55,6 @@ export default function NavBar(props) {
     anchorEl: null, // This is required for Menu Component
   });
 
-  React.useEffect(() => {
-    const socket = socketIOClient('http://localhost:3001');
-    // socket.emit("loggedin");
-  });
-
   function toggleDrawer() {
     setState({
       ...state,
