@@ -62,17 +62,6 @@ export default function NavDrawer(props) {
   const classes = useStyles();
   const user = useContext(UserContext);
 
-  useEffect(() => {
-    const socket = socketIOClient('http://localhost:3001');
-    socket.emit('logged', { userId: user._id });
-    socket.on('makeactive', (data) => {
-      fetch('/users/active').then((response) => {});
-    });
-    socket.on('makedisactive', (data) => {
-      fetch('/users/disactive').then((response) => {});
-    });
-  });
-
   return (
     <Drawer
       className={classes.root}

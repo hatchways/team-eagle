@@ -9,12 +9,14 @@ import { PollContextProvider } from './components/contexts/PollContext';
 import { PollsContextProvider } from './components/contexts/PollsContext';
 
 import NavBar from './components/NavBar';
+import NavDrawer from './components/NavDrawer';
 import Loading from './components/Loading';
 import LandingPage from './pages/Landing/Landing';
 import FriendsLayout from './pages/Friends/Friends';
 import Dashboard from './pages/Dashboard/Dashboard';
 import PollHome from './pages/Polls/PollHome';
 import Poll from './pages/Poll/Poll';
+import socketIOClient from 'socket.io-client';
 
 import './App.css';
 
@@ -24,6 +26,7 @@ function App() {
   const [userLoading, setUserLoading] = useState(true);
 
   React.useEffect(() => {
+    const socket = socketIOClient('http://localhost:3001');
     const fetchData = async () => {
       if (!user._id) {
         setUserLoading(true);
@@ -32,6 +35,10 @@ function App() {
         });
       } else {
         setUserLoading(false);
+        socket.emit('userActive', { userId: user._id });
+        socket.on('makeActive', async () => {
+          fetch('/users/active').then((response) => {});
+        });
         await friends.getFollowers(user._id, (err) => {
           throw new Error(err.message);
         });

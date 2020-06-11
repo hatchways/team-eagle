@@ -81,6 +81,8 @@ router.delete(
   (req, res) => {
     // We know that jwt is in cookies since this is a protected route
     // (a check happens through passport)
+    const user = req.user;
+    user.makeDisactive();
     res.clearCookie('jwt');
 
     return res.json({ success: true });
