@@ -42,7 +42,11 @@ export default function Friend(props) {
           <AddIcon />
         </IconButton>
       ) : null}
-      <Thumbnail picture={props.friend.picture} url={`/${props.friend._id}`} />
+      <Thumbnail
+        picture={props.friend.picture}
+        url={`/${props.friend._id}`}
+        visible={props.friend.active}
+      />
       {props.friend.name}
     </ListItem>
   );

@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { UserContext } from '../../components/contexts/UserContext';
 import { FriendsContext } from '../../components/contexts/FriendsContext';
-import { Link as RouterLink } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, Typography, List, ListItem, Grid } from '@material-ui/core';
+import { Box, Typography, List } from '@material-ui/core';
+import socketIOClient from 'socket.io-client';
 import Friend from 'components/friendList/Friend';
-import Thumbnail from 'components/Thumbnail';
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -23,33 +22,28 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Friends() {
   const friends = React.useContext(FriendsContext);
+  const user = React.useContext(UserContext);
   const classes = useStyles();
+
+  const [followers, setFollowers] = useState([]);
+
+  useEffect(() => {
+    const socket = socketIOClient('http://localhost:3001');
+    setFollowers(friends.followers);
+    socket.on('friendsUpdate', async () => {
+      friends.getFollowers(user._id, (err) => {
+        throw new Error(err.message);
+      });
+      setFollowers(friends.followers);
+    });
+  });
 
   return (
     <Box className={classes.root}>
       <Typography variant="h2">Friends</Typography>
       <List>
-        {friends.followers.map((friend, i) => {
+        {followers.map((friend, i) => {
           return <Friend key={i} friend={friend} />;
-          return (
-            <ListItem key={i} className={classes.listItem}>
-              <Grid
-                component={RouterLink}
-                to={`/user/${friend._id}`}
-                container
-                alignItems="center"
-                className={classes.friend}
-              >
-                <Thumbnail
-                  picture={friend.picture}
-                  marginRight={true}
-                  component="span"
-                  invisible="yes"
-                />
-                {friend.name}
-              </Grid>
-            </ListItem>
-          );
         })}
       </List>
     </Box>
