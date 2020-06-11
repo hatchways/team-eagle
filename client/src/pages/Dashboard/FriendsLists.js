@@ -1,8 +1,5 @@
 import React from 'react';
-import { UserContext } from '../../components/contexts/UserContext';
-import { Link as RouterLink } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
-import { Button, Grid, Container } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 
 import HorizontalFeed from 'components/HorizontalFeed';
 import FriendsList from 'components/friendList/FriendsList';
@@ -17,7 +14,6 @@ export default function FriendsLists(props) {
   React.useEffect(() => {
     getFriendLists()
       .then((lists) => {
-        console.log(lists);
         setState({
           ...state,
           lists,
@@ -28,7 +24,6 @@ export default function FriendsLists(props) {
 
   function toggleModal(list, updatedLists) {
     let value = state.listToEdit ? false : list;
-    console.log(updatedLists);
     setState({
       ...state,
       lists: updatedLists || state.lists,

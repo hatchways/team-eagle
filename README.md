@@ -34,6 +34,7 @@ User Routes
 - `GET /users/current`
 - `GET /users/active`
 - `GET /users/disactive`
+- `GET /users/changePic`
 
 Auth Routes
 
