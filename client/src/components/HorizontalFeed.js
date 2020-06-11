@@ -144,7 +144,7 @@ export default function HorizontalFeed(props) {
                 <Skeleton variant="rect" width={280} height={280} />
               </Grid>
             </>
-          ) : (
+          ) : props.children.length ? (
             props.children.map((Child, i) => {
               return (
                 <Grid item key={i} className={classes.gridItem}>
@@ -152,6 +152,8 @@ export default function HorizontalFeed(props) {
                 </Grid>
               );
             })
+          ) : (
+            <Typography variant="subtitle1">There's nothing here!</Typography>
           )}
         </Grid>
         {position ? (

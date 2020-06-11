@@ -6,6 +6,7 @@ import { theme } from 'themes/theme';
 import { UserContext } from 'components/contexts/UserContext';
 import { FriendsContext } from 'components/contexts/FriendsContext';
 import { PollContextProvider } from './components/contexts/PollContext';
+import { PollsContextProvider } from './components/contexts/PollsContext';
 
 import NavBar from './components/NavBar';
 import Loading from './components/Loading';
@@ -57,7 +58,7 @@ function App() {
     <MuiThemeProvider theme={theme}>
       <BrowserRouter>
         {user._id ? (
-          <>
+          <PollsContextProvider>
             <NavBar />
             <Switch>
               <Route exact path="/polls/:pollId">
@@ -72,7 +73,7 @@ function App() {
                 <Redirect to="/" />
               </Route>
             </Switch>
-          </>
+          </PollsContextProvider>
         ) : (
           <Switch>
             <Route

@@ -242,7 +242,7 @@ export default function FriendListModal(props) {
         <ConfirmationWindow
           title="Warning"
           titleComponent="h3"
-          message="Are you sure you want to exclude this list?"
+          message="Are you sure you want to delete this list?"
           close={toggleConfirmationWindow}
           confirm={handleDelete}
         />

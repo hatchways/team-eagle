@@ -16,8 +16,9 @@ export default function PollImages(props) {
   const justifyContainer = props.justifyContainer
     ? props.justifyContainer
     : 'center';
+  const votes = props.votes ? props.votes : [];
   // has max length of 2 & only includes 0 and 1
-  const currUserVotesImageIdxs = props.votes.map((vote) => {
+  const currUserVotesImageIdxs = votes.map((vote) => {
     if (vote.userId._id === user._id) {
       return vote.pollImageIdx;
     }
