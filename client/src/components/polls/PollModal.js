@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useContext } from 'react';
+import React from 'react';
 import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
 import {
@@ -9,49 +9,60 @@ import {
   CircularProgress,
   Paper,
   Typography,
-  List,
-  ListItem,
-  ListItemIcon,
+  Grid,
+  Select,
+  InputLabel,
+  MenuItem,
 } from '@material-ui/core';
-import ImageIcon from '@material-ui/icons/Image';
-import { useDropzone } from 'react-dropzone';
-import { UserContext } from '../contexts/UserContext';
+import PublicIcon from '@material-ui/icons/Public';
+import PollImages from './PollImages';
+import ConfirmationWindow from 'components/ConfirmationWindow';
+import { getFriendLists, putUserPoll, deleteUserPoll } from 'util/api_util';
+import { PollsContext } from 'components/contexts/PollsContext';
 
 export default function PollModal(props) {
-  const classes = useStyles();
+  const { updatePolls } = React.useContext(PollsContext);
+  const classes = useStyles({
+    extendFriendsList: !!props._id,
+  })();
   const [state, setState] = React.useState({
-    title: '',
-    images: [],
+    title: props.title || '',
+    images: props.images || [],
+    friendList: props.friendList || 'public',
+
     loading: false,
-    submitError: false,
+    friendLists: [],
+    confirmationWindowOpen: false,
+
     titleError: '',
     imagesError: '',
+    submitError: false,
   });
 
-  const user = React.useContext(UserContext);
-
-  const onDrop = useCallback((acceptedFiles) => {
-    if (acceptedFiles.length != 2) {
-      alert('You can only upload only two files per poll. No less, no more.');
-    } else {
-      setState({
-        ...state,
-        images: acceptedFiles,
+  React.useEffect(() => {
+    getFriendLists()
+      .then((friendLists) => setState({ ...state, friendLists }))
+      .catch((err) => {
+        throw err;
       });
-    }
   }, []);
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
-  const handleChange = (e) => {
+  function toggleConfirmationWindow() {
     setState({
       ...state,
-      [e.target.name]: e.target.value || e.target.files,
+      confirmationWindowOpen: !state.confirmationWindowOpen,
+    });
+  }
+
+  const handleChange = (key, value) => {
+    setState({
+      ...state,
+      [key]: value,
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     let titleError = '';
     let imagesError = '';
 
@@ -78,150 +89,219 @@ export default function PollModal(props) {
 
     setState({ ...state, loading: true });
 
-    const formData = new FormData();
-    formData.set('title', state.title);
-    formData.set('userId', user._id);
-    formData.append('image1', state.images[0]);
-    formData.append('image2', state.images[1]);
-    const config = {
-      headers: {
-        'content-type': 'multipart/form-data',
-      },
-    };
-    await axios
-      .post('/polls', formData, config)
-      .then((response) => {
-        alert('Poll has been created');
-        props.toggle();
+    const friendList = state.friendList === 'public' ? null : state.friendList;
+
+    if (props._id) {
+      putUserPoll({
+        _id: props._id,
+        title: state.title,
+        friendList: friendList,
       })
-      .catch((error) => {
-        setState({ ...state, submitError: true });
-      });
+        .then(() => {
+          props.toggle();
+          updatePolls();
+        })
+        .catch((err) => {
+          console.log(err);
+          setState({
+            ...state,
+            confirmationWindowOpen: false,
+            submitError: true,
+          });
+        });
+    } else {
+      const formData = new FormData();
+      formData.set('title', state.title);
+      formData.append('image1', state.images[0]);
+      formData.append('image2', state.images[1]);
+      formData.append('friendList', friendList);
+      const config = {
+        headers: {
+          'content-type': 'multipart/form-data',
+        },
+      };
+
+      await axios
+        .post('/polls', formData, config)
+        .then((response) => {
+          props.toggle();
+          updatePolls();
+        })
+        .catch((err) => {
+          console.log(err);
+          setState({
+            ...state,
+            confirmationWindowOpen: false,
+            submitError: true,
+          });
+        });
+    }
   };
 
+  function handleDelete(e) {
+    e.preventDefault();
+    setState({ ...state, confirmationWindowOpen: false, loading: true });
+
+    deleteUserPoll(props._id)
+      .then((data) => {
+        props.toggle();
+        updatePolls();
+      })
+      .catch((err) => {
+        console.log(err);
+        setState({
+          ...state,
+          confirmationWindowOpen: false,
+          submitError: true,
+        });
+      });
+  }
+
   return (
-    <Modal
-      open={true}
-      onClose={props.toggle}
-      aria-labelledby="poll-modal-title"
-      aria-describedby="poll-modal-description"
-      className={classes.modal}
-    >
-      <Paper className={classes.paper}>
-        {state.loading ? (
-          <>
-            <Typography
-              id="poll-modal-title"
-              variant="h2"
-              component="p"
-              align="center"
-            >
-              Creating Your Poll...
-            </Typography>
-            <Container className={classes.progressContainer}>
-              <CircularProgress />
-            </Container>
-          </>
-        ) : state.submitError ? (
-          <>
-            <Typography id="poll-modal-title" variant="h2">
-              There was an error in creating your poll. Please try again later.
-            </Typography>
-          </>
-        ) : (
-          <>
-            <Typography id="poll-modal-title" variant="h2">
-              {props.edit ? 'Edit Poll' : 'Create Poll'}
-            </Typography>
-            <form className="poll-form" noValidate autoComplete="off">
-              <TextField
-                onChange={handleChange}
-                name="title"
-                fullWidth
-                id="standard-basic"
-                label="Title"
-                helperText={state.titleError}
-                error={!!state.titleError}
-              />
-              <div
-                {...getRootProps()}
-                className={classes.dropzone}
-                style={{
-                  border: state.imagesError ? '1px solid red' : 'none',
-                }}
+    <>
+      <Modal
+        open={true}
+        onClose={props.toggle}
+        aria-labelledby="poll-modal-title"
+        aria-describedby="poll-modal-description"
+        className={classes.modal}
+      >
+        <Paper className={classes.paper}>
+          {state.loading ? (
+            <>
+              <Typography
+                id="poll-modal-title"
+                variant="h2"
+                component="p"
+                align="center"
               >
-                <input {...getInputProps()} />
-                {state.images.length ? (
-                  <List className={classes.list}>
-                    {state.images.map((image, i) => {
-                      return (
-                        <ListItem key={i} dense={true}>
-                          <ListItemIcon>
-                            <ImageIcon />
-                          </ListItemIcon>
-                          {image.name}
-                        </ListItem>
-                      );
-                    })}
-                  </List>
-                ) : isDragActive ? (
-                  <p>Drop the files here</p>
-                ) : (
-                  <p>Drag 'n' drop some files here, or click to select</p>
-                )}
-              </div>
-              <Button
-                mt={3}
-                variant="contained"
-                color="secondary"
-                onClick={handleSubmit}
-              >
-                {props.edit ? 'Edit Poll' : 'Create poll'}
-              </Button>
-            </form>
-          </>
-        )}
-      </Paper>
-    </Modal>
+                Creating Your Poll...
+              </Typography>
+              <Container className={classes.progressContainer}>
+                <CircularProgress />
+              </Container>
+            </>
+          ) : state.submitError ? (
+            <>
+              <Typography id="poll-modal-title" variant="h2">
+                There was an error in creating your poll. Please try again
+                later.
+              </Typography>
+            </>
+          ) : (
+            <>
+              <Typography id="poll-modal-title" variant="h2">
+                {props._id ? 'Edit Poll' : 'Create Poll'}
+              </Typography>
+              <form className="poll-form" noValidate autoComplete="off">
+                <TextField
+                  onChange={(e) => handleChange('title', e.target.value)}
+                  value={state.title}
+                  name="title"
+                  fullWidth
+                  id="standard-basic"
+                  label="Title"
+                  helperText={state.titleError}
+                  error={!!state.titleError}
+                />
+                <PollImages
+                  handleChange={handleChange}
+                  _id={props._id}
+                  images={state.images}
+                  imagesError={state.imagesError}
+                />
+                <Grid container justify="space-between" alignItems="flex-end">
+                  <Grid item className={classes.friendListGridItem}>
+                    <InputLabel id="friend-list-label">Friend List</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      value={state.friendList}
+                      onChange={(e) =>
+                        handleChange('friendList', e.target.value)
+                      }
+                    >
+                      <MenuItem value="public">
+                        <PublicIcon /> Public
+                      </MenuItem>
+                      {state.friendLists.map((list, i) => {
+                        return (
+                          <MenuItem key={i} value={list._id}>
+                            {list.title}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                  </Grid>
+                  <Grid item>
+                    {props._id ? (
+                      <Button
+                        mt={3}
+                        variant="contained"
+                        color="primary"
+                        onClick={toggleConfirmationWindow}
+                      >
+                        Delete Poll
+                      </Button>
+                    ) : null}
+                  </Grid>
+                  <Grid item>
+                    <Button
+                      mt={3}
+                      variant="contained"
+                      color="secondary"
+                      onClick={handleSubmit}
+                    >
+                      {props._id ? 'Edit Poll' : 'Create poll'}
+                    </Button>
+                  </Grid>
+                </Grid>
+              </form>
+            </>
+          )}
+        </Paper>
+      </Modal>
+      {state.confirmationWindowOpen ? (
+        <ConfirmationWindow
+          title="Warning"
+          titleComponent="h3"
+          message="Are you sure you want to delete this poll?"
+          close={toggleConfirmationWindow}
+          confirm={handleDelete}
+        />
+      ) : null}
+    </>
   );
 }
 
-const useStyles = makeStyles((theme) => ({
-  modal: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  list: {
-    height: theme.spacing(6),
-  },
-  dropzone: {
-    height: 300,
-    maxHeight: '25vh',
-    backgroundColor: theme.palette.grey[200],
-    padding: theme.spacing(4),
-    marginBottom: theme.spacing(4),
-    textAlign: 'center',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    cursor: 'pointer',
-  },
-  paper: {
-    maxHeight: '75vh',
-    width: 400,
-    maxWidth: '75vw',
-    padding: theme.spacing(6),
-    [theme.breakpoints.down('xs')]: {
-      padding: theme.spacing(2),
+const useStyles = ({ extendFriendsList }) =>
+  makeStyles((theme) => ({
+    modal: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
     },
-  },
-  progressContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    marginTop: theme.spacing(5),
-    '& svg': {
-      color: theme.palette.secondary.main,
+    paper: {
+      maxHeight: '75vh',
+      width: 400,
+      maxWidth: '75vw',
+      padding: theme.spacing(6),
+      [theme.breakpoints.down('xs')]: {
+        padding: theme.spacing(2),
+      },
     },
-  },
-}));
+    friendListGridItem: {
+      width: extendFriendsList ? '100%' : 'auto',
+      marginBottom: extendFriendsList ? theme.spacing(3) : 0,
+      '& .MuiSelect-select': {
+        width: 140,
+      },
+    },
+    progressContainer: {
+      display: 'flex',
+      justifyContent: 'center',
+      marginTop: theme.spacing(5),
+      '& svg': {
+        color: theme.palette.secondary.main,
+      },
+    },
+  }));

@@ -1,6 +1,6 @@
 const FriendList = require('../../models/friendList');
 
-module.exports = getUserLists = (userId) => {
+const getUserLists = (userId) => {
   return new Promise((resolve, reject) => {
     FriendList.find({ userId }, (err, docs) => {
       if (err) reject(err);
@@ -15,3 +15,5 @@ module.exports = getUserLists = (userId) => {
     });
   });
 };
+
+module.exports = getUserLists;
