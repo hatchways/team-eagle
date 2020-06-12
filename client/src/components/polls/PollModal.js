@@ -89,13 +89,11 @@ export default function PollModal(props) {
 
     setState({ ...state, loading: true });
 
-    const friendList = state.friendList === 'public' ? null : state.friendList;
-
     if (props._id) {
       putUserPoll({
         _id: props._id,
         title: state.title,
-        friendList: friendList,
+        friendList: state.friendList,
       })
         .then(() => {
           props.toggle();
@@ -114,7 +112,7 @@ export default function PollModal(props) {
       formData.set('title', state.title);
       formData.append('image1', state.images[0]);
       formData.append('image2', state.images[1]);
-      formData.append('friendList', friendList);
+      formData.append('friendList', state.friendList);
       const config = {
         headers: {
           'content-type': 'multipart/form-data',
