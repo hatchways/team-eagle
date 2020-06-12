@@ -68,6 +68,13 @@ function PollImages(props) {
     });
   };
 
+  const imageStyles = {
+    width: imageSize,
+    height: imageSize,
+    marginBottom: '10px',
+    objectFit: 'cover',
+  };
+
   return (
     <Grid justify={justifyContainer} container spacing={2}>
       {props.images.map((image, idx) => {
@@ -75,24 +82,10 @@ function PollImages(props) {
           <Grid item key={idx}>
             {props.pollId ? (
               <Link to={`/polls/${props.pollId}`}>
-                <img
-                  style={{
-                    width: imageSize,
-                    height: imageSize,
-                    marginBottom: '10px',
-                  }}
-                  src={image.url}
-                />
+                <img style={imageStyles} src={image.url} />
               </Link>
             ) : (
-              <img
-                style={{
-                  width: imageSize,
-                  height: imageSize,
-                  marginBottom: '10px',
-                }}
-                src={image.url}
-              />
+              <img style={imageStyles} src={image.url} />
             )}
             <Grid container justify="center">
               <Grid item>
