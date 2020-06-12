@@ -28,9 +28,9 @@ const list = [
     url: '/friends-polls',
   },
   {
-    label: 'Opinions',
+    label: 'Polls',
     Icon: ContactSupportIcon,
-    url: '/opinions',
+    url: '/polls',
   },
   {
     label: 'Create Poll',

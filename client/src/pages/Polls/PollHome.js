@@ -9,6 +9,7 @@ import {
   CardMedia,
   CardHeader,
   CircularProgress,
+  Typography,
 } from '@material-ui/core';
 import Pagination from '@material-ui/lab/Pagination';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
@@ -22,18 +23,18 @@ const PollCard = (props) => {
     <Card>
       <CardHeader title={poll.title} />
       <CardContent>
-        <Grid container spacing={1} alignContent="stretch" alignItems="center">
-          {poll.images.map((image) => {
+        <Grid container spacing={1} align="space-evenly">
+          {poll.images.map((image, key) => {
             return (
-              <Grid xs={6} item alignContent="center" alignItems="center">
+              <Grid xs={6} item key={key}>
                 <a href="#" onClick={(e) => props.handleVote(e, 'xyz123')}>
                   <CardMedia
                     component="img"
                     image={image.url}
-                    classes={classes.cardImg}
+                    className={classes.cardImg}
                   />
                 </a>
-                <ThumbUpIcon className={[classes.center, classes.thumb]} /> 500
+                <ThumbUpIcon className={(classes.center, classes.thumb)} /> 500
               </Grid>
             );
           })}
@@ -134,13 +135,19 @@ export default function PollHome(props) {
     );
   } else
     return (
-      <Container alignContent="center">
-        <h1 className={classes.h1}>
+      <Container>
+        <Typography variant="h1" className={classes.h1}>
+          Polls
+        </Typography>
+        <Typography variant="h3" className={classes.subh1}>
+          That require your attention ({state.polls.length})
+        </Typography>
+        {/* <h1 className={classes.h1}>
           Polls{' '}
           <span className={classes.subh1}>
-            That require your attention ({state.polls.length})
+            
           </span>
-        </h1>
+        </h1> */}
         <div className={classes.sorters}>
           Sorty By:
           <a href="#">
@@ -172,7 +179,7 @@ export default function PollHome(props) {
             />
           </a>
         </div>
-        <Grid container spacing={2}>
+        <Grid container spacing={2} alignItems="center">
           {currentPolls.map((poll, key) => {
             return (
               <Grid item xs={6} key={key}>
@@ -193,6 +200,11 @@ export default function PollHome(props) {
 }
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    paddingTop: theme.spacing(10),
+    minHeight: '100vh',
+    display: 'flex',
+  },
   pagination: {
     marginLeft: 'auto',
     marginRight: 'auto',
@@ -200,7 +212,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: 20,
   },
   cardImg: {
-    height: 0,
+    height: '100%',
   },
   sorters: {
     marginTop: -20,
@@ -213,8 +225,10 @@ const useStyles = makeStyles((theme) => ({
   subh1: {
     fontSize: 20,
     color: 'black',
+    marginBottom: 50,
   },
   h1: {
+    marginTop: 20,
     fontSize: 50,
     color: '#ec7063 ',
   },
