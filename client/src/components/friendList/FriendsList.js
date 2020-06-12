@@ -4,15 +4,11 @@ import {
   Typography,
   Divider,
   List,
-  ListItem,
-  ListItemIcon,
   Grid,
   IconButton,
   Paper,
 } from '@material-ui/core';
 import SettingsIcon from '@material-ui/icons/Settings';
-import CloseIcon from '@material-ui/icons/Close';
-import Thumbnail from 'components/Thumbnail';
 import Friend from 'components/friendList/Friend';
 
 const headerHeight = 60;
