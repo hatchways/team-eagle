@@ -22,4 +22,11 @@ const upload = multer({
   }),
 });
 
+const parseArrOfFriendLists = (list) => {
+  return list.map((item) => {
+    return ((_id) => ({ _id }))(list);
+  });
+};
+
 module.exports = upload;
+// module.exports = parseArrOfFriendLists;
