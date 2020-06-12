@@ -33,7 +33,8 @@ router.post(
     const poll = new Poll({
       title: req.body.title,
       userId: req.user._id,
-      friendList: req.body.friendList,
+      friendList:
+        req.body.friendList === 'public' ? undefined : req.body.friendList,
     });
     // Trying to save the poll
     try {
