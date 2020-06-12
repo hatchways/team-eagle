@@ -48,7 +48,7 @@ function PollImages(props) {
           pollCtx.setPollState(data);
         } else {
           // update multiple polls context
-          pollsCtx.updatePolls();
+          pollsCtx.updateDashboardPolls();
         }
       }
     });
@@ -62,7 +62,7 @@ function PollImages(props) {
         if (currURL.match(new RegExp('^/polls/'))) {
           pollCtx.setPollState(data);
         } else {
-          pollsCtx.updatePolls();
+          pollsCtx.updateDashboardPolls();
         }
       }
     });

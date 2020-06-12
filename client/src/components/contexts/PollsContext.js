@@ -9,10 +9,10 @@ export const PollsContextProvider = ({ children }) => {
   const [polls, setPolls] = React.useState([]);
 
   React.useEffect(() => {
-    updatePolls();
+    updateDashboardPolls();
   }, []);
 
-  function updatePolls() {
+  function updateDashboardPolls() {
     getUserPolls()
       .then((polls) => {
         setPolls(polls);
@@ -25,7 +25,9 @@ export const PollsContextProvider = ({ children }) => {
   }
 
   return (
-    <PollsContext.Provider value={{ polls, updatePolls, updateVotablePolls }}>
+    <PollsContext.Provider
+      value={{ polls, updateDashboardPolls, updateVotablePolls }}
+    >
       {children}
     </PollsContext.Provider>
   );
