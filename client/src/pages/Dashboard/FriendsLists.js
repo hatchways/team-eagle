@@ -13,7 +13,6 @@ export default function FriendsLists(props) {
   React.useEffect(() => {
     getFriendLists()
       .then((lists) => {
-        console.log(lists);
         setState({
           ...state,
           lists,
@@ -24,7 +23,6 @@ export default function FriendsLists(props) {
 
   function toggleModal(list, updatedLists) {
     let value = state.listToEdit ? false : list;
-    console.log(updatedLists);
     setState({
       ...state,
       lists: updatedLists || state.lists,

@@ -19,32 +19,7 @@ import NavDrawer from './NavDrawer';
 import AddPollButton from 'components/polls/AddPollButton';
 import logoImg from '../images/logo.png';
 import socketIOClient from 'socket.io-client';
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    backgroundColor: theme.palette.common.white,
-    height: theme.spacing(11),
-    color: theme.palette.common.black,
-    padding: '0 2vw;',
-  },
-  grid: {
-    flexGrow: 1,
-    justifyContent: 'space-between',
-    padding: `0 ${theme.spacing(1)}px`,
-    '& > div': {
-      display: 'flex',
-      alignItems: 'center',
-    },
-  },
-  logo: {
-    flexGrow: 1,
-  },
-  [theme.breakpoints.down('sm')]: {
-    root: {
-      height: theme.spacing(10),
-    },
-  },
-}));
+import ProfilePicModal from './ProfilePicModal';
 
 export default function NavBar(props) {
   const user = React.useContext(UserContext);
@@ -53,12 +28,21 @@ export default function NavBar(props) {
   const [state, setState] = React.useState({
     isDrawerOpen: false,
     anchorEl: null, // This is required for Menu Component
+    profilePicModal: false,
   });
 
-  function toggleDrawer() {
+  function toggleDrawer(e) {
+    e.preventDefault();
     setState({
       ...state,
       isDrawerOpen: !state.isDrawerOpen,
+    });
+  }
+
+  function changeProfilePicModal(e) {
+    setState({
+      ...state,
+      profilePicModal: !state.profilePicModal,
     });
   }
 
@@ -147,6 +131,9 @@ export default function NavBar(props) {
               <MenuItem component={RouterLink} to="/dashboard">
                 Profile
               </MenuItem>
+              <MenuItem component="a" onClick={(e) => changeProfilePicModal(e)}>
+                Change Profile Picture
+              </MenuItem>
               <MenuItem component="a" onClick={(e) => logout(e)}>
                 Logout
               </MenuItem>
@@ -161,6 +148,37 @@ export default function NavBar(props) {
           </Hidden>
         </Grid>
       </AppBar>
+      {state.profilePicModal ? (
+        <ProfilePicModal toggle={changeProfilePicModal} />
+      ) : (
+        <></>
+      )}
     </>
   );
 }
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    backgroundColor: theme.palette.common.white,
+    height: theme.spacing(11),
+    color: theme.palette.common.black,
+    padding: '0 2vw;',
+  },
+  grid: {
+    flexGrow: 1,
+    justifyContent: 'space-between',
+    padding: `0 ${theme.spacing(1)}px`,
+    '& > div': {
+      display: 'flex',
+      alignItems: 'center',
+    },
+  },
+  logo: {
+    flexGrow: 1,
+  },
+  [theme.breakpoints.down('sm')]: {
+    root: {
+      height: theme.spacing(10),
+    },
+  },
+}));
