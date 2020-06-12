@@ -28,6 +28,7 @@ const useStyles = makeStyles((theme) => ({
   },
   header: {
     height: headerHeight,
+    margin: theme.spacing(0.5),
   },
   heading: {
     border: 'none',

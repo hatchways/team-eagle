@@ -53,6 +53,7 @@ export default function PollImages(props) {
               style={{
                 width: imageSize,
                 height: imageSize,
+                objectFit: 'cover',
                 marginBottom: '10px',
               }}
               src={image.url}

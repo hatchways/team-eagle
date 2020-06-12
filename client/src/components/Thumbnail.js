@@ -8,6 +8,7 @@ const useStyles = (props) =>
   makeStyles((theme) => ({
     badge: {
       paddingRight: '7px',
+      border: '1px solid white',
     },
     icon: {
       color: theme.palette.common.white,
@@ -31,6 +32,7 @@ export default function Thumbnail(props) {
       className={classes.badge}
       color="secondary"
       variant="dot"
+      overlap="circle"
       invisible={!props.visible}
     >
       <Avatar src={props.picture ? props.picture : ''} {...props}>
