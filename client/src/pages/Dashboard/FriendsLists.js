@@ -19,7 +19,7 @@ export default function FriendsLists(props) {
         });
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [state]);
 
   function toggleModal(list, updatedLists) {
     let value = state.listToEdit ? false : list;

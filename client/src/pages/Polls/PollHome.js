@@ -27,7 +27,7 @@ const PollCard = (props) => {
           {poll.images.map((image, key) => {
             return (
               <Grid xs={6} item key={key}>
-                <a href="#" onClick={(e) => props.handleVote(e, 'xyz123')}>
+                <a onClick={(e) => props.handleVote(e, 'xyz123')}>
                   <CardMedia
                     component="img"
                     image={image.url}
@@ -150,28 +150,28 @@ export default function PollHome(props) {
         </h1> */}
         <div className={classes.sorters}>
           Sorty By:
-          <a href="#">
+          <a>
             <Chip
               label="Latest First"
               className={classes.chip}
               onClick={(e) => sortPolls(e, 'dateDsc')}
             />
           </a>
-          <a href="#">
+          <a>
             <Chip
               label="Oldest First"
               className={classes.chip}
               onClick={(e) => sortPolls(e, 'dateAsc')}
             />
           </a>
-          <a href="#">
+          <a>
             <Chip
               label="Most Voted"
               className={classes.chip}
               onClick={(e) => sortPolls(e, 'votesDsc')}
             />
           </a>
-          <a href="#">
+          <a>
             <Chip
               label="Least Voted"
               className={classes.chip}
