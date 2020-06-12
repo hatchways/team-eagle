@@ -1,11 +1,15 @@
 const express = require('express');
 const passport = require('passport');
 const router = express.Router();
-
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+const ObjectId = Schema.ObjectId;
 const Poll = require('../../models/poll');
 const FriendList = require('../../models/friendList');
 const Vote = require('../../models/vote');
 const upload = require('./utils');
+// const parseArrOfFriendLists = require('./utils');
+
 const {
   validatePollVoteReq,
   validateGetPollReq,
@@ -124,20 +128,29 @@ router.get(
 router.get(
   '/votable',
   passport.authenticate('jwt', { session: false }),
-  (req, res) => {
+  async (req, res) => {
     let polls = [];
+    let lists = [];
     const user = req.user;
-    const friendLists = FriendList.find({ friends: { $in: user._id } });
+    const userId = mongoose.Types.ObjectId(user._id);
+    await FriendList.find({ friends: userId }, (err, fls) => {
+      fls.map((list) => {
+        lists = lists.concat(list._id);
+      });
+    });
     Poll.find(
       {
         $or: [
-          { friendList: '' },
+          { friendList: null },
+          { friendList: { $in: lists } },
           { friendList: { $exists: false } },
-          { friendList: { $in: friendLists } },
         ],
       },
       (err, docs) => {
-        if (err) return res.status(400).json({ error: err });
+        if (err) {
+          console.log(err);
+          return res.status(400).json({ err: err });
+        }
         polls = polls.concat(docs);
         return res.status(200).json({ polls });
       }
