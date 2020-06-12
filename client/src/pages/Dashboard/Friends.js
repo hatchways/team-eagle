@@ -43,7 +43,7 @@ export default function Friends() {
       <Typography variant="h2">Friends</Typography>
       <List>
         {followers.map((friend, i) => {
-          return <Friend key={i} friend={friend} />;
+          return <Friend disableGutter={true} key={i} friend={friend} />;
         })}
       </List>
     </Box>
