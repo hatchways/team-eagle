@@ -1,18 +1,43 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Grid, List, ListItem, ListItemIcon } from '@material-ui/core';
+import { Box, Grid, List, ListItem, ListItemIcon } from '@material-ui/core';
 import ImageIcon from '@material-ui/icons/Image';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import { useDropzone } from 'react-dropzone';
 
 export default function PollImages(props) {
-  const classes = useStyles();
+  const classes = useStyles({
+    editable: !props._id,
+  })();
+
+  const [imagesData, setImagesData] = React.useState([]);
+
+  function readImageData(files) {
+    let promises = files.map((file) => {
+      return new Promise((resolve, reject) => {
+        let reader = new FileReader();
+        reader.onload = function (e) {
+          resolve({
+            name: file.name,
+            src: e.target.result,
+          });
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+    Promise.all(promises)
+      .then((results) => {
+        setImagesData(results);
+      })
+      .catch((err) => console.log(err));
+  }
 
   function onDrop(files) {
     if (files.length !== 2) {
       alert('You can only upload only two files per poll.');
     } else {
       props.handleChange('images', files);
+      readImageData(files);
     }
   }
 
@@ -25,7 +50,11 @@ export default function PollImages(props) {
         {props.images.map((image, i) => {
           return (
             <Grid item key={i}>
-              <img src={props.images[i].url} alt="Poll image" />
+              <img
+                src={props.images[i].url}
+                alt="Poll image"
+                className={classes.image}
+              />
               <Grid container className={classes.votes}>
                 <Grid item>
                   <FavoriteIcon color="secondary" />
@@ -48,19 +77,15 @@ export default function PollImages(props) {
       }}
     >
       <input {...getInputProps()} />
-      {props.images.length ? (
-        <List className={classes.list}>
-          {props.images.map((image, i) => {
-            return (
-              <ListItem key={i} dense={true}>
-                <ListItemIcon>
-                  <ImageIcon />
-                </ListItemIcon>
-                {image.name}
-              </ListItem>
-            );
-          })}
-        </List>
+      {imagesData.length ? (
+        imagesData.map((image, i) => {
+          return (
+            <Grid item key={i}>
+              <img src={image.src} alt="Poll image" className={classes.image} />
+              <Box>{image.name}</Box>
+            </Grid>
+          );
+        })
       ) : isDragActive ? (
         <p>Drop the files here</p>
       ) : (
@@ -70,23 +95,24 @@ export default function PollImages(props) {
   );
 }
 
-const useStyles = makeStyles((theme) => ({
-  list: {
-    height: theme.spacing(6),
-  },
-  root: {
-    height: 300,
-    maxHeight: '25vh',
-    backgroundColor: theme.palette.grey[200],
-    padding: theme.spacing(4),
-    marginBottom: theme.spacing(4),
-    textAlign: 'center',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    cursor: 'pointer',
-  },
-  votes: {
-    justifyContent: 'center',
-  },
-}));
+const useStyles = ({ editable }) =>
+  makeStyles((theme) => ({
+    root: {
+      height: 300,
+      backgroundColor: theme.palette.grey[200],
+      marginBottom: theme.spacing(4),
+      textAlign: 'center',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-evenly',
+      cursor: editable ? 'pointer' : 'inherit',
+    },
+    image: {
+      width: 120,
+      height: 120,
+      objectFit: 'cover',
+    },
+    votes: {
+      justifyContent: 'center',
+    },
+  }));
