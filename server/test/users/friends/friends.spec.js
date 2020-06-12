@@ -51,7 +51,7 @@ describe('GET /users/:userId/friends/followers', () => {
     });
   });
 
-  context('When request author is not logged in', () => {
+  context('When request author is logged out', () => {
     before((done) => {
       // user is assumed to not be logged in if a cookie isn't sent in request
       chai
@@ -116,7 +116,7 @@ describe('GET /users/:userId/friends/followings', () => {
     });
   });
 
-  context('When request author is not logged in', () => {
+  context('When request author is logged out', () => {
     before((done) => {
       // user is assumed to not be logged in if a cookie isn't sent in request
       chai
@@ -185,7 +185,7 @@ describe('GET /users/:userId/friends/suggestions', () => {
     });
   });
 
-  context('When request author is not logged in', () => {
+  context('When request author is logged out', () => {
     before((done) => {
       chai
         .request(app)
@@ -268,7 +268,7 @@ describe('POST /users/:userId/friends/:friendId/follow', () => {
     });
   });
 
-  context('When request author is not logged in', () => {
+  context('When request author is logged out', () => {
     before((done) => {
       chai
         .request(app)
@@ -360,7 +360,7 @@ describe('DELETE /users/:userId/friends/:friendId/follow', () => {
     });
   });
 
-  context('When request author is not logged in', () => {
+  context('When request author is logged out', () => {
     before((done) => {
       chai
         .request(app)

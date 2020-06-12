@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-import { Grid, Hidden, Container } from '@material-ui/core';
+import { Grid, Hidden, Container, Typography } from '@material-ui/core';
 
+import { PollContext } from '../../components/contexts/PollContext';
 import { useDashboardStyles } from '../Dashboard/Dashboard';
 import Friends from '../Dashboard/Friends';
 import PollImages from '../Dashboard/PollImages';
 import PollPageHeader from './PollPageHeader';
 import VoteList from './VoteList';
+import { getPoll } from '../../util/api_util';
 
 const useStyles = makeStyles((theme) => ({
   uColorGrey: {
@@ -31,64 +33,46 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Poll() {
+  const [error, setError] = useState(null);
+  const pollCtx = useContext(PollContext);
+  const poll = pollCtx.poll;
+  const votes = pollCtx.votes;
   const dashboardClasses = useDashboardStyles();
   const classes = useStyles();
+  const pollId = window.location.href.substring(
+    window.location.href.lastIndexOf('/') + 1
+  );
 
-  const mockPoll = {
-    _id: '180938128',
-    title: 'Which one is better?',
-    images: [
-      {
-        url:
-          'https://images-na.ssl-images-amazon.com/images/I/61mSyjeYXWL._AC_UX679_.jpg',
-        numVotes: 2,
-      },
-      {
-        url:
-          'https://lp2.hm.com/hmgoepprod?set=quality[79],source[/94/36/9436b50129c000035f451e0524d74e0f08006338.jpg],origin[dam],category[kids_babyboy_topstshirts],type[DESCRIPTIVESTILLLIFE],res[s],hmver[1]&call=url[file:/product/main]',
-        numVotes: 1,
-      },
-    ],
-  };
+  React.useEffect(() => {
+    getPoll(pollId, (err, data) => {
+      if (err) {
+        setError(err);
+      } else {
+        pollCtx.setPollState(data);
+      }
+    });
+  }, []);
 
-  const mockVotes = [
-    {
-      _id: '12412423123124',
-      author: {
-        _id: '131234234',
-        name: 'David Smith',
-        picture:
-          'https://images.unsplash.com/photo-1511623785848-021573a3a04f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80',
-      },
-      imageIdx: 0,
-      createdAt: '2020-03-10T23:44:56.289Z',
-      updatedAt: '2020-06-03T23:47:56.289Z',
-    },
-    {
-      _id: '12412423123124',
-      author: {
-        _id: '131234234',
-        name: 'Anna Devine',
-        picture:
-          'https://images.unsplash.com/photo-1559637621-d766677659e8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=934&q=80',
-      },
-      imageIdx: 1,
-      createdAt: '2020-03-10T23:44:56.289Z',
-      updatedAt: '2020-05-31T23:49:56.289Z',
-    },
-    {
-      _id: '12412423123124',
-      author: {
-        _id: '131234234',
-        name: 'Lucy Berger',
-        picture:
-          'https://images.unsplash.com/photo-1558482240-4e3c42448028?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80',
-      },
-      imageIdx: 0,
-      createdAt: '2020-03-10T23:44:56.289Z',
-      updatedAt: '2020-05-20T23:50:56.289Z',
-    },
-  ];
+  if (error) {
+    return (
+      <Grid
+        container
+        spacing={0}
+        direction="column"
+        alignItems="center"
+        style={{ marginTop: '90px' }}
+      >
+        <Grid item>
+          <Typography variant="h3"> {error} </Typography>
+        </Grid>
+      </Grid>
+    );
+  }
+
+  if (!poll._id) {
+    // poll is still loading
+    return null;
+  }
 
   return (
     <Container className={dashboardClasses.root}>
@@ -102,15 +86,17 @@ export default function Poll() {
           item
           className={`${dashboardClasses.rightSide} ${classes.uPadding}`}
         >
-          <PollPageHeader mockPoll={mockPoll} />
+          <PollPageHeader poll={poll} />
 
           <PollImages
+            pollId={poll._id}
+            votes={votes}
             justifyContainer="flex-start"
-            images={mockPoll.images}
+            images={poll.images}
             imageSize="15vh"
             favIconSize="5px"
           />
-          <VoteList poll={mockPoll} mockVotes={mockVotes} />
+          <VoteList poll={poll} votes={votes} />
         </Grid>
       </Grid>
     </Container>

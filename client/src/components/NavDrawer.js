@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import {
@@ -14,7 +14,6 @@ import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople';
 import RecentActorsIcon from '@material-ui/icons/RecentActors';
 import ContactSupportIcon from '@material-ui/icons/ContactSupport';
 import AddIcon from '@material-ui/icons/Add';
-import socketIOClient from 'socket.io-client';
 import { UserContext } from './contexts/UserContext';
 
 const list = [

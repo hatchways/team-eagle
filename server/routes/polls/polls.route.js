@@ -5,7 +5,10 @@ const router = express.Router();
 const Poll = require('../../models/poll');
 const Vote = require('../../models/vote');
 const upload = require('./utils');
-const validatePollVoteReq = require('../../validation/polls/vote.validation');
+const {
+  validatePollVoteReq,
+  validateGetPollReq,
+} = require('../../validation/polls/poll.validation');
 
 // @route POST /polls
 // @desc To add a new poll
@@ -144,7 +147,7 @@ router.get(
 // @access private
 router.get(
   '/friends',
-  passport.authenticate('jwt', { session: true }),
+  passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     const user = req.user;
     const friends = user.friendIds;
@@ -165,15 +168,21 @@ router.get(
 // @access private
 router.get(
   '/:pollId',
-  passport.authenticate('jwt', { session: true }),
+  passport.authenticate('jwt', { session: false }),
   async (req, res) => {
-    const poll = await Poll.findById(req.params.pollId);
+    const {
+      poll,
+      votes,
+      isValid,
+      statusCode,
+      message,
+    } = await validateGetPollReq(req);
 
-    if (!poll) {
-      return res.status(404).json({ message: 'Poll not found' });
+    if (!isValid) {
+      return res.status(statusCode).json({ message: message });
     }
 
-    return res.status(200).json(poll);
+    return res.status(200).json({ poll: poll, votes: votes });
   }
 );
 
@@ -183,13 +192,17 @@ router.get(
 // @access private
 router.post(
   '/:pollId/:imageIdx/vote',
-  passport.authenticate('jwt', { session: true }),
+  passport.authenticate('jwt', { session: false }),
   async (req, res) => {
-    const { isValid, statusCode, message } = await validatePollVoteReq(req);
+    const { poll, isValid, statusCode, message } = await validatePollVoteReq(
+      req
+    );
 
     if (!isValid) {
       return res.status(statusCode).json({ message: message });
     }
+
+    const imageIdx = Number(req.params.imageIdx);
 
     const vote = new Vote({
       userId: req.user._id,
@@ -202,11 +215,16 @@ router.post(
       return res.status(400).json({ message: 'Vote failed to save' });
     }
 
-    // increase numVotes in poll
     poll.images[imageIdx].numVotes += 1;
     await poll.save();
 
-    return res.status(200).json(poll);
+    const votes = await Vote.find({
+      $and: [{ userId: req.user._id }, { pollId: req.params.pollId }],
+    })
+      .populate('userId', '_id name')
+      .exec();
+
+    return res.status(200).json({ poll: poll, votes: votes });
   }
 );
 
@@ -216,16 +234,24 @@ router.post(
 // @access private
 router.delete(
   '/:pollId/:imageIdx/vote',
-  passport.authenticate('jwt', { session: true }),
+  passport.authenticate('jwt', { session: false }),
   async (req, res) => {
-    const { isValid, statusCode, message } = await validatePollVoteReq(req);
+    const { poll, isValid, statusCode, message } = await validatePollVoteReq(
+      req
+    );
 
     if (!isValid) {
       return res.status(statusCode).json({ message: message });
     }
 
-    const vote = await Vote.find({
-      $and: [{ userId: req.user._id }, { pollId: req.params.pollId }],
+    const imageIdx = Number(req.params.imageIdx);
+
+    const vote = await Vote.findOne({
+      $and: [
+        { userId: req.user._id },
+        { pollId: req.params.pollId },
+        { pollImageIdx: imageIdx },
+      ],
     });
 
     if (!vote) {
@@ -234,11 +260,16 @@ router.delete(
 
     await vote.remove();
 
-    // decrease numVotes in poll
     if (poll.images[imageIdx].numVotes > 0) poll.images[imageIdx].numVotes -= 1;
     await poll.save();
 
-    return res.status(200).json(poll);
+    const votes = await Vote.find({
+      $and: [{ userId: req.user._id }, { pollId: req.params.pollId }],
+    })
+      .populate('userId', '_id name')
+      .exec();
+
+    return res.status(200).json({ poll: poll, votes: votes });
   }
 );
 

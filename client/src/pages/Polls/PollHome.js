@@ -52,9 +52,9 @@ export default function PollHome(props) {
     polls: [],
   });
 
-  useEffect(async () => {
+  useEffect(() => {
     document.title = 'Polls | Polls App';
-    await axios.get('/polls/votable').then((response) => {
+    axios.get('/polls/votable').then((response) => {
       setState({ ...state, polls: response.data.polls, loading: false });
     });
   }, []);
@@ -172,10 +172,10 @@ export default function PollHome(props) {
             />
           </a>
         </div>
-        <Grid container xs={12} sm={12} md={12} lg={12} spacing={2}>
-          {currentPolls.map((poll) => {
+        <Grid container spacing={2}>
+          {currentPolls.map((poll, key) => {
             return (
-              <Grid item xs={6}>
+              <Grid item xs={6} key={key}>
                 <PollCard handleVote={handleVote} poll={poll} />
               </Grid>
             );

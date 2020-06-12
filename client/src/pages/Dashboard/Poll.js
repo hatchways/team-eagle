@@ -2,6 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Typography, Button, Paper } from '@material-ui/core';
 import PollImages from './PollImages';
+import { PollContextProvider } from 'components/contexts/PollContext';
 import PollModal from 'components/polls/PollModal';
 
 const useStyles = makeStyles((theme) => ({
@@ -51,7 +52,9 @@ export default function Polls(props) {
               return acc + image.numVotes;
             }, 0) + ' answers'}
           </Typography>
-          <PollImages images={props.images} />
+          <PollContextProvider>
+            <PollImages pollId={props._id} images={props.images} />
+          </PollContextProvider>
         </Box>
       </Button>
       {modalOpen ? (

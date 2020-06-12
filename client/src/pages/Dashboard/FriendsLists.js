@@ -1,6 +1,5 @@
 import React from 'react';
 import { Button } from '@material-ui/core';
-
 import HorizontalFeed from 'components/HorizontalFeed';
 import FriendsList from 'components/friendList/FriendsList';
 import FriendListModal from 'components/friendList/FriendListModal';
