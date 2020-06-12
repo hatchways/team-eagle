@@ -10,9 +10,13 @@ import {
 } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    margin: '10px 0',
+  },
   image: {
     height: '8vh',
     width: '8vh',
+    objectFit: 'cover',
   },
   [theme.breakpoints.down('sm')]: {
     root: {

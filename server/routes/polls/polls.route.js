@@ -1,10 +1,14 @@
 const express = require('express');
 const passport = require('passport');
 const router = express.Router();
-
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+const ObjectId = Schema.ObjectId;
 const Poll = require('../../models/poll');
+const FriendList = require('../../models/friendList');
 const Vote = require('../../models/vote');
 const upload = require('./utils');
+
 const {
   validatePollVoteReq,
   validateGetPollReq,
@@ -137,8 +141,21 @@ router.get(
     // Have to implement logic for checking which friendLists the user is part of and then use that
     // Because friendList not there
     // Logic to find polls with empty friendLists
+    let lists = [];
+    const userId = mongoose.Types.ObjectId(req.user._id);
+
+    const friendLists = await FriendList.find({ friends: userId });
+
+    for (const fl of friendLists) {
+      lists = lists.concat(fl);
+    }
+
     const polls = await Poll.find({
-      $or: [{ friendsLists: '' }, { friendsLists: { $exists: false } }],
+      $or: [
+        { friendList: null },
+        { friendList: { $in: lists } },
+        { friendList: { $exists: false } },
+      ],
     })
       .lean()
       .exec();

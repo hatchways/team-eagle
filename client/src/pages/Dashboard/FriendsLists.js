@@ -36,7 +36,11 @@ export default function FriendsLists(props) {
         title={'Followers Lists'}
         subtitle={`(${state.lists ? state.lists.length : 0})`}
         button={
-          <Button variant="outlined" onClick={() => toggleModal({})}>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => toggleModal({})}
+          >
             Create List
           </Button>
         }
