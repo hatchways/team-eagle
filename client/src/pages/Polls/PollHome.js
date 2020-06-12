@@ -110,7 +110,7 @@ export default function PollHome(props) {
           Polls
         </Typography>
         <Typography variant="h3" className={classes.subh1}>
-          That require your attention ({state.polls.length})
+          That require your attention ({polls.length})
         </Typography>
         <div className={classes.sorters}>
           Sorty By:
