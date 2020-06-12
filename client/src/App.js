@@ -9,7 +9,6 @@ import { PollContextProvider } from './components/contexts/PollContext';
 import { PollsContextProvider } from './components/contexts/PollsContext';
 
 import NavBar from './components/NavBar';
-import NavDrawer from './components/NavDrawer';
 import Loading from './components/Loading';
 import LandingPage from './pages/Landing/Landing';
 import FriendsLayout from './pages/Friends/Friends';

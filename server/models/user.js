@@ -30,6 +30,10 @@ const UserSchema = new Schema({
       ref: 'users',
     },
   ],
+  picture: {
+    type: String,
+    required: false,
+  },
   date: {
     type: Date,
     default: Date.now,
@@ -70,6 +74,11 @@ UserSchema.methods.makeActive = function () {
 
 UserSchema.methods.makeDisactive = function () {
   this.active = false;
+  this.save();
+};
+
+UserSchema.methods.changePicture = function (picUrl) {
+  this.picture = picUrl;
   this.save();
 };
 
