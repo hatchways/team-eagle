@@ -1,47 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import Poll from '../Dashboard/Poll';
+import { PollsContext } from '../../components/contexts/PollsContext';
+import { PollContextProvider } from '../../components/contexts/PollContext';
 import {
   Container,
-  Card,
-  CardContent,
   Grid,
   makeStyles,
   Chip,
-  CardMedia,
-  CardHeader,
   CircularProgress,
 } from '@material-ui/core';
 import Pagination from '@material-ui/lab/Pagination';
-import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import axios from 'axios';
-
-const PollCard = (props) => {
-  const { poll } = props;
-  const classes = useStyles();
-
-  return (
-    <Card>
-      <CardHeader title={poll.title} />
-      <CardContent>
-        <Grid container spacing={1} alignContent="stretch" alignItems="center">
-          {poll.images.map((image) => {
-            return (
-              <Grid xs={6} item alignContent="center" alignItems="center">
-                <a href="#" onClick={(e) => props.handleVote(e, 'xyz123')}>
-                  <CardMedia
-                    component="img"
-                    image={image.url}
-                    classes={classes.cardImg}
-                  />
-                </a>
-                <ThumbUpIcon className={[classes.center, classes.thumb]} /> 500
-              </Grid>
-            );
-          })}
-        </Grid>
-      </CardContent>
-    </Card>
-  );
-};
 
 export default function PollHome(props) {
   const classes = useStyles();
@@ -49,29 +18,26 @@ export default function PollHome(props) {
     loading: true,
     perPage: 4,
     currentPage: 1,
-    polls: [],
   });
+  const pollsCtx = useContext(PollsContext);
+  const polls = pollsCtx.polls;
 
   useEffect(() => {
     document.title = 'Polls | Polls App';
     axios.get('/polls/votable').then((response) => {
-      setState({ ...state, polls: response.data.polls, loading: false });
+      setState({ ...state, loading: false });
+      pollsCtx.updateVotablePolls(response.data.polls);
     });
   }, []);
 
   const indexOfLastPoll = state.currentPage * state.perPage;
   const indexOfFirstPoll = indexOfLastPoll - state.perPage;
-  const currentPolls = state.polls.slice(indexOfFirstPoll, indexOfLastPoll);
+  const currentPolls = polls.slice(indexOfFirstPoll, indexOfLastPoll);
 
   const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(state.polls.length / state.perPage); i++) {
+  for (let i = 1; i <= Math.ceil(polls.length / state.perPage); i++) {
     pageNumbers.push(i);
   }
-
-  const handleVote = (e, imageId) => {
-    e.preventDefault();
-    alert('You just voted');
-  };
 
   const changePage = (e, value) => {
     e.preventDefault();
@@ -80,7 +46,7 @@ export default function PollHome(props) {
 
   const sortPolls = (e, sortBy) => {
     e.preventDefault();
-    let pollsTemp = state.polls;
+    let pollsTemp = polls;
     // Switch to choose the sorter
     switch (sortBy) {
       case 'votesAsc':
@@ -138,7 +104,7 @@ export default function PollHome(props) {
         <h1 className={classes.h1}>
           Polls{' '}
           <span className={classes.subh1}>
-            That require your attention ({state.polls.length})
+            That require your attention ({polls.length})
           </span>
         </h1>
         <div className={classes.sorters}>
@@ -176,7 +142,9 @@ export default function PollHome(props) {
           {currentPolls.map((poll, key) => {
             return (
               <Grid item xs={6} key={key}>
-                <PollCard handleVote={handleVote} poll={poll} />
+                <PollContextProvider key={`pollProvider-${key}`}>
+                  <Poll key={`poll-${key}`} {...poll} />
+                </PollContextProvider>
               </Grid>
             );
           })}

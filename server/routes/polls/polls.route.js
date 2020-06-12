@@ -133,21 +133,29 @@ router.get(
 router.get(
   '/votable',
   passport.authenticate('jwt', { session: false }),
-  (req, res) => {
-    let polls = [];
+  async (req, res) => {
     // Have to implement logic for checking which friendLists the user is part of and then use that
     // Because friendList not there
     // Logic to find polls with empty friendLists
-    Poll.find(
-      {
-        $or: [{ friendsLists: '' }, { friendsLists: { $exists: false } }],
-      },
-      (err, docs) => {
-        if (err) return res.status(400).json({ error: err });
-        polls = polls.concat(docs);
-        return res.status(200).json({ polls });
-      }
-    );
+    const polls = await Poll.find({
+      $or: [{ friendsLists: '' }, { friendsLists: { $exists: false } }],
+    })
+      .lean()
+      .exec();
+
+    if (!polls) return res.status(400).json({ error: err });
+
+    for (const poll of polls) {
+      let votes = await Vote.find({
+        $and: [{ userId: req.user._id }, { pollId: poll._id }],
+      })
+        .populate('userId', '_id name')
+        .exec();
+
+      poll.votesArr = votes;
+    }
+
+    return res.status(200).json({ polls });
   }
 );
 
