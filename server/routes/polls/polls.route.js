@@ -3,6 +3,7 @@ const passport = require('passport');
 const router = express.Router();
 
 const Poll = require('../../models/poll');
+const FriendList = require('../../models/friendList');
 const Vote = require('../../models/vote');
 const upload = require('./utils');
 const {
@@ -125,12 +126,15 @@ router.get(
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
     let polls = [];
-    // Have to implement logic for checking which friendLists the user is part of and then use that
-    // Because friendList not there
-    // Logic to find polls with empty friendLists
+    const user = req.user;
+    const friendLists = FriendList.find({ friends: { $in: user._id } });
     Poll.find(
       {
-        $or: [{ friendsLists: '' }, { friendsLists: { $exists: false } }],
+        $or: [
+          { friendList: '' },
+          { friendList: { $exists: false } },
+          { friendList: { $in: friendLists } },
+        ],
       },
       (err, docs) => {
         if (err) return res.status(400).json({ error: err });
