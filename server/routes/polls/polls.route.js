@@ -8,7 +8,6 @@ const Poll = require('../../models/poll');
 const FriendList = require('../../models/friendList');
 const Vote = require('../../models/vote');
 const upload = require('./utils');
-// const parseArrOfFriendLists = require('./utils');
 
 const {
   validatePollVoteReq,
