@@ -25,6 +25,18 @@ export async function getUserPolls() {
   return body;
 }
 
+export async function getVotablePolls() {
+  const response = await fetch('/polls/votable', { method: 'GET' });
+  const body = await response.json();
+
+  if (response.status !== 200) {
+    throw Error(body.error);
+  }
+
+  debugger;
+  return body;
+}
+
 export async function deleteUserPoll(_id) {
   const response = await fetch(`/polls/${_id}`, { method: 'DELETE' });
   const body = await response.json();

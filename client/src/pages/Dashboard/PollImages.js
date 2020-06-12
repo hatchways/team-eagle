@@ -46,8 +46,10 @@ function PollImages(props) {
         if (currURL.match(new RegExp('^/polls/'))) {
           // update single poll context
           pollCtx.setPollState(data);
-        } else {
+        } else if (currURL.match(new RegExp('^/polls'))) {
           // update multiple polls context
+          pollsCtx.updateVotablePolls();
+        } else {
           pollsCtx.updateDashboardPolls();
         }
       }

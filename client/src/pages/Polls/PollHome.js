@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import Poll from '../Dashboard/Poll';
 import { PollsContext } from '../../components/contexts/PollsContext';
 import { PollContextProvider } from '../../components/contexts/PollContext';
+import { getVotablePolls } from '../../util/api_util';
 import {
   Container,
   Grid,
@@ -10,9 +11,9 @@ import {
   CircularProgress,
 } from '@material-ui/core';
 import Pagination from '@material-ui/lab/Pagination';
-import axios from 'axios';
 
 export default function PollHome(props) {
+  document.title = 'Polls | Polls App';
   const classes = useStyles();
   const [state, setState] = useState({
     loading: true,
@@ -21,17 +22,18 @@ export default function PollHome(props) {
   });
   const pollsCtx = useContext(PollsContext);
   const polls = pollsCtx.polls;
+  debugger;
 
   useEffect(() => {
-    document.title = 'Polls | Polls App';
-    axios.get('/polls/votable').then((response) => {
+    getVotablePolls().then((data) => {
       setState({ ...state, loading: false });
-      pollsCtx.updateVotablePolls(response.data.polls);
+      pollsCtx.setVotablePolls(data.polls);
     });
   }, []);
 
   const indexOfLastPoll = state.currentPage * state.perPage;
   const indexOfFirstPoll = indexOfLastPoll - state.perPage;
+  debugger;
   const currentPolls = polls.slice(indexOfFirstPoll, indexOfLastPoll);
 
   const pageNumbers = [];
@@ -46,36 +48,42 @@ export default function PollHome(props) {
 
   const sortPolls = (e, sortBy) => {
     e.preventDefault();
-    let pollsTemp = polls;
+    let pollsTemp = [...polls];
     // Switch to choose the sorter
     switch (sortBy) {
       case 'votesAsc':
         //  Sorting by least votes
         pollsTemp.sort(function (a, b) {
-          return a.votes - b.votes;
+          const aSum = a.images.reduce((accum, img) => accum + img.numVotes, 0);
+          const bSum = b.images.reduce((accum, img) => accum + img.numVotes, 0);
+          debugger;
+          return aSum > bSum ? 1 : -1;
         });
-        setState({ ...state, polls: pollsTemp });
+        pollsCtx.setVotablePolls(pollsTemp);
         break;
       case 'votesDsc':
         // Sorting by most votes
         pollsTemp.sort(function (a, b) {
-          return b.votes - a.votes;
+          const aSum = a.images.reduce((accum, img) => accum + img.numVotes, 0);
+          const bSum = b.images.reduce((accum, img) => accum + img.numVotes, 0);
+          debugger;
+          return aSum > bSum ? -1 : 1;
         });
-        setState({ ...state, polls: pollsTemp });
+        pollsCtx.setVotablePolls(pollsTemp);
         break;
       case 'dateAsc':
         // Sorting by newest
         pollsTemp.sort(function (a, b) {
           return a.date - b.date;
         });
-        setState({ ...state, polls: pollsTemp });
+        pollsCtx.setVotablePolls(pollsTemp);
         break;
       case 'dateDsc':
         // Sorting by oldest
         pollsTemp.sort(function (a, b) {
           return b.date - a.date;
         });
-        setState({ ...state, polls: pollsTemp });
+        pollsCtx.setVotablePolls(pollsTemp);
         break;
       default:
         console.log('wrong options in sorter');

@@ -20,13 +20,26 @@ export const PollsContextProvider = ({ children }) => {
       .catch((err) => console.log(err));
   }
 
-  function updateVotablePolls(polls) {
+  function updateVotablePolls() {
+    getUserPolls()
+      .then((polls) => {
+        setVotablePolls(polls);
+      })
+      .catch((err) => console.log(err));
+  }
+
+  function setVotablePolls(polls) {
     setPolls(polls);
   }
 
   return (
     <PollsContext.Provider
-      value={{ polls, updateDashboardPolls, updateVotablePolls }}
+      value={{
+        polls,
+        updateDashboardPolls,
+        updateVotablePolls,
+        setVotablePolls,
+      }}
     >
       {children}
     </PollsContext.Provider>
