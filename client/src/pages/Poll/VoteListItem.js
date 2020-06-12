@@ -13,6 +13,7 @@ const useStyles = makeStyles((theme) => ({
   image: {
     height: '8vh',
     width: '8vh',
+    objectFit: 'cover',
   },
   [theme.breakpoints.down('sm')]: {
     root: {
