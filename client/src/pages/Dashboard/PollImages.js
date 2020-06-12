@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { Grid } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { Grid, IconButton } from '@material-ui/core';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 
@@ -8,7 +9,14 @@ import { vote, unvote } from '../../util/api_util';
 import { UserContext } from 'components/contexts/UserContext';
 import { PollContext } from 'components/contexts/PollContext';
 
+const useStyles = makeStyles(() => ({
+  voteNumsContainer: {
+    display: 'flex',
+  },
+}));
+
 export default function PollImages(props) {
+  const classes = useStyles();
   const user = useContext(UserContext);
   const pollCtx = useContext(PollContext);
   const imageSize = props.imageSize ? props.imageSize : '65px';
@@ -59,21 +67,29 @@ export default function PollImages(props) {
             />
             <Grid container justify="center">
               <Grid item>
-                {currUserVotesImageIdxs.includes(idx) ? (
-                  <FavoriteIcon
-                    onClick={() => handleUnvote(idx)}
-                    ontSize={favIconSize}
-                    color="secondary"
-                  />
-                ) : (
-                  <FavoriteBorderIcon
-                    onClick={() => handleVote(idx)}
-                    fontSize={favIconSize}
-                    htmlColor="lightgrey"
-                  />
-                )}
+                <IconButton>
+                  {currUserVotesImageIdxs.includes(idx) ? (
+                    <FavoriteIcon
+                      onClick={() => handleUnvote(idx)}
+                      ontSize={favIconSize}
+                      color="secondary"
+                    />
+                  ) : (
+                    <FavoriteBorderIcon
+                      onClick={() => handleVote(idx)}
+                      fontSize={favIconSize}
+                      htmlColor="lightgrey"
+                    />
+                  )}
+                </IconButton>
               </Grid>
-              <Grid item>{image.numVotes}</Grid>
+              <Grid
+                className={classes.voteNumsContainer}
+                item
+                alignItems="center"
+              >
+                {image.numVotes}
+              </Grid>
             </Grid>
           </Grid>
         );
