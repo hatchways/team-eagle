@@ -63,9 +63,11 @@ export default function Poll(props) {
               }, 0) + ' answers'}
             </Typography>
           </Link>
-          <PollContextProvider>
-            <PollImages pollId={props._id} images={props.images} />
-          </PollContextProvider>
+          <PollImages
+            pollId={props._id}
+            votes={props.votesArr}
+            images={props.images}
+          />
         </Box>
       </Paper>
       {modalOpen ? (
