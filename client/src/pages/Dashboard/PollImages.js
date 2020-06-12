@@ -42,14 +42,14 @@ function PollImages(props) {
       if (err) {
         alert(err);
       } else {
-        // if on 'polls/:pollId' page
         if (currURL.match(new RegExp('^/polls/'))) {
-          // update single poll context
+          // update '/polls/:pollId' page context
           pollCtx.setPollState(data);
         } else if (currURL.match(new RegExp('^/polls'))) {
-          // update multiple polls context
+          // update '/polls' page content
           pollsCtx.updateVotablePolls();
         } else {
+          // update '/' page content
           pollsCtx.updateDashboardPolls();
         }
       }
