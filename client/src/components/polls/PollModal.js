@@ -21,7 +21,7 @@ import { getFriendLists, putUserPoll, deleteUserPoll } from 'util/api_util';
 import { PollsContext } from 'components/contexts/PollsContext';
 
 export default function PollModal(props) {
-  const { updatePolls } = React.useContext(PollsContext);
+  const { updateDashboardPolls } = React.useContext(PollsContext);
   const classes = useStyles({
     extendFriendsList: !!props._id,
   })();
@@ -97,7 +97,7 @@ export default function PollModal(props) {
       })
         .then(() => {
           props.toggle();
-          updatePolls();
+          updateDashboardPolls();
         })
         .catch((err) => {
           console.log(err);
@@ -123,7 +123,7 @@ export default function PollModal(props) {
         .post('/polls', formData, config)
         .then((response) => {
           props.toggle();
-          updatePolls();
+          updateDashboardPolls();
         })
         .catch((err) => {
           console.log(err);
@@ -143,7 +143,7 @@ export default function PollModal(props) {
     deleteUserPoll(props._id)
       .then((data) => {
         props.toggle();
-        updatePolls();
+        updateDashboardPolls();
       })
       .catch((err) => {
         console.log(err);

@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Typography, Paper, IconButton, Grid } from '@material-ui/core';
 import SettingsIcon from '@material-ui/icons/Settings';
 import PollImages from './PollImages';
-import { PollContextProvider } from 'components/contexts/PollContext';
 import PollModal from 'components/polls/PollModal';
 import { Link } from 'react-router-dom';
+import { UserContext } from 'components/contexts/UserContext';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -34,7 +34,8 @@ const useStyles = makeStyles((theme) => ({
 export default function Poll(props) {
   // const user = React.useContext(UserContext);
   const classes = useStyles();
-  const [modalOpen, setModalOpen] = React.useState(false);
+  const user = useContext(UserContext);
+  const [modalOpen, setModalOpen] = useState(false);
 
   function toggleModal() {
     setModalOpen(!modalOpen);
@@ -43,13 +44,15 @@ export default function Poll(props) {
   return (
     <>
       <Paper className={classes.root} square={true}>
-        <Grid container direction="row-reverse">
-          <Grid item>
-            <IconButton onClick={toggleModal}>
-              <SettingsIcon />
-            </IconButton>
+        {user._id === props.userId ? (
+          <Grid container direction="row-reverse">
+            <Grid item>
+              <IconButton onClick={toggleModal}>
+                <SettingsIcon />
+              </IconButton>
+            </Grid>
           </Grid>
-        </Grid>
+        ) : null}
         <Box>
           <Link className={classes.pollLink} to={`/polls/${props._id}`}>
             <Typography variant="h3">{props.title}</Typography>

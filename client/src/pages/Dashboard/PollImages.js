@@ -42,13 +42,15 @@ function PollImages(props) {
       if (err) {
         alert(err);
       } else {
-        // if on 'polls/:pollId' page
         if (currURL.match(new RegExp('^/polls/'))) {
-          // update single poll context
+          // update '/polls/:pollId' page context
           pollCtx.setPollState(data);
+        } else if (currURL.match(new RegExp('^/polls'))) {
+          // update '/polls' page content
+          pollsCtx.updateVotablePolls();
         } else {
-          // update multiple polls context
-          pollsCtx.updatePolls();
+          // update '/' page content
+          pollsCtx.updateDashboardPolls();
         }
       }
     });
@@ -62,7 +64,7 @@ function PollImages(props) {
         if (currURL.match(new RegExp('^/polls/'))) {
           pollCtx.setPollState(data);
         } else {
-          pollsCtx.updatePolls();
+          pollsCtx.updateDashboardPolls();
         }
       }
     });
