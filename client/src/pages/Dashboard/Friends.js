@@ -36,7 +36,7 @@ export default function Friends() {
       });
       setFollowers(friends.followers);
     });
-  });
+  }, [friends, user._id]);
 
   return (
     <Box className={classes.root}>

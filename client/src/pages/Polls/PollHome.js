@@ -9,6 +9,7 @@ import {
   makeStyles,
   Chip,
   CircularProgress,
+  Typography,
 } from '@material-ui/core';
 import Pagination from '@material-ui/lab/Pagination';
 
@@ -22,7 +23,6 @@ export default function PollHome(props) {
   });
   const pollsCtx = useContext(PollsContext);
   const polls = pollsCtx.polls;
-  debugger;
 
   useEffect(() => {
     getVotablePolls().then((data) => {
@@ -33,7 +33,6 @@ export default function PollHome(props) {
 
   const indexOfLastPoll = state.currentPage * state.perPage;
   const indexOfFirstPoll = indexOfLastPoll - state.perPage;
-  debugger;
   const currentPolls = polls.slice(indexOfFirstPoll, indexOfLastPoll);
 
   const pageNumbers = [];
@@ -56,7 +55,6 @@ export default function PollHome(props) {
         pollsTemp.sort(function (a, b) {
           const aSum = a.images.reduce((accum, img) => accum + img.numVotes, 0);
           const bSum = b.images.reduce((accum, img) => accum + img.numVotes, 0);
-          debugger;
           return aSum > bSum ? 1 : -1;
         });
         pollsCtx.setVotablePolls(pollsTemp);
@@ -66,7 +64,6 @@ export default function PollHome(props) {
         pollsTemp.sort(function (a, b) {
           const aSum = a.images.reduce((accum, img) => accum + img.numVotes, 0);
           const bSum = b.images.reduce((accum, img) => accum + img.numVotes, 0);
-          debugger;
           return aSum > bSum ? -1 : 1;
         });
         pollsCtx.setVotablePolls(pollsTemp);
@@ -108,37 +105,37 @@ export default function PollHome(props) {
     );
   } else
     return (
-      <Container alignContent="center">
-        <h1 className={classes.h1}>
-          Polls{' '}
-          <span className={classes.subh1}>
-            That require your attention ({polls.length})
-          </span>
-        </h1>
+      <Container>
+        <Typography variant="h1" className={classes.h1}>
+          Polls
+        </Typography>
+        <Typography variant="h3" className={classes.subh1}>
+          That require your attention ({polls.length})
+        </Typography>
         <div className={classes.sorters}>
           Sorty By:
-          <a href="#">
+          <a>
             <Chip
               label="Latest First"
               className={classes.chip}
               onClick={(e) => sortPolls(e, 'dateDsc')}
             />
           </a>
-          <a href="#">
+          <a>
             <Chip
               label="Oldest First"
               className={classes.chip}
               onClick={(e) => sortPolls(e, 'dateAsc')}
             />
           </a>
-          <a href="#">
+          <a>
             <Chip
               label="Most Voted"
               className={classes.chip}
               onClick={(e) => sortPolls(e, 'votesDsc')}
             />
           </a>
-          <a href="#">
+          <a>
             <Chip
               label="Least Voted"
               className={classes.chip}
@@ -146,7 +143,7 @@ export default function PollHome(props) {
             />
           </a>
         </div>
-        <Grid container spacing={2}>
+        <Grid container spacing={2} alignItems="center">
           {currentPolls.map((poll, key) => {
             return (
               <Grid item xs={6} key={key}>
@@ -169,6 +166,11 @@ export default function PollHome(props) {
 }
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    paddingTop: theme.spacing(10),
+    minHeight: '100vh',
+    display: 'flex',
+  },
   pagination: {
     marginLeft: 'auto',
     marginRight: 'auto',
@@ -176,7 +178,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: 20,
   },
   cardImg: {
-    height: 0,
+    height: '100%',
   },
   sorters: {
     marginTop: -20,
@@ -189,8 +191,10 @@ const useStyles = makeStyles((theme) => ({
   subh1: {
     fontSize: 20,
     color: 'black',
+    marginBottom: 50,
   },
   h1: {
+    marginTop: 20,
     fontSize: 50,
     color: '#ec7063 ',
   },

@@ -45,7 +45,7 @@ export default function PollModal(props) {
       .catch((err) => {
         throw err;
       });
-  }, []);
+  }, [setState]);
 
   function toggleConfirmationWindow() {
     setState({

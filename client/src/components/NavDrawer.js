@@ -33,9 +33,9 @@ const list = [
     url: '/polls',
   },
   {
-    label: 'Opinions',
+    label: 'Polls',
     Icon: ContactSupportIcon,
-    url: '/opinions',
+    url: '/polls',
   },
   {
     label: 'My Profile',

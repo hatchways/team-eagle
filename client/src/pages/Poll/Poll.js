@@ -1,5 +1,4 @@
 import React, { useState, useContext } from 'react';
-import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Hidden, Container, Typography } from '@material-ui/core';
 
@@ -103,7 +102,3 @@ export default function Poll() {
     </Container>
   );
 }
-
-Poll.propTypes = {
-  history: PropTypes.object.isRequired,
-};
