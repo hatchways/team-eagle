@@ -8,6 +8,7 @@ import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import { vote, unvote } from '../../util/api_util';
 import { UserContext } from 'components/contexts/UserContext';
 import { PollContext } from 'components/contexts/PollContext';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(() => ({
   voteNumsContainer: {
@@ -57,14 +58,27 @@ export default function PollImages(props) {
       {props.images.map((image, idx) => {
         return (
           <Grid item key={idx}>
-            <img
-              style={{
-                width: imageSize,
-                height: imageSize,
-                marginBottom: '10px',
-              }}
-              src={image.url}
-            />
+            {props.pollId ? (
+              <Link to={`/polls/${props.pollId}`}>
+                <img
+                  style={{
+                    width: imageSize,
+                    height: imageSize,
+                    marginBottom: '10px',
+                  }}
+                  src={image.url}
+                />
+              </Link>
+            ) : (
+              <img
+                style={{
+                  width: imageSize,
+                  height: imageSize,
+                  marginBottom: '10px',
+                }}
+                src={image.url}
+              />
+            )}
             <Grid container justify="center">
               <Grid item>
                 <IconButton>
