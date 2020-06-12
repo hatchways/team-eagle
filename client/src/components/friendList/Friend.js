@@ -25,7 +25,7 @@ export default function Friend(props) {
   const classes = useStyles();
 
   return (
-    <ListItem className={classes.root}>
+    <ListItem disableGutters={!!props.disableGutter} lassName={classes.root}>
       {props.removeFriend ? (
         <IconButton
           onClick={() => props.removeFriend(props.friend._id)}
