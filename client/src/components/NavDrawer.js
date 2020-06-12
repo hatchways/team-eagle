@@ -13,10 +13,15 @@ import PersonIcon from '@material-ui/icons/Person';
 import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople';
 import RecentActorsIcon from '@material-ui/icons/RecentActors';
 import ContactSupportIcon from '@material-ui/icons/ContactSupport';
-import AddIcon from '@material-ui/icons/Add';
+import HomeIcon from '@material-ui/icons/Home';
 import { UserContext } from './contexts/UserContext';
 
 const list = [
+  {
+    label: 'Home',
+    Icon: HomeIcon,
+    url: '/',
+  },
   {
     label: 'Friends',
     Icon: EmojiPeopleIcon,
@@ -25,17 +30,12 @@ const list = [
   {
     label: "Friends' Polls",
     Icon: RecentActorsIcon,
-    url: '/friends-polls',
+    url: '/polls',
   },
   {
     label: 'Opinions',
     Icon: ContactSupportIcon,
     url: '/opinions',
-  },
-  {
-    label: 'Create Poll',
-    Icon: AddIcon,
-    url: '/create-poll',
   },
   {
     label: 'My Profile',
