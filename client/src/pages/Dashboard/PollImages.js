@@ -1,17 +1,30 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { Grid } from '@material-ui/core';
+import { withRouter } from 'react-router-dom';
+import { makeStyles } from '@material-ui/core/styles';
+import { Grid, IconButton } from '@material-ui/core';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 
 import { vote, unvote } from '../../util/api_util';
 import { UserContext } from 'components/contexts/UserContext';
 import { PollContext } from 'components/contexts/PollContext';
+import { PollsContext } from 'components/contexts/PollsContext';
+import { Link } from 'react-router-dom';
 
-export default function PollImages(props) {
+const useStyles = makeStyles(() => ({
+  voteNumsContainer: {
+    display: 'flex',
+  },
+}));
+
+function PollImages(props) {
+  const classes = useStyles();
   const user = useContext(UserContext);
   const pollCtx = useContext(PollContext);
+  const pollsCtx = useContext(PollsContext);
   const imageSize = props.imageSize ? props.imageSize : '65px';
+  const currURL = props.history.location.pathname;
   const favIconSize = props.favIconSize ? props.favIconSize : 'default';
   const justifyContainer = props.justifyContainer
     ? props.justifyContainer
@@ -29,7 +42,16 @@ export default function PollImages(props) {
       if (err) {
         alert(err);
       } else {
-        pollCtx.setPollState(data);
+        if (currURL.match(new RegExp('^/polls/'))) {
+          // update '/polls/:pollId' page context
+          pollCtx.setPollState(data);
+        } else if (currURL.match(new RegExp('^/polls'))) {
+          // update '/polls' page content
+          pollsCtx.updateVotablePolls();
+        } else {
+          // update '/' page content
+          pollsCtx.updateDashboardPolls();
+        }
       }
     });
   };
@@ -39,9 +61,20 @@ export default function PollImages(props) {
       if (err) {
         alert(err);
       } else {
-        pollCtx.setPollState(data);
+        if (currURL.match(new RegExp('^/polls/'))) {
+          pollCtx.setPollState(data);
+        } else {
+          pollsCtx.updateDashboardPolls();
+        }
       }
     });
+  };
+
+  const imageStyles = {
+    width: imageSize,
+    height: imageSize,
+    marginBottom: '10px',
+    objectFit: 'cover',
   };
 
   return (
@@ -49,32 +82,38 @@ export default function PollImages(props) {
       {props.images.map((image, idx) => {
         return (
           <Grid item key={idx}>
-            <img
-              style={{
-                width: imageSize,
-                height: imageSize,
-                objectFit: 'cover',
-                marginBottom: '10px',
-              }}
-              src={image.url}
-            />
+            {props.pollId ? (
+              <Link to={`/polls/${props.pollId}`}>
+                <img style={imageStyles} src={image.url} />
+              </Link>
+            ) : (
+              <img style={imageStyles} src={image.url} />
+            )}
             <Grid container justify="center">
               <Grid item>
-                {currUserVotesImageIdxs.includes(idx) ? (
-                  <FavoriteIcon
-                    onClick={() => handleUnvote(idx)}
-                    ontSize={favIconSize}
-                    color="secondary"
-                  />
-                ) : (
-                  <FavoriteBorderIcon
-                    onClick={() => handleVote(idx)}
-                    fontSize={favIconSize}
-                    htmlColor="lightgrey"
-                  />
-                )}
+                <IconButton>
+                  {currUserVotesImageIdxs.includes(idx) ? (
+                    <FavoriteIcon
+                      onClick={() => handleUnvote(idx)}
+                      ontSize={favIconSize}
+                      color="secondary"
+                    />
+                  ) : (
+                    <FavoriteBorderIcon
+                      onClick={() => handleVote(idx)}
+                      fontSize={favIconSize}
+                      htmlColor="lightgrey"
+                    />
+                  )}
+                </IconButton>
               </Grid>
-              <Grid item>{image.numVotes}</Grid>
+              <Grid
+                className={classes.voteNumsContainer}
+                item
+                alignItems="center"
+              >
+                {image.numVotes}
+              </Grid>
             </Grid>
           </Grid>
         );
@@ -84,6 +123,7 @@ export default function PollImages(props) {
 }
 
 PollImages.propTypes = {
+  history: PropTypes.object.isRequired,
   pollId: PropTypes.string.isRequired,
   votes: PropTypes.array.isRequired,
   images: PropTypes.array.isRequired,
@@ -91,3 +131,5 @@ PollImages.propTypes = {
   favIconSize: PropTypes.string,
   justifyContainer: PropTypes.string,
 };
+
+export default withRouter(PollImages);

@@ -6,13 +6,13 @@ export const PollsContext = React.createContext();
 
 // This should be imported only by index.js
 export const PollsContextProvider = ({ children }) => {
-  const [polls, setPolls] = React.useState(null);
+  const [polls, setPolls] = React.useState([]);
 
   React.useEffect(() => {
-    updatePolls();
+    updateDashboardPolls();
   }, []);
 
-  function updatePolls() {
+  function updateDashboardPolls() {
     getUserPolls()
       .then((polls) => {
         setPolls(polls);
@@ -20,8 +20,27 @@ export const PollsContextProvider = ({ children }) => {
       .catch((err) => console.log(err));
   }
 
+  function updateVotablePolls() {
+    getUserPolls()
+      .then((polls) => {
+        setVotablePolls(polls);
+      })
+      .catch((err) => console.log(err));
+  }
+
+  function setVotablePolls(polls) {
+    setPolls(polls);
+  }
+
   return (
-    <PollsContext.Provider value={{ polls, updatePolls }}>
+    <PollsContext.Provider
+      value={{
+        polls,
+        updateDashboardPolls,
+        updateVotablePolls,
+        setVotablePolls,
+      }}
+    >
       {children}
     </PollsContext.Provider>
   );

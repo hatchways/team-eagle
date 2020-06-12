@@ -1,19 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import Poll from '../Dashboard/Poll';
+import { PollsContext } from '../../components/contexts/PollsContext';
+import { PollContextProvider } from '../../components/contexts/PollContext';
+import { getVotablePolls } from '../../util/api_util';
 import {
   Container,
-  Card,
-  CardContent,
   Grid,
   makeStyles,
   Chip,
-  CardMedia,
-  CardHeader,
   CircularProgress,
   Typography,
 } from '@material-ui/core';
 import Pagination from '@material-ui/lab/Pagination';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
-import axios from 'axios';
 
 const PollCard = (props) => {
   const { poll } = props;
@@ -45,34 +44,33 @@ const PollCard = (props) => {
 };
 
 export default function PollHome(props) {
+  document.title = 'Polls | Polls App';
   const classes = useStyles();
   const [state, setState] = useState({
     loading: true,
     perPage: 4,
     currentPage: 1,
-    polls: [],
   });
+  const pollsCtx = useContext(PollsContext);
+  const polls = pollsCtx.polls;
+  debugger;
 
   useEffect(() => {
-    document.title = 'Polls | Polls App';
-    axios.get('/polls/votable').then((response) => {
-      setState({ ...state, polls: response.data.polls, loading: false });
+    getVotablePolls().then((data) => {
+      setState({ ...state, loading: false });
+      pollsCtx.setVotablePolls(data.polls);
     });
   }, []);
 
   const indexOfLastPoll = state.currentPage * state.perPage;
   const indexOfFirstPoll = indexOfLastPoll - state.perPage;
-  const currentPolls = state.polls.slice(indexOfFirstPoll, indexOfLastPoll);
+  debugger;
+  const currentPolls = polls.slice(indexOfFirstPoll, indexOfLastPoll);
 
   const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(state.polls.length / state.perPage); i++) {
+  for (let i = 1; i <= Math.ceil(polls.length / state.perPage); i++) {
     pageNumbers.push(i);
   }
-
-  const handleVote = (e, imageId) => {
-    e.preventDefault();
-    alert('You just voted');
-  };
 
   const changePage = (e, value) => {
     e.preventDefault();
@@ -81,36 +79,42 @@ export default function PollHome(props) {
 
   const sortPolls = (e, sortBy) => {
     e.preventDefault();
-    let pollsTemp = state.polls;
+    let pollsTemp = [...polls];
     // Switch to choose the sorter
     switch (sortBy) {
       case 'votesAsc':
         //  Sorting by least votes
         pollsTemp.sort(function (a, b) {
-          return a.votes - b.votes;
+          const aSum = a.images.reduce((accum, img) => accum + img.numVotes, 0);
+          const bSum = b.images.reduce((accum, img) => accum + img.numVotes, 0);
+          debugger;
+          return aSum > bSum ? 1 : -1;
         });
-        setState({ ...state, polls: pollsTemp });
+        pollsCtx.setVotablePolls(pollsTemp);
         break;
       case 'votesDsc':
         // Sorting by most votes
         pollsTemp.sort(function (a, b) {
-          return b.votes - a.votes;
+          const aSum = a.images.reduce((accum, img) => accum + img.numVotes, 0);
+          const bSum = b.images.reduce((accum, img) => accum + img.numVotes, 0);
+          debugger;
+          return aSum > bSum ? -1 : 1;
         });
-        setState({ ...state, polls: pollsTemp });
+        pollsCtx.setVotablePolls(pollsTemp);
         break;
       case 'dateAsc':
         // Sorting by newest
         pollsTemp.sort(function (a, b) {
           return a.date - b.date;
         });
-        setState({ ...state, polls: pollsTemp });
+        pollsCtx.setVotablePolls(pollsTemp);
         break;
       case 'dateDsc':
         // Sorting by oldest
         pollsTemp.sort(function (a, b) {
           return b.date - a.date;
         });
-        setState({ ...state, polls: pollsTemp });
+        pollsCtx.setVotablePolls(pollsTemp);
         break;
       default:
         console.log('wrong options in sorter');
@@ -142,12 +146,6 @@ export default function PollHome(props) {
         <Typography variant="h3" className={classes.subh1}>
           That require your attention ({state.polls.length})
         </Typography>
-        {/* <h1 className={classes.h1}>
-          Polls{' '}
-          <span className={classes.subh1}>
-            
-          </span>
-        </h1> */}
         <div className={classes.sorters}>
           Sorty By:
           <a>
@@ -183,7 +181,9 @@ export default function PollHome(props) {
           {currentPolls.map((poll, key) => {
             return (
               <Grid item xs={6} key={key}>
-                <PollCard handleVote={handleVote} poll={poll} />
+                <PollContextProvider key={`pollProvider-${key}`}>
+                  <Poll key={`poll-${key}`} {...poll} />
+                </PollContextProvider>
               </Grid>
             );
           })}

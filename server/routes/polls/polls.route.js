@@ -110,14 +110,23 @@ router.put(
 router.get(
   '/',
   passport.authenticate('jwt', { session: false }),
-  (req, res) => {
+  async (req, res) => {
     const user = req.user;
-    let polls = [];
-    Poll.find({ userId: user._id }, (err, docs) => {
-      if (err) return res.status(400).send(err);
-      polls = polls.concat(docs);
-      return res.status(200).json(polls);
-    });
+    const polls = await Poll.find({ userId: user._id }).lean().exec();
+
+    if (!polls) return res.status(400).send(err);
+
+    for (const poll of polls) {
+      let votes = await Vote.find({
+        $and: [{ userId: req.user._id }, { pollId: poll._id }],
+      })
+        .populate('userId', '_id name')
+        .exec();
+
+      poll.votesArr = votes;
+    }
+
+    return res.status(200).json(polls);
   }
 );
 
@@ -129,32 +138,41 @@ router.get(
   '/votable',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
-    let polls = [];
+    // Have to implement logic for checking which friendLists the user is part of and then use that
+    // Because friendList not there
+    // Logic to find polls with empty friendLists
     let lists = [];
-    const user = req.user;
-    const userId = mongoose.Types.ObjectId(user._id);
-    await FriendList.find({ friends: userId }, (err, fls) => {
-      fls.map((list) => {
-        lists = lists.concat(list._id);
-      });
-    });
-    Poll.find(
-      {
-        $or: [
-          { friendList: null },
-          { friendList: { $in: lists } },
-          { friendList: { $exists: false } },
-        ],
-      },
-      (err, docs) => {
-        if (err) {
-          console.log(err);
-          return res.status(400).json({ err: err });
-        }
-        polls = polls.concat(docs);
-        return res.status(200).json({ polls });
-      }
-    );
+    const userId = mongoose.Types.ObjectId(req.user._id);
+
+    const friendLists = await FriendList.find({ friends: userId });
+
+    for (const fl of friendLists) {
+      lists = lists.concat(fl);
+    }
+
+    const polls = await Poll.find({
+      $or: [
+        { friendList: null },
+        { friendList: { $in: lists } },
+        { friendList: { $exists: false } },
+      ],
+    })
+      .lean()
+      .exec();
+
+    if (!polls) return res.status(400).json({ error: err });
+
+    for (const poll of polls) {
+      let votes = await Vote.find({
+        $and: [{ userId: req.user._id }, { pollId: poll._id }],
+      })
+        .populate('userId', '_id name')
+        .exec();
+
+      poll.votesArr = votes;
+    }
+
+    return res.status(200).json({ polls });
   }
 );
 
