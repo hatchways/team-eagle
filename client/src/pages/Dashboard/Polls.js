@@ -11,7 +11,7 @@ export default function Polls(props) {
 
   return (
     <HorizontalFeed
-      title={'Polls You Created'}
+      title={'Polls'}
       subtitle={`(${polls ? polls.length : 0})`}
       button={<AddPollButton />}
       noContent={polls && !polls.length}

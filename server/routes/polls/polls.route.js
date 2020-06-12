@@ -3,7 +3,6 @@ const passport = require('passport');
 const router = express.Router();
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const ObjectId = Schema.ObjectId;
 const Poll = require('../../models/poll');
 const FriendList = require('../../models/friendList');
 const Vote = require('../../models/vote');
@@ -120,7 +119,7 @@ router.get(
       let votes = await Vote.find({
         $and: [{ userId: req.user._id }, { pollId: poll._id }],
       })
-        .populate('userId', '_id name')
+        .populate('userId')
         .exec();
 
       poll.votesArr = votes;
@@ -166,7 +165,7 @@ router.get(
       let votes = await Vote.find({
         $and: [{ userId: req.user._id }, { pollId: poll._id }],
       })
-        .populate('userId', '_id name')
+        .populate('userId')
         .exec();
 
       poll.votesArr = votes;
@@ -253,10 +252,9 @@ router.post(
     poll.images[imageIdx].numVotes += 1;
     await poll.save();
 
-    const votes = await Vote.find({
-      $and: [{ userId: req.user._id }, { pollId: req.params.pollId }],
-    })
-      .populate('userId', '_id name')
+    const votes = await Vote.find({ pollId: req.params.pollId })
+      .sort({ createdAt: -1 })
+      .populate('userId', '_id name picture')
       .exec();
 
     return res.status(200).json({ poll: poll, votes: votes });
@@ -298,10 +296,9 @@ router.delete(
     if (poll.images[imageIdx].numVotes > 0) poll.images[imageIdx].numVotes -= 1;
     await poll.save();
 
-    const votes = await Vote.find({
-      $and: [{ userId: req.user._id }, { pollId: req.params.pollId }],
-    })
-      .populate('userId', '_id name')
+    const votes = await Vote.find({ pollId: req.params.pollId })
+      .sort({ createdAt: -1 })
+      .populate('userId', '_id name picture')
       .exec();
 
     return res.status(200).json({ poll: poll, votes: votes });

@@ -32,7 +32,6 @@ export default function VoteListItem(props) {
   const vote = props.vote;
   const author = vote.userId;
   const timeElapsed = moment(new Date(vote.updatedAt)).fromNow();
-
   return (
     <ListItem className={classes.root}>
       <ListItemAvatar>
