@@ -12,36 +12,6 @@ import {
   Typography,
 } from '@material-ui/core';
 import Pagination from '@material-ui/lab/Pagination';
-import ThumbUpIcon from '@material-ui/icons/ThumbUp';
-
-const PollCard = (props) => {
-  const { poll } = props;
-  const classes = useStyles();
-
-  return (
-    <Card>
-      <CardHeader title={poll.title} />
-      <CardContent>
-        <Grid container spacing={1} align="space-evenly">
-          {poll.images.map((image, key) => {
-            return (
-              <Grid xs={6} item key={key}>
-                <a onClick={(e) => props.handleVote(e, 'xyz123')}>
-                  <CardMedia
-                    component="img"
-                    image={image.url}
-                    className={classes.cardImg}
-                  />
-                </a>
-                <ThumbUpIcon className={(classes.center, classes.thumb)} /> 500
-              </Grid>
-            );
-          })}
-        </Grid>
-      </CardContent>
-    </Card>
-  );
-};
 
 export default function PollHome(props) {
   document.title = 'Polls | Polls App';
@@ -53,7 +23,6 @@ export default function PollHome(props) {
   });
   const pollsCtx = useContext(PollsContext);
   const polls = pollsCtx.polls;
-  debugger;
 
   useEffect(() => {
     getVotablePolls().then((data) => {
@@ -64,7 +33,6 @@ export default function PollHome(props) {
 
   const indexOfLastPoll = state.currentPage * state.perPage;
   const indexOfFirstPoll = indexOfLastPoll - state.perPage;
-  debugger;
   const currentPolls = polls.slice(indexOfFirstPoll, indexOfLastPoll);
 
   const pageNumbers = [];
@@ -87,7 +55,6 @@ export default function PollHome(props) {
         pollsTemp.sort(function (a, b) {
           const aSum = a.images.reduce((accum, img) => accum + img.numVotes, 0);
           const bSum = b.images.reduce((accum, img) => accum + img.numVotes, 0);
-          debugger;
           return aSum > bSum ? 1 : -1;
         });
         pollsCtx.setVotablePolls(pollsTemp);
@@ -97,7 +64,6 @@ export default function PollHome(props) {
         pollsTemp.sort(function (a, b) {
           const aSum = a.images.reduce((accum, img) => accum + img.numVotes, 0);
           const bSum = b.images.reduce((accum, img) => accum + img.numVotes, 0);
-          debugger;
           return aSum > bSum ? -1 : 1;
         });
         pollsCtx.setVotablePolls(pollsTemp);
