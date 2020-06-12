@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, IconButton } from '@material-ui/core';
 import FavoriteIcon from '@material-ui/icons/Favorite';
@@ -8,6 +9,7 @@ import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import { vote, unvote } from '../../util/api_util';
 import { UserContext } from 'components/contexts/UserContext';
 import { PollContext } from 'components/contexts/PollContext';
+import { PollsContext } from 'components/contexts/PollsContext';
 import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(() => ({
@@ -16,11 +18,13 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function PollImages(props) {
+function PollImages(props) {
   const classes = useStyles();
   const user = useContext(UserContext);
   const pollCtx = useContext(PollContext);
+  const pollsCtx = useContext(PollsContext);
   const imageSize = props.imageSize ? props.imageSize : '65px';
+  const currURL = props.history.location.pathname;
   const favIconSize = props.favIconSize ? props.favIconSize : 'default';
   const justifyContainer = props.justifyContainer
     ? props.justifyContainer
@@ -38,7 +42,14 @@ export default function PollImages(props) {
       if (err) {
         alert(err);
       } else {
-        pollCtx.setPollState(data);
+        // if on 'polls/:pollId' page
+        if (currURL.match(new RegExp('^/polls/'))) {
+          // update single poll context
+          pollCtx.setPollState(data);
+        } else {
+          // update multiple polls context
+          pollsCtx.updatePolls();
+        }
       }
     });
   };
@@ -48,7 +59,11 @@ export default function PollImages(props) {
       if (err) {
         alert(err);
       } else {
-        pollCtx.setPollState(data);
+        if (currURL.match(new RegExp('^/polls/'))) {
+          pollCtx.setPollState(data);
+        } else {
+          pollsCtx.updatePolls();
+        }
       }
     });
   };
@@ -113,6 +128,7 @@ export default function PollImages(props) {
 }
 
 PollImages.propTypes = {
+  history: PropTypes.object.isRequired,
   pollId: PropTypes.string.isRequired,
   votes: PropTypes.array.isRequired,
   images: PropTypes.array.isRequired,
@@ -120,3 +136,5 @@ PollImages.propTypes = {
   favIconSize: PropTypes.string,
   justifyContainer: PropTypes.string,
 };
+
+export default withRouter(PollImages);
