@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { PollsContext } from 'components/contexts/PollsContext';
 
 import HorizontalFeed from 'components/HorizontalFeed';
@@ -7,11 +7,16 @@ import Poll from './Poll';
 import { PollContextProvider } from '../../components/contexts/PollContext';
 
 export default function Polls(props) {
-  const { polls } = React.useContext(PollsContext);
+  const pollsCtx = React.useContext(PollsContext);
+  const polls = pollsCtx.polls;
+
+  useEffect(() => {
+    pollsCtx.updateDashboardPolls();
+  }, []);
 
   return (
     <HorizontalFeed
-      title={'Polls'}
+      title={'Polls you Created'}
       subtitle={`(${polls ? polls.length : 0})`}
       button={<AddPollButton />}
       noContent={polls && !polls.length}
