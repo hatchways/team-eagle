@@ -1,4 +1,4 @@
-# Poll App. Hatchways Project
+# Poll App. Hatchways Co-op Project.
 
 ## Background and Overview
 
