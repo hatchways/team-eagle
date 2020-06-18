@@ -10,7 +10,6 @@ import {
   Avatar,
 } from '@material-ui/core';
 import { green, red } from '@material-ui/core/colors';
-import testImg from '../../images/img1.png';
 import { FriendsContext } from '../contexts/FriendsContext';
 
 const useStyles = makeStyles((theme) => ({
@@ -74,7 +73,7 @@ export default function FriendCollectionItem(props) {
   return (
     <ListItem button>
       <ListItemAvatar>
-        <Avatar alt={`${user.name}'s avatar`} src={testImg} />
+        <Avatar alt={`${user.name}'s avatar`} src={user.picture} />
       </ListItemAvatar>
       <ListItemText id={labelId} primary={user.name} />
       <ListItemSecondaryAction>

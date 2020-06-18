@@ -7,7 +7,7 @@ const getUserLists = (userId) => {
       if (docs) {
         FriendList.populate(docs, {
           path: 'friends',
-          select: ['name', 'active'],
+          select: ['name', 'active', 'picture'],
         })
           .then((result) => resolve(result))
           .catch((err) => reject(err));
