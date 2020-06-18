@@ -101,7 +101,7 @@ Checkout the [dev README](./dev.README.md) for details about API endpoints.
 
 ![active user demo GIF](readme_assets/GIFS/web_socket_demo.gif)
 
-Server-side code (can be found in `./server/www`):
+`server/bin/www`:
 
 ```JavaScript
 io.on('connection', (socket) => {
@@ -136,7 +136,7 @@ io.on('connection', (socket) => {
   ![Integration tests spec run GIF](readme_assets/GIFS/spec_run.gif)
 
 - #### React Context
-  `PollContext.js`:
+  `client/src/components/contexts/PollContext.js`:
 
 ```JavaScript
 import React from 'react';
