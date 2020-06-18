@@ -94,6 +94,36 @@ Checkout the [dev README](./dev.README.md) for details about API endpoints.
 - Integration testing
 - React context
 
+### Feature visuals
+
+- #### Web sockets
+  App shows live indicators when users are logged in:
+
+![active user demo GIF](readme_assets/GIFS/web_socket_demo.gif)
+
+Server-side code (can be found in `./server/www`):
+
+```JavaScript
+io.on('connection', (socket) => {
+  console.log('connection');
+
+  socket.on('userActive', () => {
+    socket.emit('makeActive');
+    io.emit('friendsUpdate');
+  });
+
+  socket.on('userLogout', () => {
+    io.emit('friendsUpdate');
+  });
+
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+  });
+});
+```
+
+- #### Mobile responsiveness
+
 ---
 
 ## Contributors
