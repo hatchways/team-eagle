@@ -70,13 +70,13 @@ Checkout the [dev README](./dev.README.md) for details about API endpoints.
 ![Register page](readme_assets/images/register.png)
 ![Home page](readme_assets/images/home_page.png)
 
-<img src="readme_assets/images/friend_list_create.png" alt="Friend list create modal" width="500"/>
+<img src="readme_assets/images/friend_list_create.png" alt="Friend list create modal" width="400"/>
 <br/>
-<img src="readme_assets/images/followers.png" alt="Friends page. Followers tab." width="600"/>
+<img src="readme_assets/images/followers.png" alt="Friends page. Followers tab." width="500"/>
 <br/>
-<img src="readme_assets/images/poll_update.png" alt="Poll update modal" width="500"/>
+<img src="readme_assets/images/poll_update.png" alt="Poll update modal" width="400"/>
 <br/>
-<img src="readme_assets/images/poll_update_with_dropdown.png" alt="Poll update modal with dropdown" width="500"/>
+<img src="readme_assets/images/poll_update_with_dropdown.png" alt="Poll update modal with dropdown" width="400"/>
 <br/>
 <img src="readme_assets/images/profile_image_update.png" alt="Profile image update modal" width="500"/>
 <br/>
@@ -91,7 +91,7 @@ Checkout the [dev README](./dev.README.md) for details about API endpoints.
 
 - Web sockets
 - Mobile responsiveness
-- Integration testing
+- Integration tests
 - React context
 
 ### Feature visuals
@@ -123,6 +123,53 @@ io.on('connection', (socket) => {
 ```
 
 - #### Mobile responsiveness
+
+<img src="readme_assets/GIFS/mobile_navigation_demo.gif" alt="App on mobile navigation GIF" width="300"/>
+<br/>
+<img src="readme_assets/GIFS/mobile_horizontal_scroll_demo.gif" alt="App on mobile horizontal scroll GIF" width="300"/>
+<br/>
+<img src="readme_assets/GIFS/mobile_modal_demo.gif" alt="App on mobile navigation GIF" width="300"/>
+<br/>
+
+- #### Integration tests
+
+  ![Integration tests spec run GIF](readme_assets/GIFS/spec_run.gif)
+
+- #### React Context
+  `PollContext.js`:
+
+```JavaScript
+import React from 'react';
+
+// This is what each component should import
+export const PollContext = React.createContext();
+
+// This should be imported only by index.js
+export const PollContextProvider = ({ children }) => {
+  const [state, setState] = React.useState({
+    poll: {},
+    votes: [],
+  });
+
+  function setPollState(newState) {
+    setState((prevState) => {
+      return { ...prevState, ...newState };
+    });
+  }
+
+  return (
+    <PollContext.Provider
+      value={{
+        ...state,
+        setPollState,
+      }}
+    >
+      {children}
+    </PollContext.Provider>
+  );
+};
+
+```
 
 ---
 
