@@ -130,7 +130,7 @@ router.get(
   }
 );
 
-// @route GET /votable
+// @route GET /polls/votable
 // @desc To get polls that the a logged in user can vote on
 // @params None
 // @access private
