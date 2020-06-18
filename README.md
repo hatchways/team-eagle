@@ -65,6 +65,26 @@ Checkout the [dev README](./dev.README.md) for details about API endpoints.
 
 ---
 
+## App Images
+
+![Register page](readme_assets/register.png)
+![Home page](readme_assets/home_page.png)
+
+<img src="readme_assets/friend_list_create.png" alt="Friend list create modal" width="500"/>
+<br/>
+<img src="readme_assets/followers.png" alt="Friends page. Followers tab." width="600"/>
+<br/>
+<img src="readme_assets/poll_update.png" alt="Poll update modal" width="500"/>
+<br/>
+<img src="readme_assets/poll_update_with_dropdown.png" alt="Poll update modal with dropdown" width="500"/>
+<br/>
+<img src="readme_assets/profile_image_update.png" alt="Profile image update modal" width="500"/>
+<br/>
+
+![Home page](readme_assets/polls_page.png)
+
+---
+
 ## Noticeable Features
 
 ### Feature Overview
