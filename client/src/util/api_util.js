@@ -33,7 +33,6 @@ export async function getVotablePolls() {
     throw Error(body.error);
   }
 
-  debugger;
   return body;
 }
 

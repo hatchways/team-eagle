@@ -51,10 +51,9 @@ exports.validateGetPollReq = async function validateGetPollReq(req) {
     }
   }
 
-  const votes = await Vote.find({
-    $and: [{ userId: req.user._id }, { pollId: req.params.pollId }],
-  })
-    .populate('userId', '_id name')
+  const votes = await Vote.find({ pollId: req.params.pollId })
+    .sort({ createdAt: -1 })
+    .populate('userId', '_id name picture')
     .exec();
 
   isValid = true;
