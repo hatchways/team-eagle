@@ -136,7 +136,8 @@ io.on('connection', (socket) => {
   ![Integration tests spec run GIF](readme_assets/GIFS/spec_run.gif)
 
 - #### React Context
-  `client/src/components/contexts/PollContext.js`:
+
+`client/src/components/contexts/PollContext.js`:
 
 ```JavaScript
 import React from 'react';
