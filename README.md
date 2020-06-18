@@ -38,7 +38,7 @@ AWS_ACCESS_KEY_ID = ""
 - Backend
   - Express, Mongoose
 - Frontend
-  - React (with hooks), Material UI
+  - React (hooks), Material UI
 
 ### Noticeable Dependencies
 
