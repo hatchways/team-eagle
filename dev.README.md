@@ -18,12 +18,12 @@ Auth Routes
 Polls Routes
 
 - `POST /polls`
-- `PUT /polls/<pollId>`
-- `DELETE /polls/<pollId>`
+- `PUT /polls/:pollId`
+- `GET /polls/:pollId`
+- `DELETE /polls/:pollId`
 - `GET /polls`
 - `GET /polls/votable`
 - `GET /polls/friends`
-- `GET /polls/:pollId`
 - `POST /polls/:pollId/:imageIdx/vote`
 - `DELETE /polls/:pollId/:imageIdx/vote`
 
