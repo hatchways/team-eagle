@@ -10,6 +10,7 @@ import {
 } from '@material-ui/core';
 import SettingsIcon from '@material-ui/icons/Settings';
 import Friend from 'components/friendList/Friend';
+import zIndex from '@material-ui/core/styles/zIndex';
 
 const headerHeight = 60;
 
@@ -37,6 +38,9 @@ const useStyles = makeStyles((theme) => ({
   title: {
     overflow: 'hidden',
     textOverflow: 'ellipsis',
+  },
+  settingsIcon: {
+    zIndex: '1',
   },
   list: {
     overflowY: 'auto',
@@ -66,7 +70,7 @@ export default function FriendsList(props) {
         </Grid>
         <Grid item>
           <IconButton onClick={() => props.toggleModal(props.list)}>
-            <SettingsIcon />
+            <SettingsIcon className={classes.settingsIcon} />
           </IconButton>
         </Grid>
       </Grid>

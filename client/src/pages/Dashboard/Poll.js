@@ -22,6 +22,9 @@ const useStyles = makeStyles((theme) => ({
       objectFit: 'cover',
     },
   },
+  settingsIcon: {
+    zIndex: '1',
+  },
   pollLink: {
     color: 'inherit',
     textDecoration: 'none',
@@ -48,7 +51,7 @@ export default function Poll(props) {
           <Grid container direction="row-reverse">
             <Grid item>
               <IconButton onClick={toggleModal}>
-                <SettingsIcon />
+                <SettingsIcon className={classes.settingsIcon} />
               </IconButton>
             </Grid>
           </Grid>
